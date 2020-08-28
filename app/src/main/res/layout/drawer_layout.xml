@@ -1,0 +1,539 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/Scrll_Drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="left|start"
+    android:background="@color/colorBackground"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:scrollbars="none"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <!--region profile-->
+        <RelativeLayout
+            android:id="@+id/rl_headerprofile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/padding_20">
+
+                <ImageView
+                    android:layout_margin="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/mandroid_logo" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <!--endregion profile-->
+
+        <!--region menu-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_headerprofile"
+            android:layout_marginBottom="2dp"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.40dp"
+                android:layout_marginLeft="-20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="-20dp"/>
+
+            <!--region home -->
+            <RelativeLayout
+                android:id="@+id/rl_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_feed"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_home_black_24dp"
+                    android:tint="@color/colorGreen" />
+
+                <TextView
+                    android:id="@+id/txt_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toRightOf="@+id/iv_feed"
+                    android:gravity="center_vertical"
+                    android:text="Home"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+            <!--endregion-->
+
+            <!--region profile -->
+            <RelativeLayout
+                android:id="@+id/rl_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/customer"
+                    android:tint="@color/colorGreen"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toRightOf="@+id/iv_profile"
+                    android:gravity="center_vertical"
+                    android:text=" Profile"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+            <!--endregion-->
+
+
+            <!--region Payment-->
+            <RelativeLayout
+                android:id="@+id/rl_paymentHist"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_payment"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_credit_card"
+                    android:layout_centerVertical="true"
+                    android:tint="@color/colorGreen" />
+
+                <TextView
+                    android:id="@+id/tv_payment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/iv_payment"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text="History"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text" />
+            </RelativeLayout>
+            <!--endregion-->
+
+            <!--region Todays Count-->
+            <RelativeLayout
+                android:id="@+id/rl_enrolledstudent"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_todays_count"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/customer"
+                    android:tint="@color/colorGreen"/>
+
+                <TextView
+                    android:id="@+id/tv_todays_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/iv_todays_count"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text="Enrolled Student"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text"
+                    />
+            </RelativeLayout>
+            <!--endregion-->
+
+            <!--region demo_lecture-->
+            <RelativeLayout
+                android:id="@+id/rl_demo_lecture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_daily_service_request"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/classroom"
+                    android:tint="@color/colorGreen"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_daily_service_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toRightOf="@+id/iv_daily_service_request"
+                    android:gravity="center_vertical"
+                    android:text="Demo Lectures"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+            <!--endregion-->
+
+            <!--region paidelecture-->
+            <RelativeLayout
+                android:id="@+id/rl_paidelecture"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_drop_order"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/menuvideos"
+                    android:tint="@color/colorGreen"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_drop_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/iv_drop_order"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text="Paid Lectures"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text" />
+            </RelativeLayout>
+            <!--endregion-->
+
+            <!--region Todays Count-->
+            <RelativeLayout
+                android:id="@+id/rl_insert_video_link"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_tomorrows_count"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/menuvideos"
+                    android:tint="@color/colorGreen" />
+
+                <TextView
+                    android:id="@+id/tv_tomorrows_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/iv_tomorrows_count"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text="Video Links"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text" />
+            </RelativeLayout>
+            <!--endregion-->
+
+            <!--region Delete Count-->
+            <RelativeLayout
+                android:id="@+id/rl_delete_count"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_delete_count"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/customer"
+                    android:tint="@color/colorAccent"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_delete_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/iv_delete_count"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text="Delete Entry"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/nav_drawer_text" />
+            </RelativeLayout>
+            <!--endregion-->
+          <!--  <View
+                android:layout_width="match_parent"
+                android:layout_height="0.40dp"
+                android:drl_Openerlayout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorView" />
+-->
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorView" />
+
+
+
+            <TextView
+                android:id="@+id/txt_rateus"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="Rate Us"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_contact"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="Contact (Suggestion)"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/txt_aboutus"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="About Us"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="Feedback (FAQs)"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_share_app"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="Share App"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_logout"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:drawablePadding="15dp"
+                android:gravity="center_vertical"
+                android:text="Sign Out"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorView" />
+
+            <TextView
+                android:id="@+id/tv_poweredBy"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="Powered by Mandroid"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+
+            <!--region payments icons-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="We accepts"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp"
+                >
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="8dp"
+                    android:elevation="5dp"
+                    android:scaleType="fitXY"
+                    android:background="@color/grey_3"
+                    android:src="@drawable/ic_visa" />
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:background="@color/light_blue_800"
+                    android:src="@drawable/ic_american_express" />
+
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_mastercard" />
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:background="@color/grey_3"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_discover" />
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:background="@color/grey_3"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_paypal" />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:background="@color/grey_3"
+                    android:layout_gravity="center_vertical"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_google_pay" />
+
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="5dp"
+                    android:elevation="5dp"
+                    android:background="@color/grey_3"
+                    android:padding="2dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_phonepe" />
+
+            </LinearLayout>
+
+            <!--endregion-->
+
+        </LinearLayout>
+        <!--endregion menu-->
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

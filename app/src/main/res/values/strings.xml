@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Grocery</string>
+    <string name="rate_us_link">https://play.google.com/store/apps/details?id=com.teammandroid.academy</string>
+    <string name="feedback_email">ipsirssuccessacademy@gmail.com</string>
+    <string name="contact_us_details">welome to Onrfit gym and Fitness center.
+we are providing best online help,tips and personal triner guidence , also differant fitness program . </string>
+    <string name="contact_us_address"> \'Kesari Wada\', Narayan Peth
+Pune,\n Maharashtra</string>
+    <string name="txt_paid">You have to buy this video</string>
+
+    <string name="title1">Best Selling items</string>
+    <string name="title">Title</string>
+    <string name="details">Details</string>
+    <string name="text_dialog">Oops ! Data not Available..</string>
+    <string name="share">share</string>
+    <string name="notification">notification</string>
+    <string name="cart">cart</string>
+    <string name="search">search</string>
+    <string name="image">images</string>
+
+    <string name="add">add</string>
+    <string name="zero">0</string>
+    <string name="remove">remove</string>
+
+</resources>

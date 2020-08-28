@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/colorWhite"
+    android:layout_height="match_parent"
+    tools:context=".activities.SplashActivity">
+
+    <!--<TextView
+        android:id="@+id/tv_teacherName"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@drawable/gradient_green"
+        android:fontFamily="@font/acme"
+        android:gravity="center"
+        android:text="&#45;&#45; AQUA &#45;&#45;"
+        android:textColor="@color/colorTextWhite"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:fontFamily="@font/montserrat" />
+-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/logo" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:text="www.teammandroid.in"
+            android:textAlignment="center" />
+
+
+        <!--<ProgressBar-->
+        <!--android:id="@+id/splashPbar"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_marginBottom="108dp"-->
+        <!--android:indeterminateTint="@color/colorPrimary" />-->
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:padding="5dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="5dp"
+    android:clipToPadding="false">
+
+    <RelativeLayout
+        android:id="@+id/rl_package"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:elevation="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/myrect"
+        >
+        <ImageView
+            android:id="@+id/img_title"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:scaleType="fitXY"
+            android:padding="3dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/video_pkgs"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Topic name"
+            android:textColor="@color/colorBlack"
+            android:textSize="12dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/img_title"
+            android:layout_centerHorizontal="true"
+            android:padding="2dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/tv_freepaid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Premium"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="12dp"
+            android:textAlignment="center"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorYellow"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

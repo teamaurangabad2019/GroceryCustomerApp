@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_list"
+        android:elevation="4dp"
+        android:layout_width="160dp"
+        android:layout_height="240dp"
+        app:cardCornerRadius="4dp"
+        android:paddingBottom="5dp"
+        tools:targetApi="lollipop">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_offer"
+                android:layout_width="63.3dp"
+                android:layout_height="19dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="9dp"
+
+                android:layout_marginStart="9dp"
+                android:text="29%OFF"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/roundedrectgreen"
+                />
+
+            <ImageView
+                android:id="@+id/iv_items"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                app:srcCompat="@mipmap/ic_launcher"
+
+                />
+
+            <TextView
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:id="@+id/tv_iv_label"
+                android:textSize="14sp"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/title1"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:gravity="start" />
+
+            <TextView
+                android:id="@+id/tv_weight"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200g"
+                android:textSize="12sp"
+                android:textColor="@color/light_grey_"
+                android:textAlignment="textStart"
+                android:gravity="start"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_items"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:id="@+id/tv_price"
+                    android:textSize="14sp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs. 40/-"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="center"
+                    android:gravity="start" />
+
+                <TextView
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:id="@+id/tv_cutoff"
+                    android:textSize="14sp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs. 40/-"
+                    android:textAlignment="center"
+                    android:gravity="start"
+                    />
+
+            </LinearLayout>
+
+
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/bt_add"
+                android:layout_width="131.2dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/addtocart"
+                android:drawableStart="@drawable/ic_add_shopping_cart_black_24dp"
+                android:drawableLeft="@drawable/ic_add_shopping_cart_black_24dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:text="Add to cart"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

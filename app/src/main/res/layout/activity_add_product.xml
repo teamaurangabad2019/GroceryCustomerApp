@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".admin.activities.AddCategoryActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/iv_backprofile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="Product"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="@string/title"
+                    android:textColor="@color/colorPrimary" />
+
+
+                <EditText
+                    android:id="@+id/et_titlename"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Product Name"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#b6b5b5"
+                    android:textSize="@dimen/textSizeForm"
+                    android:layout_toRightOf="@id/tv_sub_name"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="Icon image"
+                    android:textColor="@color/colorPrimary" />
+
+                <!--Email-->
+                <TextView
+                    android:id="@+id/et_attach"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="#243343"
+                    android:drawableRight="@drawable/ic_attachment_black_24dp"
+                    android:hint="Icon image"
+                    android:paddingTop="15dp"
+                    android:inputType="textPersonName"
+                    android:textSize="@dimen/textSizeForm"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#b6b5b5" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="Other images"
+                    android:textColor="@color/colorPrimary" />
+
+                <!--Email-->
+                <TextView
+                    android:id="@+id/et_attach2"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="#243343"
+                    android:drawableRight="@drawable/ic_attachment_black_24dp"
+                    android:hint="Other images"
+                    android:paddingTop="15dp"
+                    android:inputType="textPersonName"
+                    android:textSize="@dimen/textSizeForm"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#b6b5b5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="Type a Message"
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/et_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Your Message Here"
+                    android:textSize="@dimen/textSizeForm"
+                    android:gravity="left"
+                    android:padding="10dp"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorBlack"
+                    android:background="@drawable/border_rectangle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="Actual Price"
+                    android:textColor="@color/colorPrimary" />
+
+
+                <EditText
+                    android:id="@+id/et_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Product Price"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#b6b5b5"
+                    android:textSize="@dimen/textSizeForm"
+                    android:layout_toRightOf="@id/tv_sub_name" />
+
+
+                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="Offer (in %)"
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/et_Offer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Product Offer"
+                    android:inputType="number"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#b6b5b5"
+                    android:textSize="@dimen/textSizeForm"
+                    android:layout_toRightOf="@id/tv_sub_name"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="Ourprice"
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/et_Ourprice"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Product Ourprice"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#b6b5b5"
+                    android:textSize="@dimen/textSizeForm"
+                    android:layout_toRightOf="@id/tv_sub_name"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="Product Avalability"
+                    android:textColor="@color/colorPrimary" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/group">
+
+                    <RadioButton
+                        android:id="@+id/radioButton_avalable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Available" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_notavalable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Not available" />
+                </RadioGroup>
+
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Submit"
+                    android:background="@drawable/rectangle"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginBottom="@dimen/padding_20"/>
+
+
+
+            </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

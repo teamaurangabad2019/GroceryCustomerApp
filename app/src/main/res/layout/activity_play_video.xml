@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.videos.PlayVideoActivity">
+
+    <RelativeLayout
+        android:background="@color/grey_5"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/layout1">
+
+        <include
+            layout="@layout/mk_player"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:background="@color/grey_5"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Video title"
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/txt_video_name"
+            android:layout_above="@+id/btn_full_screen"
+            android:textSize="@dimen/padding_20"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/padding_20">
+        </TextView>
+
+        <Button
+            android:background="@color/grey_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="--Full Screen--"
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/btn_full_screen"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true">
+        </Button>
+
+    </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/layout1"
+            android:id="@+id/recycler_view_videos"
+            android:layout_width="match_parent"
+            android:background="#00111111"
+            android:padding="@dimen/padding_10"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+        </androidx.recyclerview.widget.RecyclerView>
+</RelativeLayout>
