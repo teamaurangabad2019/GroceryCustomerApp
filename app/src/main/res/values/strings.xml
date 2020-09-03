@@ -22,4 +22,17 @@ Pune,\n Maharashtra</string>
     <string name="zero">0</string>
     <string name="remove">remove</string>
 
+    <string name="fullname">Fullname</string>
+    <string name="username">Username</string>
+    <string name="pass">Password</string>
+    <string name="mobile">Mobile Number</string>
+    <string name="email">Email</string>
+    <string name="profilepic">profilepic</string>
+    <string name="subjectnm">Subject Name</string>
+    <string name="boardnm">Board Name</string>
+    <string name="classnm">Class Name</string>
+    <string name="contact">contact</string>
+    <string name="location">location</string>
+
+
 </resources>

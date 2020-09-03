@@ -1,11 +1,11 @@
 package com.teammandroid.dairyapplication.admin.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,10 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.androidnetworking.error.ANError;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
+import com.teammandroid.dairyapplication.Network.OrderProductServices;
 import com.teammandroid.dairyapplication.Network.OrderServices;
 import com.teammandroid.dairyapplication.R;
-import com.teammandroid.dairyapplication.activities.AuthenticationActivity;
-import com.teammandroid.dairyapplication.activities.BookingActivity;
 import com.teammandroid.dairyapplication.activities.HomepageActivity;
 import com.teammandroid.dairyapplication.admin.adapters.CartAdapter;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
@@ -30,10 +29,14 @@ import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.model.Response;
 import com.teammandroid.dairyapplication.model.UserModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
-import com.teammandroid.dairyapplication.utils.SessionManager;
+import com.teammandroid.dairyapplication.utils.PrefManager;
+import com.teammandroid.dairyapplication.utils.SessionHelper;
 import com.teammandroid.dairyapplication.utils.Utility;
 
 import java.util.ArrayList;
+
+import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_2;
+import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_4;
 
 public class CartActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -47,6 +50,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     AppBarLayout appBarLayout;
     DatabaseHelper dbHelper;
+    ArrayList product_array_list;
+    Activity activity;
+    int tquantity;
+    PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +64,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         toolbar.setTitleTextColor(Color.WHITE);
 
         progressDialog = new ProgressDialog(CartActivity.this);
+        prefManager = new PrefManager(CartActivity.this);
         appBarLayout = findViewById(R.id.appBarLayout);
         dbHelper = new DatabaseHelper(CartActivity.this);
+        activity=CartActivity.this;
         //Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu, null);
        // drawable = DrawableCompat.wrap(drawable);
         //DrawableCompat.setTint(drawable, Color.WHITE);
@@ -76,6 +85,15 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setLayoutManager(layoutManager);
         CartAdapter adapter = new CartAdapter(this,productModelslist);
         recyclerView.setAdapter(adapter);
+
+        product_array_list = dbHelper.getAllCotacts(String.valueOf(0));
+
+        for(int i=0; i<product_array_list.size(); i++)
+
+        {
+            Log.e( "pchk: ", String.valueOf(product_array_list.get(i)));
+        }
+
         //initRecyclerViewMenus();
 
     }
@@ -182,17 +200,10 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
                case R.id.btn_continue:
 
-                  // Bundle bundle = new Bundle();
-                  // bundle.putParcelable("cartData", productModelslist);
 
-                   if (validateUser()) {
-                       Utility.launchActivity(CartActivity.this, BookingActivity.class, false);//,bundle);
-                   } else {
-                       Utility.launchActivity(CartActivity.this, AuthenticationActivity.class, false);// bundle);
-                   }
-                   /*placeOrder(0,1,1,deliveryDate,
-                           Address,1,price,sprice);*/
-                //Utility.launchActivity(CartActivity.this, HomepageActivity.class,true);
+                placeOrder(0,prefManager.getUSER_ID(),0,0,Utility.getCurrentDate(),
+                           "Address",0,10,5);
+
                 break;
 
 
@@ -202,7 +213,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     private boolean validateUser() {
         boolean result = false;
         try {
-            SessionManager sessionManager=new SessionManager(CartActivity.this);
+            SessionHelper sessionManager=new SessionHelper(CartActivity.this);
             //UserResponse response = PrefHandler.getUserFromSharedPref(SplashActivity.this);
             UserModel response = sessionManager.getUserDetails();
             Log.e(TAG, "validateUser: "+response.toString());
@@ -216,7 +227,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void placeOrder(int Orderid,int Status,int Deliveryboyid,String Deliverydate,
+    private void placeOrder(int Orderid, int Userid,int Status,int Deliveryboyid,String Deliverydate,
                             String Address,int Paymentmode,double Totalprice,double Savedprice) {
 
         progressDialog.setTitle("Please Wait...");
@@ -224,14 +235,28 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         progressDialog.show();
 
         OrderServices.getInstance(getApplicationContext()).
-                createOrder(Orderid,Status,Deliveryboyid,Deliverydate,
+                createOrder(Orderid,Userid,Status,Deliveryboyid,Deliverydate,
                 Address,Paymentmode,Totalprice,Savedprice, new ApiStatusCallBack<Response>() {
                             @Override
                             public void onSuccess(Response response) {
                                 progressDialog.dismiss();
                                 Log.e(TAG, "response " + response.getMessage());
+
+
+                                Log.e( "chk: ", product_array_list.toString() );
+                                for(int i=0; i<product_array_list.size(); i++)
+                                {
+
+                                    Log.e( "productlist: ",  product_array_list.get(i).toString());
+                                    getQuantity(Integer.parseInt(product_array_list.get(i).toString()), response.getResult());
+                                  /*  insertOrderProduct(0,response.getResult(),
+                                            Integer.parseInt(product_array_list.get(i).toString()),tquantity,1,1);
+*/
+                                }
+                                // imp
+                                Utility.launchActivity(CartActivity.this,OrderHistoryActivity.class,true);
                                 //Utility.launchActivity(CartActivity.this, EnquiryListActivity.class,false);
-                                Toast.makeText(getApplicationContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                              //  Toast.makeText(getApplicationContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -251,7 +276,64 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                         });
 
     }
-//    endregion recyclerview
+    void insertOrderProduct(int Orderproductid,int Orderid, int Productid,int Quantity, double Totalamount,int LogedinUserId)
+    {
+        progressDialog.setTitle("Please Wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
+        OrderProductServices.getInstance(activity).insertOrderProduct(
+                Orderproductid ,Orderid,Productid,Quantity,Totalamount, LogedinUserId,
+                new ApiStatusCallBack<Response>() {
+                    @Override
+                    public void onSuccess(Response userModels) {
+                        Log.e("ChkOrderdetails:",userModels.getMessage());
+                        Log.e("ChkOrderdetails:",userModels.toString());
 
+                        if (userModels.getHasError()==1) {
+                            progressDialog.dismiss();
+                            Toast.makeText(activity, userModels.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            progressDialog.dismiss();
+                            Utility.showErrorMessage(activity, userModels.getMessage());
+
+                        }
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Utility.showErrorMessage(activity,"Server Error", Snackbar.LENGTH_SHORT);
+                    }
+
+                    @Override
+                    public void onUnknownError(Exception e) {
+                        progressDialog.dismiss();
+                        Utility.showErrorMessage(activity,"Server Error", Snackbar.LENGTH_SHORT);
+                    }
+                });
+    }
+
+    void getQuantity(int pid, int oid)
+    {
+        SQLiteDatabase db2 = dbHelper.getWritableDatabase();
+
+        Cursor cursor = db2.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " + dbHelper.TABLE_PLUS_MINUS_QUANTITY
+                + " WHERE " + PMQUANTITY_2 + " = " + pid +" AND " +dbHelper.PMQUANTITY_3 + " = "
+                + " 0 ", null);
+
+        if (cursor.moveToNext()) {
+
+            tquantity = cursor.getInt(0);//to get id, 0 is the column index
+            Log.e( "getQuantity: ", String.valueOf(tquantity));
+
+        }
+        //tv.setText(String.valueOf(id));
+       // double price =  item * item.getOurprice();
+
+        insertOrderProduct(0,oid,
+                pid,tquantity,0,1);
+
+        Log.e( "getQuantity: ", String.valueOf(tquantity));
+    }
 }

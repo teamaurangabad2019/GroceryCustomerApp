@@ -3,10 +3,15 @@ package com.teammandroid.dairyapplication.activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +34,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shuhart.stepview.StepView;
 import com.teammandroid.dairyapplication.Network.AuthServices;
+import com.teammandroid.dairyapplication.Network.OTPServices;
 import com.teammandroid.dairyapplication.R;
+import com.teammandroid.dairyapplication.admin.activities.DeliveryboyStatusListActivity;
+import com.teammandroid.dairyapplication.admin.activities.SelectRoleActivity;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.model.Response;
 import com.teammandroid.dairyapplication.model.UserModel;
@@ -41,6 +49,8 @@ import com.teammandroid.dairyapplication.utils.Utility;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
 
 
 public class AuthenticationActivity extends AppCompatActivity {
@@ -56,7 +66,6 @@ public class AuthenticationActivity extends AppCompatActivity {
     private static final String UNIQUE_ID = "UNIQUE_ID";
     private static final long ONE_HOUR_MILLI = 60 * 60 * 1000;
 
-
     private String OTP = "123456";
     private Button sendCodeButton;
     private Button verifyCodeButton;
@@ -68,6 +77,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     private EditText phoneNum;
     private PinView verifyCodeET;
     private TextView phonenumberText;
+    private TextView tv_sms_recv,text_otp_expire;
 
     private String mVerificationId;
     String mobileNumber = null;
@@ -78,6 +88,15 @@ public class AuthenticationActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     PrefManager prefManager;
     SessionHelper sessionHelper;
+
+    int roleIdBundle;
+    TextView tv_regFree,tv_verify;
+
+
+    private long mTimeLeftInMillis;
+    private CountDownTimer mCountDownTimer;
+
+    String message = "Thank you for visiting Grocery Store \n Your OTP :" + OTP;
 
 
     @SuppressLint("SetTextI18n")
@@ -90,6 +109,11 @@ public class AuthenticationActivity extends AppCompatActivity {
         prefManager=new PrefManager(activity);
         pbLoading = new ProgressBar(activity);
         sessionHelper = new SessionHelper(AuthenticationActivity.this);
+
+        roleIdBundle=getIntent().getIntExtra("roleId",0);
+        Log.e(TAG,"roleIDBundle "+roleIdBundle);
+
+        tv_sms_recv = findViewById(R.id.tv_sms_recv);
 
         layout1 = (LinearLayout) findViewById(R.id.layout1);
         layout2 = (LinearLayout) findViewById(R.id.layout2);
@@ -105,6 +129,9 @@ public class AuthenticationActivity extends AppCompatActivity {
         tv_nickname_status = (TextView) findViewById(R.id.tv_nickname_status);
         pbLoading = findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.GONE);
+
+        tv_verify = findViewById(R.id.tv_verify);
+        text_otp_expire = findViewById(R.id.text_otp_expire);
 
         stepView = findViewById(R.id.step_view);
         stepView.setStepsNumber(3);
@@ -144,6 +171,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                prefManager.setAUTH_BACK(2);
                 phoneNumber = phoneNum.getText().toString();
                 phonenumberText.setText(phoneNumber);
                 String deviceName = Utility.getDeviceName();
@@ -156,14 +184,38 @@ public class AuthenticationActivity extends AppCompatActivity {
                     phoneNum.setError("Please enter a valid phone");
                     phoneNum.requestFocus();
                 }  else {
-                    if (currentStep < stepView.getStepCount() - 1) {
-                        currentStep++;
-                        stepView.go(currentStep, true);
-                    } else {
-                        stepView.done(true);
+                    if (Utility.isNetworkAvailable(getApplicationContext())) {
+
+                        if(roleIdBundle==1) {
+
+                            adminCheck(phoneNumber);
+                            //timerForOtp(mobileNumber, message);
+                        }
+                        else if (roleIdBundle==2){
+
+                            createDeliveryBoy(phoneNumber);
+                        }
+
+
+                    /*
+                        int count = 0;
+                        if (currentStep < step_view.getStepCount() - 1) {
+
+                            //timerForOtp(mobileNumber,message);
+
+                            currentStep++;
+                            step_view.go(currentStep, true);
+                        } *//*else {
+                            step_view.done(true);
+                        }*/
+                    }
+
+                    else {
+                        Utility.showErrorMessage(AuthenticationActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
                     }
                     layout1.setVisibility(View.GONE);
                     layout2.setVisibility(View.VISIBLE);
+                    tv_verify.setVisibility(View.GONE);
                 }
             }
         });
@@ -189,6 +241,10 @@ public class AuthenticationActivity extends AppCompatActivity {
                         layout1.setVisibility(View.GONE);
                         layout2.setVisibility(View.GONE);
                         layout3.setVisibility(View.VISIBLE);
+                        tv_verify.setText("Verified");
+                        tv_verify.setVisibility(View.VISIBLE);
+                        //prefManager.setROLE_ID(6);
+                        prefManager.setAUTH_BACK(3);
                     } else {
                         Utility.showErrorMessage(activity, "Something went wrong");
                         Toast.makeText(AuthenticationActivity.this, "Something  wrong", Toast.LENGTH_SHORT).show();
@@ -213,13 +269,26 @@ public class AuthenticationActivity extends AppCompatActivity {
 
                 // Utility.launchActivity(AuthenticationActivity.this, HomepageActivity.class, true);
                 Log.e( "createUser: ","phe" +phoneNumber);
-                createUser(phoneNumber);
+
+                if(roleIdBundle==1)
+                {
+                    prefManager.setROLE_ID(1);
+                    getAdminInfo(prefManager.getUSER_ID());
+                    //Utility.launchActivity(AuthenticationActivity.this, HomepageActivity.class, true);
+                }
+                else if(roleIdBundle==2)
+                {
+                    //createDeliveryBoy(phoneNumber);
+                    prefManager.setROLE_ID(2);
+                    Utility.launchActivity(AuthenticationActivity.this, DeliveryboyStatusListActivity.class, true);
+                }
+
                 //Toast.makeText(AuthenticationActivity.this,"ContinuePressed " ,Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void createUser(String phoneNumber)
+    private void createDeliveryBoy(String phoneNumber)
     {
         Log.e( "createUser: ","phone" +phoneNumber);
         try {
@@ -230,8 +299,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                //Creating a multi part request
-                AndroidNetworking.upload(Constants.URL_LOGIN)
+                AndroidNetworking.upload(Constants.URL_USER)
                         .addMultipartParameter("type", "1")
                         .addMultipartParameter("Action", "1")
                         .addMultipartParameter("Userid", "0")
@@ -243,7 +311,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                         .addMultipartParameter("Email", "")
                         .addMultipartParameter("Profilepic", "")
                         .addMultipartParameter("Device", Utility.getDeviceName())
-                        .addMultipartParameter("LogedinUserId", "0")  //.setNotificationConfig(new UploadNotificationConfig())
+                        .addMultipartParameter("LogedinUserId", "0")
                         .setTag("uploadTest")
                         .setPriority(Priority.HIGH)
                         .build()
@@ -316,7 +384,6 @@ public class AuthenticationActivity extends AppCompatActivity {
                                 userModel = response.get(0);
                                 sessionHelper.setLogin(true);
                                 prefManager.setROLE_ID(2);
-                                Toast.makeText(AuthenticationActivity.this,"Success "+userModel.getUserid() ,Toast.LENGTH_SHORT).show();
 
                                 if (is_new) {
                                     progressDialog.dismiss();
@@ -325,9 +392,16 @@ public class AuthenticationActivity extends AppCompatActivity {
                                     Bundle bundle=new Bundle();
                                     bundle.putParcelable("userData",userModel);
                                     bundle.putString("number", userModel.getMobile());
-                                    Utility.launchActivity(AuthenticationActivity.this, ProfileActivity.class, true,bundle);
+                                    //Utility.launchActivity(AuthenticationActivity.this, DeliveryboyStatusListActivity.class, true,bundle);
+                                    layout1.setVisibility(View.GONE);
+                                    layout2.setVisibility(View.VISIBLE);
+                                    tv_verify.setVisibility(View.GONE);
+
+                                    Log.e(TAG, "PrinciSuccess "+OTP);
+                                    String message = "Thank you for visiting Sarvodaya International School \n Your OTP :" + OTP;
+                                    timerForOtp(mobileNumber,message);
                                 } else {
-                                    Log.e(TAG, "olreadyExist: " + userModel.getUserid());
+                                    Log.e(TAG, "olreadyExist: " + userModel.getUserid() +"roleId "+prefManager.getROLE_ID());
                                     UpdateUser();
                                 }
                             }
@@ -368,7 +442,7 @@ public class AuthenticationActivity extends AppCompatActivity {
 
             try {
                 //Creating a multi part request
-                AndroidNetworking.upload(Constants.URL_LOGIN)
+                AndroidNetworking.upload(Constants.URL_USER)
                         .addMultipartParameter("type", "1")
                         .addMultipartParameter("Action", "1")
                         .addMultipartParameter("Userid", String.valueOf(userModel.getUserid()))
@@ -404,9 +478,12 @@ public class AuthenticationActivity extends AppCompatActivity {
                                 //  lyt_progress_reg.setVisibility(View.GONE);
                                 sessionHelper.createLoginSession(userModel);
                                 Log.e(TAG, "onSuccess in Update: " + userModel.getUserid());
-                                Utility.showErrorMessage(AuthenticationActivity.this,response.toString());
+                                timerForOtp(userModel.getMobile(),message);
+                                //layout2.setVisibility(View.GONE);
+                                //layout3.setVisibility(View.VISIBLE);
+                                //Utility.showErrorMessage(AuthenticationActivity.this,response.toString());
                                 Toast.makeText(AuthenticationActivity.this,"response1 "+response1.getMessage() ,Toast.LENGTH_SHORT).show();
-                                Utility.launchActivity(AuthenticationActivity.this, HomepageActivity.class, true);
+                                //Utility.launchActivity(AuthenticationActivity.this, DeliveryboyStatusListActivity.class, true);
                             }
 
                             @Override
@@ -429,6 +506,257 @@ public class AuthenticationActivity extends AppCompatActivity {
             }
         } else {
             Utility.showErrorMessage(AuthenticationActivity.this, "Could not connect to the internet");
+        }
+    }
+
+    private void adminCheck(String phoneNumber) {
+
+        progressDialog.setTitle("Please Wait...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        Log.d("phoneNumber","phoneNumber "+phoneNumber);
+
+        AuthServices.getInstance(activity).
+                adminLogin(phoneNumber, new ApiStatusCallBack<Response>() {
+                    @Override
+                    public void onSuccess(Response response) {
+                        progressDialog.dismiss();
+
+
+                        if (response.getResult() == 0)
+                        {
+                            Log.e(TAG, "responseAdminLogin " + response.getMessage());
+                            //Invalid credential
+                            Toast.makeText(activity, response.getMessage(), Toast.LENGTH_SHORT).show();
+                        }else
+                        {
+                            layout1.setVisibility(View.GONE);
+                            layout2.setVisibility(View.VISIBLE);
+
+                            Log.e(TAG, "responseAdminLogin " + response.getMessage() +"OTP "+OTP +" "+response.getResult());
+                            String message = "Thank you for visiting Grocery Store \n Your OTP :" + OTP;
+                            timerForOtp(mobileNumber,message);
+                            prefManager.setUSER_ID(response.getResult());
+                            Toast.makeText(activity, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            //Utility.launchActivity(AuthenticationActivity.this, HomepageActivity.class,false);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "ANError " + anError.getMessage());
+                        Utility.showErrorMessage(activity, "Server Error", Snackbar.LENGTH_SHORT);
+                    }
+
+                    @Override
+                    public void onUnknownError(Exception e) {
+                        progressDialog.dismiss();
+                        Log.e(TAG, "exc " + e.getMessage());
+                        Utility.showErrorMessage(activity, "Server Error", Snackbar.LENGTH_SHORT);
+                    }
+
+                });
+
+    }
+
+    private void getAdminInfo(int UserId) {
+        try {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
+
+                progressDialog.setTitle("Please Wait...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                Log.e(TAG, "GetUser: " + UserId);
+                AuthServices.getInstance(getApplicationContext()).
+                        getAdminInfo(UserId, new ApiStatusCallBack<ArrayList<UserModel>>() {
+                            @Override
+                            public void onSuccess(ArrayList<UserModel> response) {
+                                progressDialog.dismiss();
+                                // lyt_progress_reg.setVisibility(View.GONE);
+                                userModel = response.get(0);
+                                sessionHelper.setLogin(true);
+                                prefManager.setROLE_ID(userModel.getRoleid());
+
+                                //if (is_new) {
+                                progressDialog.dismiss();
+                                sessionHelper.createLoginSession(userModel);
+                                Log.e(TAG, "isNew: " + userModel.getUserid() +"Mob "+userModel.getMobile());
+                                Bundle bundle=new Bundle();
+                                bundle.putParcelable("userData",userModel);
+                                bundle.putString("number", userModel.getMobile());
+                                //Utility.launchActivity(AuthenticationActivity.this, DeliveryboyStatusListActivity.class, true,bundle);
+                                layout2.setVisibility(View.GONE);
+                                layout3.setVisibility(View.VISIBLE);
+                                Utility.launchActivity(AuthenticationActivity.this, HomepageActivity.class, true);
+                                    /*tv_verify.setVisibility(View.GONE);
+
+                                     Log.e(TAG, "PrinciSuccess "+OTP);
+                                    String message = "Thank you for visiting Sarvodaya International School \n Your OTP :" + OTP;
+                                    timerForOtp(mobileNumber,message);*/
+                                //} else {
+                                //    Log.e(TAG, "olreadyExist: " + userModel.getUserid() +"roleId "+prefManager.getROLE_ID());
+                                //    UpdateUser();
+                                // }
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                // lyt_progress_reg.setVisibility(View.GONE);
+                                progressDialog.dismiss();
+                                Log.e("anErrorOTP",anError.getMessage());
+                                // Toast.makeText(AuthenticationActivity.this,"anErrorA "+anError.getMessage() ,Toast.LENGTH_SHORT).show();
+                                Utility.showErrorMessage(AuthenticationActivity.this, "Invalid Credentials");
+                            }
+
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                //  lyt_progress_reg.setVisibility(View.GONE);
+                                progressDialog.dismiss();
+                                // Toast.makeText(AuthenticationActivity.this,"eA "+e.getMessage() ,Toast.LENGTH_SHORT).show();
+                                Utility.showErrorMessage(AuthenticationActivity.this, e.getMessage());
+                            }
+                        });
+            } else {
+                Utility.showErrorMessage(AuthenticationActivity.this, "Could not connect to the internet");
+            }
+        } catch (Exception ex) {
+            //  lyt_progress_reg.setVisibility(View.GONE);
+            progressDialog.dismiss();
+            //Toast.makeText(AuthenticationActivity.this,"ex "+ex.getMessage() ,Toast.LENGTH_SHORT).show();
+            Utility.showErrorMessage(AuthenticationActivity.this, ex.getMessage());
+        }
+    }
+
+    // OTP Timer
+    private void timerForOtp(String mobileNumber,String message) {
+
+        prefManager.setAUTH_BACK(2);
+        tv_sms_recv.setVisibility(View.GONE);
+        SpannableString span = new SpannableString("Didn't receive SMS ? Resend");
+
+        span.setSpan(new ForegroundColorSpan(Color.GRAY), 21, 27, 0);
+        tv_sms_recv.setTextColor(Color.parseColor("#48494b"));
+
+        mCountDownTimer = new CountDownTimer(120000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+                mTimeLeftInMillis=millisUntilFinished;
+                updateCountDownText(millisUntilFinished);
+                //120 sec=120000ms
+                if ((millisUntilFinished / 1000) == 117) {
+
+                    //sendOTP(mobileNumber, message);
+                    Log.e(TAG, "text " + message);
+
+                }
+                else {
+                    Log.e(TAG, "seconds remaining: " + millisUntilFinished / 1000);
+                    sendCodeButton.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            public void onFinish() {
+                Log.e(TAG,"Done! " );
+
+                //sendOTP(mobileNumber, message);
+                //Toast.makeText(AuthenticationActivity.this,"Time Out!! Resend OTP",Toast.LENGTH_LONG).show();
+                SpannableString span = new SpannableString("Didn't receive SMS ? Resend");
+                span.setSpan(new ForegroundColorSpan(Color.BLUE), 21, 27, 0);
+                tv_sms_recv.setText(span, TextView.BufferType.SPANNABLE);
+                tv_sms_recv.setVisibility(View.VISIBLE);
+                //tv_sms_recv.setTextColor(Color.parseColor("#002266"));
+
+                tv_sms_recv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        OTP = GenerateRandomNumber(6);
+                        Log.e("ChkOTP2",""+OTP);
+                        String message2 = "Thank you for visiting Grocery Store \n Your OTP :" + OTP;
+                        timerForOtp(mobileNumber,message2);
+                        layout2.setVisibility(View.VISIBLE);
+                        layout1.setVisibility(View.GONE);
+
+                    }
+                });
+
+            }
+
+        }.start();
+    }
+
+    //Timer count down
+    private void updateCountDownText(long millisUntilFinished) {
+        int minutes = (int) (millisUntilFinished / 1000) / 60;
+        int seconds = (int) (millisUntilFinished / 1000) % 60;
+        String timeLeftFormatted = String.format(Locale.getDefault(), "%d:%d", minutes, seconds);
+        //text_otp_expire.setText(timeLeftFormatted);
+        Spannable WordtoSpan = new SpannableString("OTP expire after "+timeLeftFormatted+"  ");
+        WordtoSpan.setSpan(new ForegroundColorSpan(Color.RED), 17, 21,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        text_otp_expire.setText(WordtoSpan);
+
+    }
+
+    void sendOTP(String mobileNumber, String message) {
+        OTPServices.getInstance(AuthenticationActivity.this).SendOTP(mobileNumber, message, new ApiStatusCallBack() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(AuthenticationActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                Toast.makeText(AuthenticationActivity.this, "Failed ", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onUnknownError(Exception e) {
+                Toast.makeText(AuthenticationActivity.this, "Error ", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //Generate Random Number for OTP
+    String GenerateRandomNumber(int charLength) {
+        return String.valueOf(charLength < 1 ? 0 : new Random()
+                .nextInt((9 * (int) Math.pow(10, charLength - 1)) - 1)
+                + (int) Math.pow(10, charLength - 1));
+    }
+
+    //Back button
+    @Override
+    public void onBackPressed() {
+
+        if (prefManager.getAUTH_BACK()==1) {
+            Log.e("currentStep0"," "+" "+prefManager.getAUTH_BACK());
+            Utility.launchActivity(AuthenticationActivity.this, SelectRoleActivity.class, true);
+
+        }else if (prefManager.getAUTH_BACK()==2) {
+            //mCountDownTimer.cancel();
+            //step_view.go(0, true);
+            layout1.setVisibility(View.VISIBLE);
+            layout2.setVisibility(View.GONE);
+            layout3.setVisibility(View.GONE);
+            tv_verify.setText("Verify");
+            tv_verify.setVisibility(View.VISIBLE);
+            prefManager.setAUTH_BACK(1);
+            Log.e("currentStep1"," "+" "+prefManager.getAUTH_BACK());
+
+        } else if (prefManager.getAUTH_BACK() == 3 ) {
+            //step_view.go(1, true);
+            layout1.setVisibility(View.GONE);
+            layout2.setVisibility(View.VISIBLE);
+            layout3.setVisibility(View.GONE);
+            tv_verify.setVisibility(View.GONE);
+            prefManager.setAUTH_BACK(2);
+            Log.e("currentStep2"," "+" "+prefManager.getAUTH_BACK());
         }
     }
 

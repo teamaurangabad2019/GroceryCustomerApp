@@ -3,24 +3,18 @@ package com.teammandroid.dairyapplication.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.androidnetworking.error.ANError;
-import com.google.android.material.snackbar.Snackbar;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.model.UserModel;
-import com.teammandroid.dairyapplication.utils.SessionManager;
-import com.teammandroid.dairyapplication.utils.Utility;
+import com.teammandroid.dairyapplication.utils.SessionHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -154,7 +148,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         btn_Book_Now = findViewById(R.id.btn_Book_Now);
         viewMenuIconBack = findViewById(R.id.viewMenuIconBack);
 
-        SessionManager sessionManager=new SessionManager(this);
+        SessionHelper sessionManager=new SessionHelper(this);
         user= sessionManager.getUserDetails();
 
     }

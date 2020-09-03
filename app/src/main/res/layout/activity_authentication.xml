@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
-    tools:context=".activities.AuthenticationActivity">
+    android:background="@color/colorWhite"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,8 +34,41 @@
                 app:layout_constraintVertical_bias="0.0"
                 app:sv_animationType="All"
                 app:sv_stepPadding="12dp"
-                app:sv_steps="@array/steps" />
+                app:sv_steps="@array/steps"
+                app:sv_doneCircleColor="@color/colorGreen"
+                app:sv_doneStepLineColor="@color/colorGreen"/>
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_verify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="Verify"
+            android:layout_marginTop="@dimen/padding_20"
+            android:textAlignment="center"
+            android:textSize="26sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:paddingLeft="@dimen/spacing_mxlarge"
+            android:paddingRight="@dimen/spacing_mxlarge"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_verified"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="Verify"
+            android:layout_marginTop="@dimen/padding_20"
+            android:textAlignment="center"
+            android:textSize="26sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:paddingLeft="@dimen/spacing_mxlarge"
+            android:paddingRight="@dimen/spacing_mxlarge"
+            android:visibility="gone"/>
 
         <!--1st Layout-->
         <LinearLayout
@@ -45,97 +79,164 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/first">
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="Enter your mobile number"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-
-            <!--region Check Mobile Number-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="40dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Verifying Mobile Number"
-                    android:textColor="@color/colorBlack" />
-
-                <ProgressBar
-                    android:id="@+id/pbLoading"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:indeterminate="true" />
-
-                <TextView
-                    android:id="@+id/tv_nickname_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="status"
-                    android:textColor="@color/colorBlack" />
-
-
-            </LinearLayout>
-            <!--endregion-->
-
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:background="@color/colorWhite">
 
-                <EditText
-                    android:id="@+id/phonenumber"
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="@dimen/padding_20"
+                    android:background="@drawable/mobile"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="@color/colorPrimary"/>
+
+                <TextView
+                    android:id="@+id/tv_regFree"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingLeft="@dimen/spacing_mxlarge"
+                    android:paddingRight="@dimen/spacing_mxlarge"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="Enter your mobile number"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+
+                <!--region Check Mobile Number-->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    android:background="@drawable/auth_edittext_background"
-                    android:inputType="phone"
-                    android:maxLength="10"
-                    android:padding="10dp" />
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Login with Mobile Number"
+                        android:textColor="@color/colorGreen"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+
+                    <ProgressBar
+                        android:id="@+id/pbLoading"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:indeterminate="true"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_nickname_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="status"
+                        android:visibility="gone"
+                        android:textColor="@color/colorPrimary" />
+
+                </LinearLayout>
+                <!--endregion-->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="sans-serif"
+                    android:text="Enter your mobile number we will send you OTP to verify"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="@dimen/padding_10"
+                    app:cardBackgroundColor="@color/colorWhite"
+                    android:layout_marginTop="@dimen/padding_10">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/padding_20"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/phonenumber"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:layout_marginEnd="40dp"
+                                android:background="@drawable/auth_edittext_background"
+                                android:inputType="phone"
+                                android:maxLength="10"
+                                android:padding="10dp" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/submit1"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="50dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/button_background"
+                            android:text="next"
+                            android:layout_marginBottom="@dimen/padding_20"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#fff"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <Button
+                    android:id="@+id/submit_unvisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/button_background"
+                    android:text="next"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
-                android:fontFamily="sans-serif"
-                android:text="Tap Next to verify your account with your phone number..."
-                android:textAlignment="center" />
-
-            <Button
-                android:id="@+id/submit1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/button_background"
-                android:text="next"
-                android:textColor="#fff"
-                android:textStyle="bold" />
         </LinearLayout>
 
         <!--2nd Layout-->
@@ -155,13 +256,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/first">
 
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="@dimen/padding_20"
+                android:background="@drawable/mail_env"
+                android:backgroundTint="@color/colorPrimary"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter the code that was send to"
+                android:text="Verification"
+                android:textAlignment="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="visible"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter OTP code sent to your number"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/padding_10"/>
 
             <TextView
                 android:id="@+id/phonenumberText"
@@ -169,59 +288,91 @@
                 android:layout_height="wrap_content"
                 android:text="+918372890302"
                 android:textAlignment="center"
-                android:textColor="#019b77"
+                android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <com.chaos.view.PinView
-                android:id="@+id/pinView"
-                style="@style/PinWidget.PinView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:cursorVisible="true"
-                android:inputType="number"
-                android:padding="10dp"
-                android:textColor="#222222"
-                android:textSize="18sp"
-                app:cursorColor="@color/colorAccent"
-                app:cursorWidth="2dp"
-                app:itemCount="6"
-                app:itemHeight="48dp"
-                app:itemRadius="4dp"
-                app:itemSpacing="5dp"
-                app:itemWidth="36dp"
-                app:lineColor="#2f64ba"
-                app:lineWidth="2dp"
-                app:viewType="rectangle" />
-
-            <Button
-                android:id="@+id/submit2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/button_background"
-                android:text="continue"
-                android:textColor="#fff"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/text_otp_expire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="OTP expire after 00:00"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/padding_10"/>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_lider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="@dimen/padding_10"
+                app:cardBackgroundColor="@color/colorWhite"
+                android:layout_marginTop="@dimen/padding_10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.chaos.view.PinView
+                        android:id="@+id/pinView"
+                        style="@style/PinWidget.PinView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:cursorVisible="true"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        app:cursorColor="@color/colorAccent"
+                        app:cursorWidth="2dp"
+                        app:itemCount="6"
+                        app:itemHeight="48dp"
+                        app:itemRadius="4dp"
+                        app:itemSpacing="5dp"
+                        app:itemWidth="36dp"
+                        android:layout_gravity="center_horizontal"
+                        app:lineColor="#2f64ba"
+                        app:lineWidth="2dp"
+                        app:viewType="rectangle" />
+
+                    <Button
+                        android:id="@+id/submit2"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/button_background"
+                        android:text="continue"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#fff"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/padding_20"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tv_sms_recv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="I didn't get a code"
+                android:text="Didn't receive SMS ? Resend "
                 android:textAlignment="center"
-                android:textColor="#019b77"
-                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="10dp"
                 android:text="Tap Continue to accept our Terms,Data Policy, cookie use and the Privacy Policy and Terms of Service..."
                 android:textAlignment="center" />
@@ -235,11 +386,12 @@
             android:background="#FFF"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/padding_20">
 
             <pl.droidsonroids.gif.GifImageView
-                android:layout_width="380dp"
-                android:layout_height="350dp"
+                android:layout_width="340dp"
+                android:layout_height="280dp"
                 android:background="@drawable/auth_success"
                 android:scaleType="fitXY" />
 
@@ -249,7 +401,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
-                android:text="Congratulation your number is verified click Continue to create your profile"
+                android:text="Welcome to SIS your number is verified click Continue to create your profile"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -259,12 +411,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/button_background"
                 android:text="Continue"
                 android:textColor="#fff"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <!--region progress bar-->

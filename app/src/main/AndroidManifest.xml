@@ -20,25 +20,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".admin.activities.OrderActivity"></activity>
-        <activity android:name=".activities.BookingActivity"></activity>
-        <activity android:name=".admin.activities.CartActivity"></activity>
-
-        <activity android:name=".admin.activities.AddProductActivity"></activity>
-        <activity android:name=".admin.activities.ProductListActivity">
-
-        </activity>
+        <activity android:name=".admin.activities.DeliveryboyListActivity"></activity>
+        <activity android:name=".admin.activities.EditDeliveryBoyActivity" />
+        <activity android:name=".admin.activities.AddDeliveryboyActivity" />
+        <activity android:name=".admin.activities.OrderActivity" />
+        <activity android:name=".activities.BookingActivity" />
+        <activity android:name=".admin.activities.CartActivity" />
+        <activity android:name=".admin.activities.AddProductActivity" />
+        <activity android:name=".admin.activities.ProductListActivity" />
         <activity android:name=".admin.activities.AddSubCategoryActivity" />
         <activity android:name=".admin.activities.SubcategoryListActivity" />
         <activity android:name=".admin.activities.AddCategoryActivity" />
         <activity android:name=".admin.activities.EditCategoryActivity" />
         <activity android:name=".admin.activities.CategoryListActivity" />
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.NavProfileActivity" />
         <activity android:name=".activities.AuthenticationActivity" />
         <activity android:name=".admin.activities.EditSubcategoryActivity" />
-        <activity android:name=".activities.SplashActivity"></activity>
+        <activity android:name=".activities.SplashActivity" >
+
+
+        </activity>
         <activity android:name=".activities.AboutUsActivity" />
+        <activity android:name=".admin.activities.SelectRoleActivity" />
         <activity android:name=".activities.HomepageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,6 +50,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+        <activity android:name=".admin.activities.OrderHistoryActivity" />
+        <activity android:name=".admin.activities.DeliveryboyStatusListActivity" />
+        <activity android:name=".admin.activities.DeliveryboyOrderListActivity" />
+        <activity android:name=".admin.activities.EditProductActivity" />
+        <activity android:name=".admin.activities.EditHomeProductActivity" />
+        <activity android:name=".admin.activities.AddHomeProductActivity" />
+        <activity android:name=".activities.AuthUserActivity" />
     </application>
 
 </manifest>

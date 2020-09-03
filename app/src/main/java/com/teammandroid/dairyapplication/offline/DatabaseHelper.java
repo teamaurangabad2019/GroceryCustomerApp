@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public final static String DATABASE_NAME = "grocery.db";
@@ -31,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public final static String CUST_14 = "modified";
     public final static String CUST_15 = "modifiedby";
     public final static String CUST_16 = "RowCount";
+    public final static String CUST_17 = "userid";
 
     public final static String TABLE_ORDERS = "orders";
 
@@ -106,7 +109,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "createdby INTEGER," +
                 "modified TEXT," +
                 "modifiedby INTEGER," +
-                "RowCount INTEGER )");                          //10
+                "RowCount INTEGER,"+                          //10
+                "userid INTEGER )");                          //10
 
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "
@@ -152,7 +156,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean insertProductInfo(int productid,String title,String details,
                                      double price,double ourprice,
                               int offer,int subcategory,String image ,int isavailable,int isactive
-    ,String created,int createdby,String modified,int modifiedby,int RowCount)
+    ,String created,int createdby,String modified,int modifiedby,int RowCount, int userid)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -174,6 +178,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(CUST_14,modified);
         contentValues.put(CUST_15,modifiedby);
         contentValues.put(CUST_16,RowCount);
+        contentValues.put(CUST_17,userid);
 
         //long result = db.insert(TABLE_PRODUCT, null, contentValues);
 
@@ -204,22 +209,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // selection arguments
         String[] selectionArgs = {Integer.toString(productId)};
 
-        // query user table with conditions
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT productid FROM TABLE_PRODUCT WHERE CUST_2 = 'productId' AND user_password = 'qwerty';
-         */
-      /*  Cursor cursor = db.query(TABLE_QUANTITY, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                       //filter by row groups
-                null);*/                      //The sort order
-
-        //select productid from quantity where productid = 20;
-        //                Cursor cursor = db.rawQuery("SELECT * FROM " + dbHelper.TABLE_PRODUCT, null);//+" WHERE "+ QUANTITY_2 +" = "+ item.getProductid(), null);
         Cursor cursor = db.rawQuery("SELECT " + QUANTITY_2 +" FROM " + TABLE_QUANTITY +" WHERE "+ QUANTITY_2 +" = "+ productId,null);
         int cursorCount = cursor.getCount();
 
@@ -311,65 +300,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    //code to check vacation
-    public boolean checkVacationDates(String startdate,String endDate) {
-
-        // array of columns to fetch
-        String[] columns = {
-                DRP_ORD_2
-        };
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        // selection criteria
-
-        String selection = DRP_ORD_4 + " = ?" + " BETWEEN " + DRP_ORD_4 + " = ?";
-
-        // selection arguments
-        String[] selectionArgs = {startdate,endDate};
-
-        // query user table with conditions
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'jack@androidtutorialshub.com' AND user_password = 'qwerty';
-         */
-        Cursor cursor = db.query(TABLE_DROP_ORDER, //Table to query
-                columns,                    //columns to return
-                selection,                  //columns for the WHERE clause
-                selectionArgs,              //The values for the WHERE clause
-                null,                       //group the rows
-                null,                       //filter by row groups
-                null);                      //The sort order
-
-        int cursorCount = cursor.getCount();
-
-        cursor.close();
-        db.close();
-        if (cursorCount > 0) {
-            return true;
-        }
-        return false;
-    }
-
-
-    //to delete order
-    public Integer deleteEntry(int orderid){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        return db.delete(TABLE_ORDERS, "orderid=?", new String[]{String.valueOf(orderid)});
-
-    }
-
 
     //to delete quantity
     public Integer deleteQuantity(int quantityId){
 
         SQLiteDatabase db = this.getWritableDatabase();
-
-        //DELETE FROM quantity where quantityid In
-        //(SELECT quantityid FROM quantity ORDER BY
-        // quantityid LIMIT 1);
 
         return db.delete(TABLE_QUANTITY, "quantityid=?", new String[]{String.valueOf(quantityId)});
 
@@ -381,6 +316,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_QUANTITY, null);
         return cursor;
+    }
+
+
+
+    public ArrayList getAllCotacts(String  userid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> array_list = new ArrayList<String>();
+        Cursor res = db.rawQuery( "select * from "+TABLE_PRODUCT+" where userid= "+ userid, null );
+        res.moveToFirst();
+        while(res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(CUST_1)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_2)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_3)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_4)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_5)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_6)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_7)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_8)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_9)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_10)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_11)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_12)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_13)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_14)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_15)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_16)));
+            array_list.add(res.getString(res.getColumnIndex(CUST_17)));
+            res.moveToNext();
+        }
+        return array_list;
     }
 }
 

@@ -3,34 +3,14 @@ package com.teammandroid.dairyapplication.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class OrderModel implements Parcelable {
+public class RequestDetailsForAdminModel implements Parcelable {
 
+    /* String Productname;
+     String fullname;*/
     int orderid;
     int userid;
     int status;
     int deliveryboyid;
-
-    @Override
-    public String toString() {
-        return "OrderModel{" +
-                "orderid=" + orderid +
-                ", userid=" + userid +
-                ", status=" + status +
-                ", deliveryboyid=" + deliveryboyid +
-                ", deliverydate='" + deliverydate + '\'' +
-                ", address='" + address + '\'' +
-                ", paymentmode=" + paymentmode +
-                ", totalprice=" + totalprice +
-                ", savedprice=" + savedprice +
-                ", isactive=" + isactive +
-                ", created='" + created + '\'' +
-                ", createdby=" + createdby +
-                ", modified='" + modified + '\'' +
-                ", modifiedby=" + modifiedby +
-                ", RowCount=" + RowCount +
-                '}';
-    }
-
     String deliverydate;
     String address;
     int paymentmode;
@@ -43,7 +23,7 @@ public class OrderModel implements Parcelable {
     int modifiedby;
     int RowCount;
 
-    protected OrderModel(Parcel in) {
+    protected RequestDetailsForAdminModel(Parcel in) {
         orderid = in.readInt();
         userid = in.readInt();
         status = in.readInt();
@@ -61,19 +41,7 @@ public class OrderModel implements Parcelable {
         RowCount = in.readInt();
     }
 
-    public static final Creator<OrderModel> CREATOR = new Creator<OrderModel>() {
-        @Override
-        public OrderModel createFromParcel(Parcel in) {
-            return new OrderModel(in);
-        }
-
-        @Override
-        public OrderModel[] newArray(int size) {
-            return new OrderModel[size];
-        }
-    };
-
-    public OrderModel(int orderid, int userid, int status, int deliveryboyid, String deliverydate, String address, int paymentmode, double totalprice, double savedprice, int isactive, String created, int createdby, String modified, int modifiedby, int rowCount) {
+    public RequestDetailsForAdminModel(int orderid, int userid, int status, int deliveryboyid, String deliverydate, String address, int paymentmode, double totalprice, double savedprice, int isactive, String created, int createdby, String modified, int modifiedby, int rowCount) {
         this.orderid = orderid;
         this.userid = userid;
         this.status = status;
@@ -92,28 +60,40 @@ public class OrderModel implements Parcelable {
     }
 
     @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(orderid);
+        dest.writeInt(userid);
+        dest.writeInt(status);
+        dest.writeInt(deliveryboyid);
+        dest.writeString(deliverydate);
+        dest.writeString(address);
+        dest.writeInt(paymentmode);
+        dest.writeDouble(totalprice);
+        dest.writeDouble(savedprice);
+        dest.writeInt(isactive);
+        dest.writeString(created);
+        dest.writeInt(createdby);
+        dest.writeString(modified);
+        dest.writeInt(modifiedby);
+        dest.writeInt(RowCount);
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(orderid);
-        parcel.writeInt(userid);
-        parcel.writeInt(status);
-        parcel.writeInt(deliveryboyid);
-        parcel.writeString(deliverydate);
-        parcel.writeString(address);
-        parcel.writeInt(paymentmode);
-        parcel.writeDouble(totalprice);
-        parcel.writeDouble(savedprice);
-        parcel.writeInt(isactive);
-        parcel.writeString(created);
-        parcel.writeInt(createdby);
-        parcel.writeString(modified);
-        parcel.writeInt(modifiedby);
-        parcel.writeInt(RowCount);
-    }
+    public static final Creator<RequestDetailsForAdminModel> CREATOR = new Creator<RequestDetailsForAdminModel>() {
+        @Override
+        public RequestDetailsForAdminModel createFromParcel(Parcel in) {
+            return new RequestDetailsForAdminModel(in);
+        }
+
+        @Override
+        public RequestDetailsForAdminModel[] newArray(int size) {
+            return new RequestDetailsForAdminModel[size];
+        }
+    };
 
     public int getOrderid() {
         return orderid;
@@ -235,7 +215,28 @@ public class OrderModel implements Parcelable {
         RowCount = rowCount;
     }
 
-    public static Creator<OrderModel> getCREATOR() {
+    public static Creator<RequestDetailsForAdminModel> getCREATOR() {
         return CREATOR;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestDetailsForAdminModel{" +
+                "orderid=" + orderid +
+                ", userid=" + userid +
+                ", status=" + status +
+                ", deliveryboyid=" + deliveryboyid +
+                ", deliverydate='" + deliverydate + '\'' +
+                ", address='" + address + '\'' +
+                ", paymentmode=" + paymentmode +
+                ", totalprice=" + totalprice +
+                ", savedprice=" + savedprice +
+                ", isactive=" + isactive +
+                ", created='" + created + '\'' +
+                ", createdby=" + createdby +
+                ", modified='" + modified + '\'' +
+                ", modifiedby=" + modifiedby +
+                ", RowCount=" + RowCount +
+                '}';
     }
 }

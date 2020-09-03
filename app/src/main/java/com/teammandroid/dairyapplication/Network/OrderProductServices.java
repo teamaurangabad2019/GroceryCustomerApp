@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.teammandroid.dairyapplication.admin.model.OrderDeliveryboyModel;
 import com.teammandroid.dairyapplication.admin.model.OrderproductModel;
+import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.model.OrderModel;
 import com.teammandroid.dairyapplication.model.Response;
@@ -43,13 +44,16 @@ public class OrderProductServices {
         return instance;
     }
 
-    public void FetchOrderproduct(int Orderid, final ApiStatusCallBack apiStatusCallBack) {
-        //{"type":2,"Action":3, "Orderid":1} //
+
+    public void fetchProductUsingOrderId(int Orderid,final ApiStatusCallBack apiStatusCallBack) {
+
+        //{"type":2,"Action":5, "Deliveryboyid":35}      fetch all order history using Deliveryboyid
+
         try {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("type", 2);
-                jsonObject.put("Action", 3);
+                jsonObject.put("Action", 5);
                 jsonObject.put("Orderid", Orderid);
 
             } catch (Exception e) {
@@ -67,9 +71,9 @@ public class OrderProductServices {
                         public void onResponse(JSONArray response) {
 
                             try {
-                                TypeToken<ArrayList<OrderproductModel>> token = new TypeToken<ArrayList<OrderproductModel>>() {
+                                TypeToken<ArrayList<ProductModel>> token = new TypeToken<ArrayList<ProductModel>>() {
                                 };
-                                ArrayList<OrderproductModel> notesPackages = new Gson().fromJson(response.toString(), token.getType());
+                                ArrayList<ProductModel> notesPackages = new Gson().fromJson(response.toString(), token.getType());
                                 Log.e("SubjectModel", "" + notesPackages);
                                 apiStatusCallBack.onSuccess(notesPackages);
 
@@ -93,20 +97,23 @@ public class OrderProductServices {
         }
     }
 
-    public void createOrderproduct(int Orderproductid,int Orderid,int Productid,
-                            final ApiStatusCallBack apiStatusCallBack) {
 
-        // {"type":1,"Action":1, "Orderproductid":0,"Orderid":1,"Productid":1}
+    public void insertOrderProduct(int Orderproductid,int Orderid, int Productid, int Quantity,double Totalamount,int LogedinUserId, final ApiStatusCallBack apiStatusCallBack) {
+
+        //  add {"type":1,"Action":1, "Orderproductid":0,"Orderid":1,"Productid":1}
 
         try {
             JSONObject jsonObject = new JSONObject();
-
             try {
-                jsonObject.put("type","1");
-                jsonObject.put("Action","1");
-                jsonObject.put("Orderproductid",Orderproductid);
-                jsonObject.put("Orderid",Orderid);
-                jsonObject.put("Productid",Productid);
+                jsonObject.put("type", 1);
+                jsonObject.put("Action", 1);
+                jsonObject.put("Orderproductid", Orderproductid);
+                jsonObject.put("Orderid", Orderid);
+                jsonObject.put("Productid", Productid);
+                jsonObject.put("Quantity", Quantity);
+                jsonObject.put("Totalamount", Totalamount);
+                jsonObject.put("LogedinUserId", LogedinUserId);
+
             } catch (Exception e) {
                 Log.e("JSONOBJECTerr", "" + e);
                 apiStatusCallBack.onUnknownError(e);
@@ -127,12 +134,11 @@ public class OrderProductServices {
                                 TypeToken<Response> token = new TypeToken<Response>() {
                                 };
                                 Response response1 = new Gson().fromJson(response.toString(), token.getType());
-                                Log.e("orderDetails", "" + response1);
                                 apiStatusCallBack.onSuccess(response1);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Log.e("erroeorder", e.getMessage());
+                                Log.e("erroe", e.getMessage());
                             }
 
                             Log.e("orderdetails", String.valueOf(response));
@@ -141,19 +147,16 @@ public class OrderProductServices {
 
                         @Override
                         public void onError(ANError anError) {
-                            Log.e("order:anError", "" + anError);
-                            Log.e("order:anError", "" + anError.getErrorBody());
+                            Log.e("OrderPkgs:anError", "" + anError);
+                            Log.e("OrderPkgs:anError", "" + anError.getErrorBody());
                             apiStatusCallBack.onError(anError);
-
                         }
                     });
         } catch (Exception ex) {
             Log.e("onUnknownError", "" + ex);
             apiStatusCallBack.onUnknownError(ex);
         }
-
     }
-
 
 
 }

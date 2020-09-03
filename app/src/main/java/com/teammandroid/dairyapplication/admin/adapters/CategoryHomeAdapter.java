@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.activities.HomepageActivity;
 
+import com.teammandroid.dairyapplication.admin.activities.CategoryListActivity;
+import com.teammandroid.dairyapplication.admin.activities.SubcategoryListActivity;
 import com.teammandroid.dairyapplication.admin.model.CategoryModel;
 
 import com.teammandroid.dairyapplication.utils.Utility;
@@ -77,7 +79,7 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
 
         Log.e(TAG, list.toString());
         viewHolder.name.setText(item.getTitle());
-       
+
 
       /*  Random r = new Random();
         int red=r.nextInt(255 - 0 + 1)+0;
@@ -93,8 +95,17 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
                 .load(URL_CATEGORY_IMG+item.getImagename())
                 .into(viewHolder.image_view);
 
+        viewHolder.rl_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                //   bundle.putString("categoryName",categoryName);
+                bundle.putParcelable("CategoryModel", item);
+                Utility.launchActivity(activity, SubcategoryListActivity.class, false,bundle);
 
-       
+            }
+        });
+
 
     }
 
@@ -108,11 +119,13 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
 
         ImageView image_view;
         TextView name;
+        RelativeLayout rl_category;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             image_view = itemView.findViewById(R.id.image_view);
+            rl_category = itemView.findViewById(R.id.rl_category);
 
             itemView.setOnClickListener(this); // bind the listener
         }

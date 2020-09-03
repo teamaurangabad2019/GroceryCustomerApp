@@ -38,9 +38,9 @@ public class SessionHelper {
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String TAG_TOKEN = "saarthi_app";
+    public static final String KEY_USERDATA = "USERDATA";
 
-
-    public SessionHelper(Context context) {
+    /*public SessionHelper(Context context) {
         this._context = context;
         mInstance = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = mInstance.edit();
@@ -50,10 +50,20 @@ public class SessionHelper {
             editor.putString(TAG_TOKEN, "No Token");
             editor.commit();
         }
-    }
+    }*/
 
+
+
+    // Constructor
+    public SessionHelper(Context context){
+        this._context = context;
+        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        editor = pref.edit();
+        editor.apply();
+    }
     public void setLogin(boolean isLoggedIn) {
-        editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
+        // editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
+        editor.putBoolean(IS_LOGIN, isLoggedIn);
         // commit changes
         editor.commit();
         Log.d(TAG, "User login session modified!");
@@ -66,10 +76,9 @@ public class SessionHelper {
     }
 
     public boolean isLoggedIn(){
-        return mInstance.getBoolean(KEY_IS_LOGGEDIN, false);
+        //return mInstance.getBoolean(KEY_IS_LOGGEDIN, false);
+        return pref.getBoolean(IS_LOGIN, false);
     }
-
-
 
     public void createLoginSession(UserModel user){
         editor.putBoolean(IS_LOGIN, true);
@@ -81,6 +90,33 @@ public class SessionHelper {
         } catch (Exception ex) {
             Log.e(TAG, "setStudentInSharedPref: ", ex);
         }
+    }
+
+
+    /*public UserModel getUserDetails(){
+        UserModel user = null;
+
+        try {
+            String response =  pref.getString(KEY_USERDATA, null);
+            Gson gson = new Gson();
+            user = gson.fromJson(response, UserModel.class);
+        } catch (Exception ex) {
+            Log.e(TAG, "getStudentFromSharedPref: ", ex);
+        }
+        return user;
+    }*/
+
+    public UserModel getUserDetails(){
+        UserModel user = null;
+
+        try {
+            String response =  pref.getString(KEY_USERDATA, null);
+            Gson gson = new Gson();
+            user = gson.fromJson(response, UserModel.class);
+        } catch (Exception ex) {
+            Log.e(TAG, "getStudentFromSharedPref: ", ex);
+        }
+        return user;
     }
 
     public void logoutUser(){
@@ -97,17 +133,5 @@ public class SessionHelper {
         _context.startActivity(i);
     }
 
-    public UserModel getUserDetails(){
-        UserModel user = null;
-
-        try {
-            String response =  pref.getString(KEY_USERDATA, null);
-            Gson gson = new Gson();
-            user = gson.fromJson(response, UserModel.class);
-        } catch (Exception ex) {
-            Log.e(TAG, "getStudentFromSharedPref: ", ex);
-        }
-        return user;
-    }
 
 }

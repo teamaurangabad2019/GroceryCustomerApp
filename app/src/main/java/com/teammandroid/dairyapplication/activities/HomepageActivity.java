@@ -45,17 +45,20 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.razorpay.Checkout;
-import com.razorpay.PaymentResultListener;
 import com.teammandroid.dairyapplication.Network.CategoryServices;
+import com.teammandroid.dairyapplication.Network.ProductServices;
 import com.teammandroid.dairyapplication.Network.SliderService;
 import com.teammandroid.dairyapplication.R;
 
+import com.teammandroid.dairyapplication.admin.activities.AddHomeProductActivity;
 import com.teammandroid.dairyapplication.admin.activities.CategoryListActivity;
+import com.teammandroid.dairyapplication.admin.activities.DeliveryboyListActivity;
+import com.teammandroid.dairyapplication.admin.activities.OrderHistoryActivity;
 import com.teammandroid.dairyapplication.admin.adapters.CategoryHomeAdapter;
-import com.teammandroid.dairyapplication.admin.adapters.RecyclerViewAdapter;
+import com.teammandroid.dairyapplication.admin.adapters.ProductListHomeAdapter;
 import com.teammandroid.dairyapplication.admin.model.CategoryModel;
+import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
-import com.teammandroid.dairyapplication.model.Response;
 import com.teammandroid.dairyapplication.model.SliderModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 
@@ -64,20 +67,15 @@ import com.teammandroid.dairyapplication.utils.PrefManager;
 import com.teammandroid.dairyapplication.utils.SessionHelper;
 import com.teammandroid.dairyapplication.utils.Utility;
 
-import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class HomepageActivity extends AppCompatActivity implements View.OnClickListener,BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener
-  , PaymentResultListener {
+public class HomepageActivity extends AppCompatActivity implements View.OnClickListener,
+        BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener
+{
 
     RecyclerView recyclerView;
     private final static String TAG=HomepageActivity.class.getSimpleName();
@@ -201,11 +199,12 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> mPrice = new ArrayList<>();
     private ArrayList<String> mCutoff = new ArrayList<>();
 
-
+    RelativeLayout rl_addHomeProduct;
+    ProductListHomeAdapter productListHomeAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+     //   getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(R.layout.activity_homepage);
         activity=HomepageActivity.this;
@@ -219,6 +218,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         requestPermission();
         getCategory();
         getImages();
+        productList(0);
     }
 
     private void listener() {
@@ -247,6 +247,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         ib_whatsapp.setOnClickListener(this);
         ib_linkedin.setOnClickListener(this);
         ib_telegram.setOnClickListener(this);
+        rl_addHomeProduct.setOnClickListener(this);
     }
 
     private void bindView() {
@@ -262,6 +263,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         rl_headerprofile = (RelativeLayout) findViewById(R.id.rl_headerprofile);
         rl_profile = (RelativeLayout) findViewById(R.id.rl_profile);
         rl_home = (RelativeLayout) findViewById(R.id.rl_home);
+        rl_addHomeProduct = (RelativeLayout) findViewById(R.id.rl_addHomeProduct);
         drl_Opener =  findViewById(R.id.drl_Opener);
 
         rl_enrolledstudent = (RelativeLayout) findViewById(R.id.rl_enrolledstudent);
@@ -305,8 +307,8 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         return list;
     }*/
-        @Override
-        public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         switch (v.getId()) {
             default:
                 break;
@@ -323,7 +325,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.rl_profile:
                 drl_Opener.closeDrawer(Gravity.LEFT);
-                Utility.launchActivity(HomepageActivity.this,NavProfileActivity.class,false);
+                Utility.launchActivity(HomepageActivity.this, DeliveryboyListActivity.class,false);
                 break;
             case R.id.rl_enrolledstudent:
                 drl_Opener.closeDrawer(Gravity.LEFT);
@@ -331,15 +333,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.rl_paymentHist:
-                drl_Opener.closeDrawer(Gravity.LEFT);
-                //Utility.launchActivity(HomepageActivity.this,PaymenyHistoryActivity.class,false);
-                //Toast.makeText(getApplicationContext(),"CLick here",Toast.LENGTH_SHORT).show();
+                Utility.launchActivity(HomepageActivity.this, OrderHistoryActivity.class,false);
 
                 break;
             case R.id.rl_paidelecture:
                 drl_Opener.closeDrawer(Gravity.LEFT);
                 Toast.makeText(getApplicationContext(),"CLick here",Toast.LENGTH_SHORT).show();
-               // Utility.launchActivity(HomepageActivity.this, PayementActivity.class,false);
+                // Utility.launchActivity(HomepageActivity.this, PayementActivity.class,false);
                 break;
             case R.id.rl_insert_video_link:
                 drl_Opener.closeDrawer(Gravity.LEFT);
@@ -360,10 +360,10 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 Utility.launchActivity(HomepageActivity.this, CategoryListActivity.class,false);
                 break;
 
-             case R.id.txt_rateus:
-                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.rate_us_link)));
-                 startActivity(intent);
-                 break;
+            case R.id.txt_rateus:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.rate_us_link)));
+                startActivity(intent);
+                break;
 
             case R.id.tv_share_app:
                 Intent sendIntent = new Intent();
@@ -373,13 +373,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(sendIntent);
                 break;
 
-               case R.id.txt_contact:
-               Utility.launchActivity(HomepageActivity.this, AboutUsActivity.class,false);
-               break;
+            case R.id.txt_contact:
+                Utility.launchActivity(HomepageActivity.this, AboutUsActivity.class,false);
+                break;
 
-               case R.id.txt_feedback:
-                   writeReviewMail(HomepageActivity.this);
-                   break;
+            case R.id.txt_feedback:
+                writeReviewMail(HomepageActivity.this);
+                break;
 
             case R.id.txt_aboutus:
                 Utility.launchActivity(HomepageActivity.this, AboutUsActivity.class,false);
@@ -454,59 +454,64 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
 
+            case R.id.rl_addHomeProduct:
+                Utility.launchActivity(HomepageActivity.this, AddHomeProductActivity.class,false);
+                drl_Opener.closeDrawer(Gravity.LEFT);
+                break;
+
         }
     }
 
-        public static void writeReviewMail(Context context) {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                    "mailto", context.getResources().getString(R.string.feedback_email), null));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-            context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.app_name)));
-        }
+    public static void writeReviewMail(Context context) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", context.getResources().getString(R.string.feedback_email), null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.app_name)));
+    }
 
-        private void getSlider() {
+    private void getSlider() {
 
-            try {
-                if (Utility.isNetworkAvailable(HomepageActivity.this)) {
-                    progressDialog.setTitle("Please Wait...");
-                    progressDialog.setCancelable(false);
-                    progressDialog.show();
+        try {
+            if (Utility.isNetworkAvailable(HomepageActivity.this)) {
+                progressDialog.setTitle("Please Wait...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
 
-                    SliderService.getInstance(HomepageActivity.this).
-                            GetSlides(1,new ApiStatusCallBack<ArrayList<SliderModel>>() {
-                        @Override
-                        public void onSuccess(ArrayList<SliderModel> sliderModels) {
-                            progressDialog.dismiss();
-                            slider(sliderModels);
-                            Log.e("checkModel",""+sliderModels);
-                        }
+                SliderService.getInstance(HomepageActivity.this).
+                        GetSlides(1,new ApiStatusCallBack<ArrayList<SliderModel>>() {
+                            @Override
+                            public void onSuccess(ArrayList<SliderModel> sliderModels) {
+                                progressDialog.dismiss();
+                                slider(sliderModels);
+                                Log.e("checkModel",""+sliderModels);
+                            }
 
-                        @Override
-                        public void onError(ANError anError) {
-                            // lyt_progress_employees.setVisibility(View.GONE);
-                            progressDialog.dismiss();
-                            Log.e("errorHome",""+anError);
-                            Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                            @Override
+                            public void onError(ANError anError) {
+                                // lyt_progress_employees.setVisibility(View.GONE);
+                                progressDialog.dismiss();
+                                Log.e("errorHome",""+anError);
+                                Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
 
-                        }
+                            }
 
-                        @Override
-                        public void onUnknownError(Exception e) {
-                            // lyt_progress_employees.setVisibility(View.GONE);
-                            progressDialog.dismiss();
-                            Utility.showErrorMessage(HomepageActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
-                        }
-                    });
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                // lyt_progress_employees.setVisibility(View.GONE);
+                                progressDialog.dismiss();
+                                Utility.showErrorMessage(HomepageActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+                            }
+                        });
 
-                } else {
-                    Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
-                }
-            } catch (Exception ex) {
-                Utility.showErrorMessage(HomepageActivity.this, ex.getMessage(), Snackbar.LENGTH_LONG);
+            } else {
+                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
             }
+        } catch (Exception ex) {
+            Utility.showErrorMessage(HomepageActivity.this, ex.getMessage(), Snackbar.LENGTH_LONG);
         }
+    }
 
-        public void slider(ArrayList<SliderModel> arraylist) {
+    public void slider(ArrayList<SliderModel> arraylist) {
         progressDialog.dismiss();
         HashMap<String, String> url_maps1 = new HashMap<String, String>();
         int id = 1;
@@ -539,94 +544,94 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         mDemoSlider.addOnPageChangeListener(this);
     }
 
-        private void requestPermission() {
-            Dexter.withActivity(this)
-                    .withPermissions(
-                            Manifest.permission.INTERNET)
-                    .withListener(new MultiplePermissionsListener() {
-                        @Override
-                        public void onPermissionsChecked(MultiplePermissionsReport report) {
-                            // check if all permissions are granted
-                            if (report.areAllPermissionsGranted()) {
-                                //Toast.makeText(getApplicationContext(), "All permissions are granted!", Toast.LENGTH_SHORT).show();
-                            }
-
-                            // check for permanent denial of any permission
-                            if (report.isAnyPermissionPermanentlyDenied()) {
-                                // show alert dialog navigating to Settings
-                                // showSettingsDialog();
-                            }
+    private void requestPermission() {
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.INTERNET)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            //Toast.makeText(getApplicationContext(), "All permissions are granted!", Toast.LENGTH_SHORT).show();
                         }
 
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                            token.continuePermissionRequest();
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // show alert dialog navigating to Settings
+                            // showSettingsDialog();
                         }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
 
 
-                    }).
-                    withErrorListener(new PermissionRequestErrorListener() {
-                        @Override
-                        public void onError(DexterError error) {
-                            Toast.makeText(getApplicationContext(), "Error occurred! "+error, Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .onSameThread()
-                    .check();
-        }
+                }).
+                withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Toast.makeText(getApplicationContext(), "Error occurred! "+error, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
 
-        private void showCustomDialogLogout() {
-            // this.correct = correct;
-            resultbox = new Dialog(HomepageActivity.this);
-            resultbox.setContentView(R.layout.custom_dialog);
-            // resultbox.setCanceledOnTouchOutside(false);
-            Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
-            Button btn_cancel = (Button) resultbox.findViewById(R.id.btn_resume);
-            TextView text_assign = resultbox.findViewById(R.id.text_title);
+    private void showCustomDialogLogout() {
+        // this.correct = correct;
+        resultbox = new Dialog(HomepageActivity.this);
+        resultbox.setContentView(R.layout.custom_dialog);
+        // resultbox.setCanceledOnTouchOutside(false);
+        Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
+        Button btn_cancel = (Button) resultbox.findViewById(R.id.btn_resume);
+        TextView text_assign = resultbox.findViewById(R.id.text_title);
 
-            text_assign.setText("Are you sure you want to exit ?");
+        text_assign.setText("Are you sure you want to exit ?");
 
-            btn_finish.setOnClickListener(new View.OnClickListener() {
+        btn_finish.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    resultbox.cancel();
-                    SessionHelper sessionManager=new SessionHelper(HomepageActivity.this);
-                    sessionManager.logoutUser();
-                    prefManager.setROLE_ID(5);
-                    finish();
-                }
-            });
+            @Override
+            public void onClick(View v) {
+                resultbox.cancel();
+                SessionHelper sessionManager=new SessionHelper(HomepageActivity.this);
+                sessionManager.logoutUser();
+                prefManager.setROLE_ID(5);
+                finish();
+            }
+        });
 
-            btn_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    resultbox.cancel();
-                }
-            });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resultbox.cancel();
+            }
+        });
 
-            resultbox.show();
-        }
+        resultbox.show();
+    }
 
-        @Override
-        public void onSliderClick(BaseSliderView slider) {
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
 
-        }
+    }
 
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        }
+    }
 
-        @Override
-        public void onPageSelected(int position) {
+    @Override
+    public void onPageSelected(int position) {
 
-        }
+    }
 
-        @Override
-        public void onPageScrollStateChanged(int state) {
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
-        }
+    }
 
 /*
         private void checkAlreadyPurchased(int packageId,int userId, int total_days) {
@@ -684,213 +689,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
             } catch (Exception ex) {
                 Toast.makeText(getApplicationContext(),"ex "+ex.getMessage(),Toast.LENGTH_LONG).show();
                 Utility.showErrorMessage(activity, ex.getMessage(), Snackbar.LENGTH_LONG);
-            }
-
-        }
-*/
-
-        private void showCustomDialogForUnpaid(double amount) {
-            // this.correct = correct;
-            resultbox = new Dialog(activity);
-            resultbox.setContentView(R.layout.custom_dialog);
-            // resultbox.setCanceledOnTouchOutside(false);
-            Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
-            Button btn_cancel = (Button) resultbox.findViewById(R.id.btn_resume);
-            TextView text_assign = resultbox.findViewById(R.id.text_title);
-
-            text_assign.setText("Are you want to purchase Package ?");
-
-            btn_finish.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    resultbox.cancel();
-                    Toast.makeText(getApplicationContext(),"DialogunPaidFinishBtn",Toast.LENGTH_LONG).show();
-                    Log.e("Amount ", String.valueOf(amount));
-                    startPayment("",amount);
-                }
-            });
-
-            btn_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Toast.makeText(getApplicationContext(),"DialogunPaidCancelBtn",Toast.LENGTH_LONG).show();
-                    resultbox.cancel();
-                }
-            });
-
-            resultbox.show();
-        }
-
-        private void checkDateExtendedFunction(int total_days) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            Date today = Calendar.getInstance().getTime();
-            String startDate = sdf.format(today);
-            Log.e(TAG, "onPaymentSuccess: today "+today );
-            Calendar c = Calendar.getInstance();
-            try {
-                c.setTime(sdf.parse(startDate));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-           // Log.e(TAG, "onPaymentSuccess: Duration "+programModel.getDuration() );
-            c.add(Calendar.DATE, total_days);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
-            String endDate = sdf.format(c.getTime());
-            expirydate = sdf.format(c.getTime());
-            Log.e(TAG, "onPaymentSuccess: exp "+endDate );
-
-            //AddPayment(0,prefManager.getUSER_ID(),packageId,Utility.getCurrentDate());
-
-        }
-
-
-        private void checkDateExtendedFunctionForNewPayment(int total_days, double pamount) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            Date today = Calendar.getInstance().getTime();
-            String startDate = sdf.format(today);
-            Log.e(TAG, "onPaymentSuccess: today "+today );
-            Calendar c = Calendar.getInstance();
-            try {
-                c.setTime(sdf.parse(startDate));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-           // Log.e(TAG, "onPaymentSuccess: Duration "+programModel.getDuration() );
-            c.add(Calendar.DATE, total_days);  // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
-            String endDate = sdf.format(c.getTime());
-            expirydate = sdf.format(c.getTime());
-            Log.e(TAG, "onPaymentSuccess: exp "+expirydate );
-
-            showCustomDialogForUnpaid(pamount);
-
-            //AddPayment(0,prefManager.getUSER_ID(),packageId,Utility.getCurrentDate());
-
-        }
-        private void showCustomDialogForPaid(int packageId,int userId) {
-            // this.correct = correct;
-            resultbox = new Dialog(activity);
-            resultbox.setContentView(R.layout.custom_dialog);
-            // resultbox.setCanceledOnTouchOutside(false);
-            Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
-            Button btn_cancel = (Button) resultbox.findViewById(R.id.btn_resume);
-            TextView text_assign = resultbox.findViewById(R.id.text_title);
-
-            text_assign.setText("You already have this package,Do you want to watch Videos ??");
-
-            btn_finish.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("Videopackageid", packageId);
-                    // bundle.putParcelable("VideoPackagesModel", item);
-                    Log.e("Videopackageid", String.valueOf(packageId));
-                   //18-08
-                    // Utility.launchActivity(activity, VideoActivity.class, false, bundle);
-                    resultbox.cancel();
-
-                }
-            });
-
-            btn_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    resultbox.cancel();
-                }
-            });
-
-            resultbox.show();
-        }
-
-        public void startPayment(String orderId,double price) {
-
-            /**   * Instantiate Checkout   */
-            Checkout checkout = new Checkout();
-            checkout.setKeyID(Constants.RAZOR_ID);
-            /*** Set your logo here   */
-            //checkout.setImage(R.drawable.logo);
-            /**   * Reference to current activity   */
-            final Activity activity = this;
-            /**   * Pass your payment options to the Razorpay Checkout as a JSONObject   */
-            try {
-                JSONObject options = new JSONObject();
-                /**      * Merchant Name      * eg: ACME Corp || HasGeek etc.      */
-                options.put("name", "SuccessAcademy");
-                /**      * Description can be anything      * eg: Reference No. #123123 - This order number is passed by you for your internal reference. This is not the `razorpay_order_id`.      *     Invoice Payment      *     etc.      */
-                options.put("description", "Reference No. #123456");
-                options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
-                // options.put("order_id", orderId);
-                options.put("currency", "INR");
-                /**      * Amount is always passed in currency subunits      * Eg: "500" = INR 5.00      */
-
-                double finalPrice = price*100;
-                options.put("amount", String.valueOf(finalPrice));
-                checkout.open(activity, options);
-
-            } catch(Exception e) {
-                Toast.makeText(getApplicationContext(),"Error in starting Razorpay Checkout "+e.getMessage(),Toast.LENGTH_LONG).show();
-                Log.e(TAG, "Error in starting Razorpay Checkout", e);
-            }
-        }
-
-        @Override
-        public void onPaymentSuccess(String s) {
-            Log.e(TAG, "onPaymentSuccess: " + s +"pid "+packageId+"uid "+prefManager.getUSER_ID());
-           // AddPayment(0,prefManager.getUSER_ID(),packageId,Utility.getCurrentDate(), expirydate );
-        }
-
-        @Override
-        public void onPaymentError(int i, String s) {
-            Log.e(TAG, "onPaymentError: " + s);
-        }
-
-       /* private void AddPayment(int Paymentid,int Userid,int Packageid,String Paiddate, String Expirydate)
-        {
-            try{
-                if (Utility.isNetworkAvailable(activity)) {
-                    progressDialog.setMessage("Please Wait...");
-                    progressDialog.setCancelable(false);
-                    progressDialog.show();
-                    PaymentServices.getInstance(activity).addPayment(Paymentid,
-                            Userid, Packageid, Paiddate, Expirydate, new ApiStatusCallBack<Response>() {
-                                @Override
-                                public void onSuccess(Response response) {
-                                    progressDialog.dismiss();
-                                    Log.e("PaymentModel", response.getMessage());
-                                    Bundle bundle = new Bundle();
-                                    bundle.putInt("Videopackageid", packageId);
-                                    // bundle.putParcelable("VideoPackagesModel", item);
-                                    Log.e("packageIdSuccess", String.valueOf(packageId));
-                                    Utility.launchActivity(activity, VideoActivity.class, false, bundle);
-                                    Toast.makeText(activity, "Added Successfully !!", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onError(ANError anError) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(),"ANErrorAdd "+anError.getMessage(),Toast.LENGTH_LONG).show();
-                                    Log.e("PaymentModel", anError.getMessage());
-
-                                }
-
-                                @Override
-                                public void onUnknownError(Exception e) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(),"exc e "+e.getMessage(),Toast.LENGTH_LONG).show();
-                                    Log.e("PaymentModel", e.getMessage());
-
-                                }
-                            });
-                }else {
-                    Utility.showErrorMessage(activity, "Could not connect to the internet", Snackbar.LENGTH_LONG);
-                }
-            }catch (Exception ex) {
-                Toast.makeText(getApplicationContext(),"ex "+ex.getMessage(),Toast.LENGTH_LONG).show();
-                Log.e("CheckReponseOther","InsideExtra"+ex);
-                progressDialog.dismiss();
-                // Utility.showErrorMessage(PaymenyHistoryActivity.this, "No record found", Snackbar.LENGTH_LONG);
             }
 
         }
@@ -993,23 +791,79 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-        initRecyclerView();
 
     }
-    // recycler view adapters
-    private void initRecyclerView(){
-        Log.d(TAG, "initRecyclerView: init recyclerview");
 
+    private void productList(int Subcategoryid) {
+        try {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
 
+                progressDialog.setMessage("Please Wait...");
+                progressDialog.setCancelable(false);
+                // progressDialog.setProgressStyle(R.id.abbreviationsBar);
+                progressDialog.show();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-       /* GridLayoutManager layoutManager = new GridLayoutManager(this,1);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);*/
+                Log.e(TAG, "LoginUser: ");
 
+                ProductServices.getInstance(getApplicationContext()).
+                        fetchHomeProduct(Subcategoryid,new ApiStatusCallBack<ArrayList<ProductModel>>() {
+                            @Override
+                            public void onSuccess(ArrayList<ProductModel> productModels) {
+                                progressDialog.dismiss();
+                                BindList(productModels);
+                            }
 
-        /*recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));*/
-        recyclerView.setLayoutManager(layoutManager);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mOffersprice, mImage, mLabel,mWeight,mPrice,mCutoff);
-        recyclerView.setAdapter(adapter);
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.e(TAG, "ANError " + anError.getMessage());
+                                progressDialog.dismiss();
+                                Utility.showErrorMessage(HomepageActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                            }
+
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                progressDialog.dismiss();
+                                Log.e(TAG, "exc " + e.getMessage());
+                                //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                            }
+
+                        });
+            } else {
+                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet");
+            }
+        } catch (Exception ex) {
+            //  lyt_progress_reg.setVisibility(View.GONE);
+            progressDialog.dismiss();
+            Utility.showErrorMessage(HomepageActivity.this, ex.getMessage());
+        }
     }
+
+    private void BindList(final ArrayList<ProductModel> mUserList) {
+        try {
+            progressDialog.dismiss();
+
+            setTitle("NotesPackages (" + mUserList.size() + ")");
+            Log.e(TAG, "CAtemUserList: "+mUserList.toString());
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(HomepageActivity.this,
+                    LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+
+            productListHomeAdapter = new ProductListHomeAdapter(HomepageActivity.this,
+                    mUserList, new ProductListHomeAdapter.ItemClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+
+                }
+            });
+
+            recyclerView.setAdapter(productListHomeAdapter);
+            productListHomeAdapter.notifyDataSetChanged();
+        } catch (Exception ex) {
+            //Utility.showErrorMessage(this, ex.getMessage(), Snackbar.LENGTH_LONG);
+        }
     }
+
+}

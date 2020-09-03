@@ -26,17 +26,29 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="180dp"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/padding_20">
 
                 <ImageView
-                    android:layout_margin="20dp"
+                    android:id="@+id/iv_logo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="150dp"
                     android:src="@drawable/mandroid_logo" />
 
+                <TextView
+                    android:id="@+id/txt_userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:drawablePadding="15dp"
+                    android:gravity="center_horizontal"
+                    android:text="txt_userName"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@+id/iv_logo"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -115,7 +127,7 @@
                     android:layout_marginBottom="0dp"
                     android:layout_toRightOf="@+id/iv_profile"
                     android:gravity="center_vertical"
-                    android:text=" Profile"
+                    android:text=" Delivery Boy"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/nav_drawer_text"
                     android:textStyle="bold" />
@@ -148,12 +160,44 @@
                     android:layout_toRightOf="@+id/iv_payment"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
-                    android:text="History"
+                    android:text="Order History"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/nav_drawer_text" />
             </RelativeLayout>
             <!--endregion-->
 
+
+
+            <!--region Payment-->
+            <RelativeLayout
+                android:id="@+id/rl_addHomeProduct"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_addhome"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_credit_card"
+                    android:layout_centerVertical="true"
+                    android:tint="@color/colorGreen" />
+
+                <TextView
+                    android:id="@+id/tv_addhome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/iv_addhome"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text=" Add Home Product"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text" />
+
+            </RelativeLayout>
+            <!--endregion-->
             <!--region Todays Count-->
             <RelativeLayout
                 android:id="@+id/rl_enrolledstudent"

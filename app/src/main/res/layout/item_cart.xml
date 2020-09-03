@@ -21,7 +21,8 @@
                 android:layout_height="wrap_content"
                 android:text="Label"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"/>
 
             <TextView
                 android:id="@+id/desc"
@@ -89,6 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:visibility="gone"
                 android:src="@drawable/ic_delete_black_24dp" />
         </RelativeLayout>
 
@@ -135,7 +137,7 @@
             android:id="@+id/tv_subtotalView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total: "
+            android:text="Total : "
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -216,10 +218,10 @@
         android:textStyle="bold"
         android:visibility="gone"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.4dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/grey_455" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey_455" />
 
 </LinearLayout>

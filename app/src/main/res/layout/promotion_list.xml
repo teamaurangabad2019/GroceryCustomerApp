@@ -10,8 +10,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_list"
         android:elevation="4dp"
-        android:layout_width="160dp"
-        android:layout_height="240dp"
+        android:layout_width="170dp"
+        android:layout_height="260dp"
         app:cardCornerRadius="4dp"
         android:paddingBottom="5dp"
         tools:targetApi="lollipop">
@@ -28,7 +28,6 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="9dp"
-
                 android:layout_marginStart="9dp"
                 android:text="29%OFF"
                 android:textAlignment="center"
@@ -55,18 +54,33 @@
                 android:textSize="14sp"
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
+                android:text="@string/title1"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:gravity="start" />
+
+            <TextView
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:id="@+id/tv_details"
+                android:textSize="14sp"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/title1"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:gravity="start" />
 
             <TextView
-                android:id="@+id/tv_weight"
+                android:id="@+id/tv_quantity"
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="200g"
+                android:text="2"
                 android:textSize="12sp"
                 android:textColor="@color/light_grey_"
                 android:textAlignment="textStart"
@@ -75,21 +89,22 @@
                 android:layout_marginStart="10dp"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
-                />
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/ll_items"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
                 android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp">
+                android:layout_marginStart="10dp"
+                android:weightSum="2">
 
                 <TextView
                     android:paddingEnd="5dp"
                     android:paddingStart="5dp"
-                    android:id="@+id/tv_price"
+                    android:id="@+id/tv_ourprice"
                     android:textSize="14sp"
+                    android:layout_weight="1"
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,26 +116,26 @@
                 <TextView
                     android:paddingEnd="5dp"
                     android:paddingStart="5dp"
-                    android:id="@+id/tv_cutoff"
+                    android:layout_weight="1"
+                    android:id="@+id/tv_ActualPrice"
                     android:textSize="14sp"
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rs. 40/-"
                     android:textAlignment="center"
-                    android:gravity="start"
+                    android:gravity="end"
                     />
 
             </LinearLayout>
 
 
-
             <Button
                 android:layout_marginTop="10dp"
-                android:id="@+id/bt_add"
+                android:id="@+id/btn_add"
                 android:layout_width="131.2dp"
                 android:layout_height="36dp"
-                android:layout_gravity="center_horizontal|bottom"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="12dp"
                 android:background="@drawable/addtocart"
                 android:drawableStart="@drawable/ic_add_shopping_cart_black_24dp"
@@ -129,12 +144,41 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="5dp"
+                android:drawablePadding="5dp"
                 android:text="Add to cart"
+                android:gravity="center_vertical"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
 
+                <ImageView
+                    android:id="@+id/iv_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:padding="@dimen/padding_5"
+                    android:visibility="visible"
+                    android:background="@drawable/ic_edit_black_24dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    />
 
+                <ImageView
+                    android:id="@+id/iv_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_delete_black_24dp"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/padding_5"
+                    android:layout_centerVertical="true"
+                    android:visibility="visible"/>
+
+            </RelativeLayout>
         </LinearLayout>
 
 

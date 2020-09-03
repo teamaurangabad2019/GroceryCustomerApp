@@ -1,7 +1,6 @@
 package com.teammandroid.dairyapplication.admin.adapters;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
@@ -16,31 +15,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.activities.AuthenticationActivity;
 import com.teammandroid.dairyapplication.activities.BookingActivity;
-import com.teammandroid.dairyapplication.admin.activities.CartActivity;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
-import com.teammandroid.dairyapplication.utils.SessionManager;
+import com.teammandroid.dairyapplication.utils.SessionHelper;
 import com.teammandroid.dairyapplication.utils.Utility;
 
 import java.util.ArrayList;
 
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_2;
-import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_3;
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_4;
-
-import static com.teammandroid.dairyapplication.offline.DatabaseHelper.QUANTITY_1;
-import static com.teammandroid.dairyapplication.offline.DatabaseHelper.QUANTITY_2;
-import static com.teammandroid.dairyapplication.offline.DatabaseHelper.QUANTITY_4;
-import static com.teammandroid.dairyapplication.offline.DatabaseHelper.TABLE_PLUS_MINUS_QUANTITY;
-import static com.teammandroid.dairyapplication.offline.DatabaseHelper.TABLE_QUANTITY;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
@@ -111,45 +101,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
 
-                deleteQuantity(item,viewHolder.totalview);
+                deleteQuantity(item,viewHolder.totalview, viewHolder.txt_total_amount);
             }
         });
 
-        //viewHolder.txt_quantity.setText(String.valueOf(item.getNumber()));
-        //viewHolder.txt_total_amount.setText(String.valueOf(item.getTotalprice()));
 
-       /* viewHolder.rl_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                Toast.makeText(mContext, "Clicked Positive", Toast.LENGTH_SHORT).show();
-                                BookingSqliteOperations bookingSqliteOperations = new BookingSqliteOperations(mContext);
-                                bookingSqliteOperations.deleteBookings(item.getBookingid());
-
-                                list.remove(i);
-                                notifyDataSetChanged();
-                                notifyItemRemoved(i);
-                                notifyItemRangeChanged(i, list.size());
-                                // Show the removed item label`enter code here`
-                                Toast.makeText(mContext, "Removed : " + item.getItemname(), Toast.LENGTH_SHORT).show();
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //Do your No progress
-                                break;
-                        }
-                    }
-                };
-                AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
-                ab.setMessage("Are you sure to delete?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
-            }
-        });*/
 
         viewHolder.btn_booknow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +137,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private boolean validateUser() {
         boolean result = false;
         try {
-            SessionManager sessionManager=new SessionManager(mContext);
+            SessionHelper sessionManager=new SessionHelper(mContext);
             //UserResponse response = PrefHandler.getUserFromSharedPref(SplashActivity.this);
             UserModel response = sessionManager.getUserDetails();
             Log.e(TAG, "validateUser: "+response.toString());
@@ -277,63 +233,45 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }*/
     }
 
-    private void deleteQuantity(ProductModel item, TextView tv)
+    private void deleteQuantity(ProductModel item, TextView tv, TextView txt_total_amount)
     {
-       // DELETE FROM plusminusquantity where pmproductid IN
-       // (SELECT pmproductid FROM plusminusquantity where
-       // pmproductid = 22 and pmuserid = 2 ORDER BY
-       // pmproductid LIMIT 1 );
-
         SQLiteDatabase db=dbHelper.getWritableDatabase();
+/*
+        DELETE FROM plusminusquantity WHERE pmquantityid = (SELECT MAX(pmquantityid )
+        FROM plusminusquantity) and pmproductid = 20 AND pmuserid = 0;
+*/
+        String sql="DELETE FROM plusminusquantity WHERE pmquantityid = (SELECT MAX(pmquantityid )" +
+                "FROM plusminusquantity where pmproductid = "
+                +item.getProductid()+ " AND pmuserid ="+ 0+")";
 
-        String sql=" DELETE FROM "+ TABLE_PLUS_MINUS_QUANTITY +" WHERE " + PMQUANTITY_2 + " IN  ( SELECT " + PMQUANTITY_2 + " FROM "
-                + TABLE_PLUS_MINUS_QUANTITY +" WHERE " + PMQUANTITY_2 +" = "+ item.getProductid() +" AND "+ PMQUANTITY_3
-                +" = "+ 0 +" ORDER BY " + PMQUANTITY_2 + " LIMIT 1 );";
-
-        Cursor cursor=db.rawQuery(sql,null);
-
-        int index=0 ;
-        int index2=0 ;
-        int id =0;
-
-        if(cursor.moveToLast()){
-
-            index = cursor.getColumnIndex("quantityid"); //quantityid
-
-            id = cursor.getInt(index);//to get id, 0 is the column index
-            showText(tv);
-        }
-
-        mContext.finish();
-        mContext.overridePendingTransition( 0, 0);
-        mContext.startActivity(mContext.getIntent());
-        mContext.overridePendingTransition( 0, 0);
-
-        Toast.makeText(mContext, "Deleted " , Toast.LENGTH_SHORT).show();
-
-
-    }
-
-
-    private void showText(TextView totalview) {
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT SUM (" + QUANTITY_4 + ") FROM " + dbHelper.TABLE_QUANTITY, null);
+        db.execSQL(sql);
 
         int id = 0;
-        if(cursor.moveToNext()){
+
+        SQLiteDatabase db2 = dbHelper.getWritableDatabase();
+
+        //Chnage userId static to dynamic
+        //SELECT sum(count) from quantity where productid = 21;
+        Cursor cursor = db2.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " + dbHelper.TABLE_PLUS_MINUS_QUANTITY
+                + " WHERE " + PMQUANTITY_2 + " = " + item.getProductid() +" AND " +dbHelper.PMQUANTITY_3 + " = "
+                + " 0 ", null);
+
+        if (cursor.moveToNext()) {
 
             id = cursor.getInt(0);//to get id, 0 is the column index
-            //productId=cursor.getInt(1);
-            //userid=cursor.getInt(1);
-            //prefManager.setCOUNT_ID(id);
 
         }
-        totalview.setText(String.valueOf(id));
+        tv.setText(String.valueOf(id));
+        double price =  id * item.getOurprice();
+        txt_total_amount.setText(String.valueOf(price));
+        Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
+
+       // Toast.makeText(mContext, "Deleted " , Toast.LENGTH_SHORT).show();
 
 
     }
+
+
 
 }
 

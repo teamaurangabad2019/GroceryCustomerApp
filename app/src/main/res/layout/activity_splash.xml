@@ -30,7 +30,7 @@
             android:layout_height="250dp"
             android:layout_centerInParent="true"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/mandroid_logo" />
 
 
         <TextView

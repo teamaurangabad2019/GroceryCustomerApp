@@ -12,6 +12,9 @@ import com.androidnetworking.error.ANError;
 import com.google.android.material.snackbar.Snackbar;
 import com.teammandroid.dairyapplication.Network.AppVersionServices;
 import com.teammandroid.dairyapplication.R;
+import com.teammandroid.dairyapplication.admin.activities.DeliveryboyOrderListActivity;
+import com.teammandroid.dairyapplication.admin.activities.DeliveryboyStatusListActivity;
+import com.teammandroid.dairyapplication.admin.activities.SelectRoleActivity;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.model.AppVersionModel;
 import com.teammandroid.dairyapplication.model.UserModel;
@@ -54,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
         sversion = info.versionName;
         version_code = Double.parseDouble(sversion);
 
-      //  getAppVersion();
+        //  getAppVersion();
         animation();
         Log.e("versionName", sversion +" "+version_code);
     }
@@ -74,7 +77,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Log.e("cHkVersion", "" + arraylist.get(0).getAppversionid());
                                 //Change code
                                 if (version_code < Double.parseDouble(arraylist.get(0).getVersionno())) {
-                               // if (version_code > Double.parseDouble(arraylist.get(0).getVersionno())) {
+                                    // if (version_code > Double.parseDouble(arraylist.get(0).getVersionno())) {
                                     final AppVersion_Dialog dialog = new AppVersion_Dialog(SplashActivity.this);
                                     dialog.show();
                                     dialog.setCanceledOnTouchOutside(false);
@@ -118,13 +121,13 @@ public class SplashActivity extends AppCompatActivity {
                     if (prefManager.getROLE_ID() == 1) {
                         Utility.launchActivity(SplashActivity.this, HomepageActivity.class, true);
                     } else if (prefManager.getROLE_ID() == 2) {
-                        Utility.launchActivity(SplashActivity.this, HomepageActivity.class, true);
+                        Utility.launchActivity(SplashActivity.this, DeliveryboyStatusListActivity.class, true);
                     } else if (prefManager.getROLE_ID() == 5) {
-                        Utility.launchActivity(SplashActivity.this, AuthenticationActivity.class, true);
+                        Utility.launchActivity(SplashActivity.this, SelectRoleActivity.class, true);
                     }
                 }
                 else {
-                    Utility.launchActivity(SplashActivity.this, AuthenticationActivity.class, true);
+                    Utility.launchActivity(SplashActivity.this, SelectRoleActivity.class, true);
                 }
             }
         }, 3000);
@@ -136,7 +139,6 @@ public class SplashActivity extends AppCompatActivity {
             SessionHelper sessionHelper=new SessionHelper(SplashActivity.this);
             //SessionManager sessionManager=new SessionManager(SplashActivity.this);
             //UserResponse response = PrefHandler.getUserFromSharedPref(SplashActivity.this);
-
             UserModel response = sessionHelper.getUserDetails();
             Log.e(TAG, "validateUser: "+response.toString());
             if (response.getUserid() > 0) {
@@ -149,6 +151,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 }
+
 /*Log.e("versionName", sversion);
 
         handler = new Handler();

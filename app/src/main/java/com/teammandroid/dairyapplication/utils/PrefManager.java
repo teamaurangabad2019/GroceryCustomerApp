@@ -22,7 +22,8 @@ public class PrefManager {
     private static final String COUNT_ID = "count_id";
     private static final String ProfilePath = "ProfilePath";
 
-
+    private static final String D_BOY_ID = "D_BOY_ID";
+    private static final String AUTH_BACK = "auth_back";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -83,6 +84,25 @@ public class PrefManager {
 
 
     //
+
+    //
+    public void setD_BOY_ID(int p) {
+        editor.putInt(D_BOY_ID, p);
+        editor.commit();
+    }
+
+    public int getD_BOY_ID() {
+        return pref.getInt(D_BOY_ID, 0);
+    }
+
+    public void setAUTH_BACK(int uid) {
+        editor.putInt(AUTH_BACK, uid);
+        editor.commit();
+    }
+
+    public int getAUTH_BACK() {
+        return pref.getInt(AUTH_BACK, 0);
+    }
 
 
 
