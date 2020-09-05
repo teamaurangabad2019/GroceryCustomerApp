@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProfileActivity"
+    tools:context=".activities.EntryProfileActivity"
     android:orientation="vertical"
     android:scrollbars="none">
 
@@ -32,6 +32,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,20 +43,22 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="110dp"
                 android:background="@color/colorPrimary">
 
-            </LinearLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_centerHorizontal="true">
 
-                <ImageView
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="128dp"
+                android:layout_height="127dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_male_avatar"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
@@ -66,184 +69,109 @@
                     android:id="@+id/iv_edit"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginLeft="95dp"
+                    android:layout_marginLeft="85dp"
                     android:layout_marginTop="95dp"
-                    android:src="@drawable/ic_edit" />
+                    android:src="@drawable/pencil" />
+
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="160dp"
                 android:orientation="vertical"
-                android:paddingLeft="20dp"
+                android:paddingLeft="10dp"
                 android:paddingRight="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Full Name :"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="16sp"
-                    android:paddingLeft="10dp" />
 
                 <EditText
                     android:id="@+id/et_fullname"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_person_black_24dp"
+                    android:drawableTint="@color/colorPrimary"
                     android:gravity="center_vertical"
-                    android:text=""
-                    android:background="@drawable/simpleshape"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
-                    android:paddingLeft="20dp"
+                    android:drawablePadding="10dp"
                     android:inputType="text"
-                    android:elevation="5dp" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:paddingLeft="10dp"
-                    android:text="Mobile Number :"
+                    android:hint="@string/username"
                     android:textColor="@color/colorBlack"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="14sp" />
+                <!--End-->
 
                 <EditText
                     android:id="@+id/et_mobileno"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:gravity="center_vertical"
-                    android:text=""
-                    android:background="@drawable/simpleshape"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
+                    android:drawableLeft="@drawable/mobile"
+                    android:drawableTint="@color/colorPrimary"
+                    android:drawablePadding="10dp"
+                    android:hint="@string/contact"
                     android:maxLength="10"
+                    android:gravity="center_vertical"
                     android:inputType="number"
-                    android:paddingLeft="20dp"
-                    android:elevation="5dp"/>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Email :"
                     android:textColor="@color/colorBlack"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp"
-                   />
+                    android:textSize="14sp" />
 
                 <EditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
-                    android:text=""
-                    android:background="@drawable/simpleshape"
+                    android:drawableLeft="@drawable/ic_email"
+                    android:drawableTint="@color/colorPrimary"
+                    android:drawablePadding="10dp"
+                    android:hint="@string/email"
                     android:textColor="@color/colorBlack"
                     android:textSize="14sp"
-                    android:paddingLeft="20dp"
-                    android:inputType="textEmailAddress"
-                    android:elevation="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="State :"
-                    android:textColor="@color/colorBlack"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp"
-                    android:visibility="gone"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_state"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center_vertical"
-                    android:text="Goa"
-                    android:background="@drawable/simpleshape"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
-                    android:paddingLeft="20dp"
-                    android:elevation="5dp"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="City :"
-                    android:textColor="@color/colorBlack"
-                    android:paddingLeft="10dp"
-                    android:textSize="16sp"
-                    android:visibility="gone"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center_vertical"
-                    android:text="Aurangabad"
-                    android:background="@drawable/simpleshape"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
-                    android:paddingLeft="20dp"
-                    android:elevation="5dp"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Address :"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="16sp"
-                    android:paddingLeft="10dp" />
+                    android:inputType="textEmailAddress"/>
 
                 <EditText
                     android:id="@+id/et_address"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
-                    android:text=""
-                    android:background="@drawable/simpleshape"
+                    android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                    android:drawableTint="@color/colorPrimary"
+                    android:drawablePadding="10dp"
+                    android:hint="@string/location"
                     android:textColor="@color/colorBlack"
                     android:textSize="14sp"
-                    android:paddingLeft="20dp"
-                    android:elevation="5dp"
-                    android:inputType="text"
-                    android:layout_marginBottom="10dp"/>
+                    android:inputType="text"/>
 
 
-                <Button android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
+
+                <Button
                     android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:background="@drawable/button_background"
                     android:text="Submit"
-                    android:background="@color/colorPrimary"
-                    android:layout_marginBottom="@dimen/padding_20"
-                    android:textColor="@color/colorWhite"/>
+                    android:textColor="@color/colorWhite"
+                    android:textSize="15dp"
+                    android:layout_marginBottom="@dimen/padding_20"/>
+
 
             </LinearLayout>
+
+
         </RelativeLayout>
 
     </ScrollView>
-</LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fb_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:src="@drawable/pencil"
+        app:rippleColor="@color/colorWhite"
+        android:background="@color/colorWhite"/>
+
+</RelativeLayout>

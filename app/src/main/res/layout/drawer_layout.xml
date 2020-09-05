@@ -48,7 +48,8 @@
                     android:layout_below="@+id/iv_logo"
                     android:textColor="@color/colorBlack"
                     android:textSize="14sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:textStyle="bold"/>
 
             </RelativeLayout>
 
@@ -103,6 +104,37 @@
             </RelativeLayout>
             <!--endregion-->
 
+            <!--region home -->
+            <RelativeLayout
+                android:id="@+id/rl_profileChnage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_prof"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_person_black_24dp"
+                    android:tint="@color/colorGreen" />
+
+                <TextView
+                    android:id="@+id/txt_prof"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toRightOf="@+id/iv_prof"
+                    android:gravity="center_vertical"
+                    android:text="Profile"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/nav_drawer_text"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+            <!--endregion-->
+
             <!--region profile -->
             <RelativeLayout
                 android:id="@+id/rl_profile"
@@ -127,7 +159,7 @@
                     android:layout_marginBottom="0dp"
                     android:layout_toRightOf="@+id/iv_profile"
                     android:gravity="center_vertical"
-                    android:text=" Delivery Boy"
+                    android:text="Delivery Boy"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/nav_drawer_text"
                     android:textStyle="bold" />
@@ -192,7 +224,7 @@
                     android:layout_toRightOf="@+id/iv_addhome"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
-                    android:text=" Add Home Product"
+                    android:text="Add Home Product"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/nav_drawer_text" />
 

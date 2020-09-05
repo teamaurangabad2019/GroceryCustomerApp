@@ -78,7 +78,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
                     android:background="@drawable/ic_add"
                     android:layout_toLeftOf="@+id/iv_edit"
                     android:backgroundTint="@color/colorPrimary" />
@@ -91,7 +92,7 @@
                     android:layout_marginRight="17dp"
                     android:layout_toLeftOf="@+id/iv_delete"
                     android:padding="@dimen/padding_5"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:background="@drawable/ic_edit_black_24dp"
                     android:backgroundTint="@color/colorPrimary"
                     />
@@ -104,7 +105,7 @@
                     android:layout_alignParentRight="true"
                     android:padding="@dimen/padding_5"
                     android:layout_centerVertical="true"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
 
 
 

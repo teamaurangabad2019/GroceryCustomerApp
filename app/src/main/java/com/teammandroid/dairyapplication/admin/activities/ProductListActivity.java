@@ -93,8 +93,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
         txtTitleBar.setText("Product List");
 
-        productList(subcategoryModel.getSubcategoryid());
-        //productList(22);
+       // productList(subcategoryModel.getSubcategoryid());
+        productList(22);
         getCount();
         //getExpenseList(expenseCategoryHolder.getCategoryid());
 
@@ -178,7 +178,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());
 
-             rv_productlist.setLayoutManager(new LinearLayoutManager(ProductListActivity.this,
+            rv_productlist.setLayoutManager(new LinearLayoutManager(ProductListActivity.this,
                     LinearLayoutManager.VERTICAL, false));
             rv_productlist.setItemAnimator(new DefaultItemAnimator());
             rv_productlist.setHasFixedSize(true);
@@ -197,21 +197,21 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             //Utility.showErrorMessage(this, ex.getMessage(), Snackbar.LENGTH_LONG);
         }
     }
-    
+
     private void filter(String text) {
         ArrayList<ProductModel> filterdNames = new ArrayList<>();
         for (ProductModel member : mList) {
 
             String name = member.getTitle().toLowerCase();
-           // String code = member.getInstituteid();
+            // String code = member.getInstituteid();
 
             if (name.contains(text.toLowerCase()) )
                 filterdNames.add(member);
         }
 
-      // categoryListAdapter.setFilter(filterdNames);
+        // categoryListAdapter.setFilter(filterdNames);
     }
-    
+
     private void bindView() {
 
         lyt_progress =  findViewById(R.id.lyt_progress);
@@ -256,13 +256,13 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 replaceToolbar.setVisibility(View.GONE);
                 break;
 
-              case R.id.viewMenuIconBack:
+            case R.id.viewMenuIconBack:
                 onBackPressed();
                 break;
 
-               case R.id.badgeLayout:
-                  Utility.launchActivity(ProductListActivity.this,CartActivity.class,false);
-                   //Toast.makeText(activity,"count " , Toast.LENGTH_LONG).show();
+            case R.id.badgeLayout:
+                Utility.launchActivity(ProductListActivity.this,CartActivity.class,false);
+                //Toast.makeText(activity,"count " , Toast.LENGTH_LONG).show();
                 break;
 
         }
@@ -331,7 +331,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             //prefManager.setCOUNT_ID(id);
         }
 
-       // int count = bookingSqliteOperations.GetBookings().size();
+        // int count = bookingSqliteOperations.GetBookings().size();
         badgeLayout.setCountWithAnimation(id);
         //Toast.makeText(activity,"count "+ id , Toast.LENGTH_LONG).show();
 

@@ -73,7 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public final static String QUANTITY_3 = "userid";
     public final static String QUANTITY_4 = "count";
 
-     public final static String TABLE_PLUS_MINUS_QUANTITY = "plusminusquantity";
+    public final static String TABLE_PLUS_MINUS_QUANTITY = "plusminusquantity";
 
     public final static String PMQUANTITY_1 = "pmquantityid";
     public final static String PMQUANTITY_2 = "pmproductid";
@@ -131,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "userid INTEGER," +
                 "count INTEGER)" );
 
-         db.execSQL("CREATE TABLE IF NOT EXISTS "
+        db.execSQL("CREATE TABLE IF NOT EXISTS "
                 + TABLE_PLUS_MINUS_QUANTITY +
                 " (pmquantityid INTEGER PRIMARY KEY AUTOINCREMENT ,"+
                 "pmproductid INTEGER," +
@@ -155,8 +155,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //to insert data inside ProductInfo table
     public boolean insertProductInfo(int productid,String title,String details,
                                      double price,double ourprice,
-                              int offer,int subcategory,String image ,int isavailable,int isactive
-    ,String created,int createdby,String modified,int modifiedby,int RowCount, int userid)
+                                     int offer,int subcategory,String image ,int isavailable,int isactive
+            ,String created,int createdby,String modified,int modifiedby,int RowCount, int userid)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -241,7 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-     public boolean insertPmQuantity(int productid,int userid,int count,double amount)
+    public boolean insertPmQuantity(int productid,int userid,int count,double amount)
     {
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
@@ -326,9 +326,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery( "select * from "+TABLE_PRODUCT+" where userid= "+ userid, null );
         res.moveToFirst();
         while(res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(CUST_1)));
+            //  array_list.add(res.getString(res.getColumnIndex(CUST_1)));
             array_list.add(res.getString(res.getColumnIndex(CUST_2)));
-            array_list.add(res.getString(res.getColumnIndex(CUST_3)));
+          /*  array_list.add(res.getString(res.getColumnIndex(CUST_3)));
             array_list.add(res.getString(res.getColumnIndex(CUST_4)));
             array_list.add(res.getString(res.getColumnIndex(CUST_5)));
             array_list.add(res.getString(res.getColumnIndex(CUST_6)));
@@ -343,7 +343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(CUST_15)));
             array_list.add(res.getString(res.getColumnIndex(CUST_16)));
             array_list.add(res.getString(res.getColumnIndex(CUST_17)));
-            res.moveToNext();
+          */  res.moveToNext();
         }
         return array_list;
     }

@@ -121,6 +121,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/ic_add"
+                    android:visibility="gone"
                     android:layout_toLeftOf="@+id/badgeLayout"
                     android:backgroundTint="@color/colorTextWhite" />
 
@@ -133,7 +134,8 @@
                     app:bhl_default_badge_background="@color/colorAccent"
                     app:bhl_text_color="@android:color/white"
                     app:bhl_text_size="12sp"
-                    app:bhl_badge_radius="10dp">
+                    app:bhl_badge_radius="10dp"
+                    >
 
                     <ImageView
                         android:id="@+id/iv_cart"

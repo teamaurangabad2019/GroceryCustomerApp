@@ -27,6 +27,8 @@ import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.activities.AuthUserActivity;
 import com.teammandroid.dairyapplication.admin.activities.AddProductActivity;
+import com.teammandroid.dairyapplication.admin.activities.CategoryListActivity;
+import com.teammandroid.dairyapplication.admin.activities.ProductListActivity;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
@@ -114,14 +116,13 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
             }
         });
 
-         holder.iv_add.setOnClickListener(new View.OnClickListener() {
+        holder.iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle=new Bundle();
-                //   bundle.putString("categoryName",categoryName);
+                bundle.putString("categoryName",categoryName);
                 bundle.putParcelable("ProductModel", item);
-                Utility.launchActivity(activity, AddProductActivity.class, false,bundle);
-
+                Utility.launchActivity(activity, ProductListActivity.class, false);
             }
         });
 
@@ -131,7 +132,7 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
                 Log.d("CatAdapter ",item.getProductid()+" "+item.getImagename()+" "+item.getTitle()+" "+item.getDetails());
                 dialogForDeleteImage(item.getProductid(),item.getTitle(), item.getDetails(),item.getPrice(),
-                      item.getOurprice(),item.getOffer(),item.getIsavailable(),item.getSubcategory(),
+                        item.getOurprice(),item.getOffer(),item.getIsavailable(),item.getSubcategory(),
                         item.getImagename());
 
             }
@@ -145,7 +146,14 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
                         item.getOffer(),item.getIsavailable(),item.getSubcategory(),item.getImagename(),item.getIsactive(),
                         item.getCreated(),item.getCreatedby(),item.getModified(),item.getModifiedby(),item.getRowCount());
 */
-                addQuantity(item);
+                if (validateUser()) {
+
+                    addQuantity(item);
+                }
+                else {
+                    Utility.launchActivity(activity, AuthUserActivity.class, false);//,bundle);
+
+                }
 
                 //deleteQuantity(holder.totalview);
             }
@@ -205,41 +213,41 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
                             String  created, int createdby,String modified,int modifiedby,int RowCount, int userid) {
 
 
-            boolean isInserted = dbHelper.
-                    insertProductInfo(
-                            Productid, title, Details, Price, Ourprice,
-                            Offer, Subcategory, imgpath, Isavailable,
-                            isactive, created, createdby, modified, modifiedby, RowCount, userid);
+        boolean isInserted = dbHelper.
+                insertProductInfo(
+                        Productid, title, Details, Price, Ourprice,
+                        Offer, Subcategory, imgpath, Isavailable,
+                        isactive, created, createdby, modified, modifiedby, RowCount, userid);
 
-            if (isInserted == true) {
+        if (isInserted == true) {
 
-                int id = 0;
-                int productId = 0;
+            int id = 0;
+            int productId = 0;
 
 
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-                //SELECT sum(count) from quantity where productid = 21;
-                Cursor cursor = db.rawQuery("SELECT * FROM " + dbHelper.TABLE_PRODUCT, null);//+" WHERE "+ QUANTITY_2 +" = "+ item.getProductid(), null);
+            //SELECT sum(count) from quantity where productid = 21;
+            Cursor cursor = db.rawQuery("SELECT * FROM " + dbHelper.TABLE_PRODUCT, null);//+" WHERE "+ QUANTITY_2 +" = "+ item.getProductid(), null);
 
-                if (cursor.moveToNext()) {
+            if (cursor.moveToNext()) {
 
-                    id = cursor.getInt(0);//to get id, 0 is the column index
-                    productId = cursor.getInt(1);
-                    title = cursor.getString(2);
-                }
-
-                activity.finish();
-                activity.overridePendingTransition( 0, 0);
-                activity.startActivity(activity.getIntent());
-                activity.overridePendingTransition( 0, 0);
-
-                Log.d("ProductviewListAdapter", "productAdapter " + title +" "+productId);
-                //Utility.launchActivity(getActivity(), HomepageActivity.class,false);
-
-            } else {
-                Toast.makeText(activity, "Something went wrong", Toast.LENGTH_SHORT).show();
+                id = cursor.getInt(0);//to get id, 0 is the column index
+                productId = cursor.getInt(1);
+                title = cursor.getString(2);
             }
+
+            activity.finish();
+            activity.overridePendingTransition( 0, 0);
+            activity.startActivity(activity.getIntent());
+            activity.overridePendingTransition( 0, 0);
+
+            Log.d("ProductviewListAdapter", "productAdapter " + title +" "+productId);
+            //Utility.launchActivity(getActivity(), HomepageActivity.class,false);
+
+        } else {
+            Toast.makeText(activity, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
         //}
 
 
@@ -253,7 +261,7 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
         {
             boolean isInserted = dbHelper.insertQuantity(
                     item.getProductid(),//prefManager.getUSER_ID()
-                    0,
+                    prefManager.getUSER_ID(),
                     1
             );
 
@@ -266,7 +274,9 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
 
                 //SELECT sum(count) from quantity where productid = 21;
-                Cursor cursor = db.rawQuery("SELECT SUM (" + QUANTITY_4 + ") FROM " + dbHelper.TABLE_QUANTITY + " WHERE " + QUANTITY_2 + " = " + item.getProductid(), null);
+                Cursor cursor = db.rawQuery("SELECT SUM (" + QUANTITY_4 + ") FROM "
+                        + dbHelper.TABLE_QUANTITY + " WHERE " + QUANTITY_2 + " = "
+                        + item.getProductid(), null);
 
                 if (cursor.moveToNext()) {
 
@@ -274,17 +284,13 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
                 }
 
-                if (validateUser()) {
-                    //true
-                    addProduct(item.getProductid(), item.getTitle(),item.getDetails(),item.getPrice(),item.getOurprice(),
-                            item.getOffer(),item.getIsavailable(),item.getSubcategory(),item.getImagename(),item.getIsactive(),
-                            item.getCreated(),item.getCreatedby(),item.getModified(),item.getModifiedby(),item.getRowCount(), prefManager.getUSER_ID());
+                //true
+                addProduct(item.getProductid(), item.getTitle(),item.getDetails(),item.getPrice(),item.getOurprice(),
+                        item.getOffer(),item.getIsavailable(),item.getSubcategory(),item.getImagename(),item.getIsactive(),
+                        item.getCreated(),item.getCreatedby(),item.getModified(),
+                        item.getModifiedby(),item.getRowCount(), prefManager.getUSER_ID());
 
-                    Toast.makeText(activity, "Added to Cart ", Toast.LENGTH_LONG).show();
-                } else {
-                    //false
-                    Utility.launchActivity(activity, AuthUserActivity.class, false);//,bundle);
-                }
+                Toast.makeText(activity, "Added to Cart ", Toast.LENGTH_LONG).show();
 
 
 
@@ -294,9 +300,9 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
             }
 
         } else
-            {
-                Toast.makeText(activity,"Go to Cart",Toast.LENGTH_LONG).show();
-            }
+        {
+            Toast.makeText(activity,"Go to Cart",Toast.LENGTH_LONG).show();
+        }
     }
 
     private void dialogForDeleteImage(int pid,String title,String Details,double Price,
@@ -404,7 +410,7 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
                 result = true;
             }
         } catch (Exception ex) {
-           // Log.e(TAG, "validateUser: ", ex);
+            // Log.e(TAG, "validateUser: ", ex);
         }
         return result;
     }

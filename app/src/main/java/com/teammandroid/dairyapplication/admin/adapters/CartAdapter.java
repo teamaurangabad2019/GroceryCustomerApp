@@ -24,6 +24,7 @@ import com.teammandroid.dairyapplication.activities.BookingActivity;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
+import com.teammandroid.dairyapplication.utils.PrefManager;
 import com.teammandroid.dairyapplication.utils.SessionHelper;
 import com.teammandroid.dairyapplication.utils.Utility;
 
@@ -38,6 +39,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     private Activity mContext;
     ArrayList<ProductModel> list;
+    ArrayList<Double> totlAmt = new ArrayList<>();
 
     int offer =0 ;
     int subcategory = 0 ;
@@ -49,6 +51,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     double ourprice = 0.0;
 
     DatabaseHelper dbHelper;
+    PrefManager prefManager;
 
     public CartAdapter(Activity context, String title, String details, double price, double ourprice, int offer, int subcategory, String image) {
 
@@ -70,6 +73,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false);
 
+        prefManager = new PrefManager(mContext);
         dbHelper = new DatabaseHelper(mContext);
         return new ViewHolder(view);
     }
@@ -87,13 +91,37 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         viewHolder.mOfferprice.setText(String.valueOf("("+item.getOffer() + "% off ) "));
         viewHolder.mPrice.setText(String.valueOf(item.getOurprice()));
         viewHolder.txt_quantity.setText(String.valueOf(item.getRowCount()));
-       // viewHolder.txt_total_amount.setText(String.valueOf(item.getOurprice()));
+        // viewHolder.txt_total_amount.setText(String.valueOf(item.getOurprice()));
+
+
+
+        int sum = 0;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " +
+                dbHelper.TABLE_PLUS_MINUS_QUANTITY + " WHERE " + PMQUANTITY_2 + " = " +
+                item.getProductid() +" AND " +dbHelper.PMQUANTITY_3 + " = "
+                + prefManager.getUSER_ID(), null);
+
+        if (cursor.moveToNext()) {
+
+            sum = cursor.getInt(0);//to get id, 0 is the column index
+
+        }
+        viewHolder.totalview.setText(String.valueOf(sum));
+        double price =  sum * item.getOurprice();
+        viewHolder.txt_total_amount.setText(String.valueOf(price));
+        //  Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
+
 
         viewHolder.iv_addImg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
 
                 addPmQuantity(item,viewHolder.totalview ,viewHolder.txt_total_amount);
+
+
             }
         });
 
@@ -104,8 +132,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 deleteQuantity(item,viewHolder.totalview, viewHolder.txt_total_amount);
             }
         });
-
-
 
         viewHolder.btn_booknow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +158,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 }*/
             }
         });
+
+
+
     }
 
     private boolean validateUser() {
@@ -190,48 +219,80 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     private void addPmQuantity(ProductModel item,  TextView totalview,TextView txt_total_amount)
     {
-            Log.d("CartAdapter ",String.valueOf(item.getProductid()));
-       // if (!dbHelper.alreadyExistProductEntry(item.getProductid()))
+        Log.d("CartAdapter ",String.valueOf(item.getProductid()));
+        // if (!dbHelper.alreadyExistProductEntry(item.getProductid()))
         //{
-            boolean isInserted = dbHelper.insertPmQuantity(
-                    item.getProductid(),//prefManager.getUSER_ID()
-                    0,
-                    1,
-                    item.getOurprice()
-            );
+        boolean isInserted = dbHelper.insertPmQuantity(
+                item.getProductid(),//prefManager.getUSER_ID()
+                prefManager.getUSER_ID(),
+                1,
+                item.getOurprice()
+        );
 
-            if (isInserted == true) {
+        if (isInserted == true) {
 
-                int id = 0;
-                int productId = 0;
-                int userid = 0;
+            int id = 0;
+            int productId = 0;
+            int userid = 0;
 
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-                //Chnage userId static to dynamic
-                //SELECT sum(count) from quantity where productid = 21;
-                Cursor cursor = db.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " + dbHelper.TABLE_PLUS_MINUS_QUANTITY + " WHERE " + PMQUANTITY_2 + " = " + item.getProductid() +" AND " +dbHelper.PMQUANTITY_3 + " = " + " 0 ", null);
+            Cursor cursor = db.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " +
+                    dbHelper.TABLE_PLUS_MINUS_QUANTITY + " WHERE " + PMQUANTITY_2 + " = " +
+                    item.getProductid() +" AND " +dbHelper.PMQUANTITY_3 + " = "
+                    + prefManager.getUSER_ID(), null);
 
-                if (cursor.moveToNext()) {
+            if (cursor.moveToNext()) {
 
-                    id = cursor.getInt(0);//to get id, 0 is the column index
+                id = cursor.getInt(0);//to get id, 0 is the column index
 
-                }
-                totalview.setText(String.valueOf(id));
-                double price =  id * item.getOurprice();
-                txt_total_amount.setText(String.valueOf(price));
-                Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
-                Toast.makeText(mContext, "Added Quantity " +id, Toast.LENGTH_SHORT).show();
+            }
+            totalview.setText(String.valueOf(id));
+            double price =  id * item.getOurprice();
+            txt_total_amount.setText(String.valueOf(price));
+            Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
+            Toast.makeText(mContext, "Added Quantity " +id, Toast.LENGTH_SHORT).show();
 
-            } else {
-                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+            /*
+            try
+            {
+                String title = String.valueOf(price);
+                totlAmt.add(price);
+                Log.d(TAG, "amt "+title);
+            }
+            catch (Exception e)
+            {
+                Log.d(TAG, "ex "+e.getMessage());
             }
 
-       /* } else
-        {
-            Toast.makeText(mContext,"Go to Cart",Toast.LENGTH_SHORT).show();
-        }*/
+            Toast.makeText(mContext, "Clicked : "
+                    + totlAmt.toString(), Toast.LENGTH_LONG).show();*/
+
+            double tsum = 0;
+            for (int i = 0; i < list.size(); i++){
+               // tsum = tsum + price;
+                totlAmt.add(price);
+            }
+            Log.d("CartAdapter : ", String.valueOf(tsum));
+            Toast.makeText(mContext, "Clicked : "
+                    + totlAmt.toString(), Toast.LENGTH_LONG).show();
+
+           // for (int i=0; i<totlAmt.size(); i++);
+
+        } else {
+            Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
+
     }
+
+    private int grandTotal() {
+        int totalPrice = 0;
+        for (int i = 0; i < list.size(); i++) {
+            totalPrice += list.get(i).getPrice();
+        }
+        return totalPrice;
+    }
+
 
     private void deleteQuantity(ProductModel item, TextView tv, TextView txt_total_amount)
     {
@@ -242,7 +303,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 */
         String sql="DELETE FROM plusminusquantity WHERE pmquantityid = (SELECT MAX(pmquantityid )" +
                 "FROM plusminusquantity where pmproductid = "
-                +item.getProductid()+ " AND pmuserid ="+ 0+")";
+                +item.getProductid()+ " AND pmuserid = "+ String.valueOf(prefManager.getUSER_ID())+")";
 
         db.execSQL(sql);
 
@@ -254,7 +315,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         //SELECT sum(count) from quantity where productid = 21;
         Cursor cursor = db2.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " + dbHelper.TABLE_PLUS_MINUS_QUANTITY
                 + " WHERE " + PMQUANTITY_2 + " = " + item.getProductid() +" AND " +dbHelper.PMQUANTITY_3 + " = "
-                + " 0 ", null);
+                + prefManager.getUSER_ID(), null);
 
         if (cursor.moveToNext()) {
 
@@ -266,7 +327,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         txt_total_amount.setText(String.valueOf(price));
         Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
 
-       // Toast.makeText(mContext, "Deleted " , Toast.LENGTH_SHORT).show();
+        // Toast.makeText(mContext, "Deleted " , Toast.LENGTH_SHORT).show();
 
 
     }

@@ -69,7 +69,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         dbHelper = new DatabaseHelper(CartActivity.this);
         activity=CartActivity.this;
         //Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu, null);
-       // drawable = DrawableCompat.wrap(drawable);
+        // drawable = DrawableCompat.wrap(drawable);
         //DrawableCompat.setTint(drawable, Color.WHITE);
         //toolbar.setOverflowIcon(drawable);
 
@@ -86,12 +86,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         CartAdapter adapter = new CartAdapter(this,productModelslist);
         recyclerView.setAdapter(adapter);
 
-        product_array_list = dbHelper.getAllCotacts(String.valueOf(0));
+        product_array_list = dbHelper.getAllCotacts(String.valueOf(prefManager.getUSER_ID()));
 
         for(int i=0; i<product_array_list.size(); i++)
 
         {
-            Log.e( "pchk: ", String.valueOf(product_array_list.get(i)));
+            Log.e( "pchk: ", product_array_list.get(i).toString());
         }
 
         //initRecyclerViewMenus();
@@ -190,7 +190,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.viewMenuIconBack:
-               // Utility.launchActivity(CartActivity.this,HomeActivity.class,true);
+                // Utility.launchActivity(CartActivity.this,HomeActivity.class,true);
                 onBackPressed();
                 break;
 
@@ -198,11 +198,11 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 Utility.launchActivity(CartActivity.this, HomepageActivity.class,true);
                 break;
 
-               case R.id.btn_continue:
+            case R.id.btn_continue:
 
 
                 placeOrder(0,prefManager.getUSER_ID(),0,0,Utility.getCurrentDate(),
-                           "Address",0,10,5);
+                        "Address",0,10,5);
 
                 break;
 
@@ -236,7 +236,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         OrderServices.getInstance(getApplicationContext()).
                 createOrder(Orderid,Userid,Status,Deliveryboyid,Deliverydate,
-                Address,Paymentmode,Totalprice,Savedprice, new ApiStatusCallBack<Response>() {
+                        Address,Paymentmode,Totalprice,Savedprice, new ApiStatusCallBack<Response>() {
                             @Override
                             public void onSuccess(Response response) {
                                 progressDialog.dismiss();
@@ -256,7 +256,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                                 // imp
                                 Utility.launchActivity(CartActivity.this,OrderHistoryActivity.class,true);
                                 //Utility.launchActivity(CartActivity.this, EnquiryListActivity.class,false);
-                              //  Toast.makeText(getApplicationContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(getApplicationContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -320,7 +320,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         Cursor cursor = db2.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " + dbHelper.TABLE_PLUS_MINUS_QUANTITY
                 + " WHERE " + PMQUANTITY_2 + " = " + pid +" AND " +dbHelper.PMQUANTITY_3 + " = "
-                + " 0 ", null);
+                + prefManager.getUSER_ID(), null);
 
         if (cursor.moveToNext()) {
 
@@ -329,11 +329,11 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         //tv.setText(String.valueOf(id));
-       // double price =  item * item.getOurprice();
+        // double price =  item * item.getOurprice();
 
         insertOrderProduct(0,oid,
                 pid,tquantity,0,1);
 
-        Log.e( "getQuantity: ", String.valueOf(tquantity));
+        //  Log.e( "getQuantity: ", String.valueOf(tquantity));
     }
 }

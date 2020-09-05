@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".admin.activities.CartActivity">
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -101,7 +100,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -119,6 +117,13 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_total"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Total"
+        android:layout_above="@id/btn_continue"
+        />
     <Button
         android:id="@+id/btn_continue"
         android:layout_width="match_parent"

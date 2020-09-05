@@ -2,6 +2,7 @@ package com.teammandroid.dairyapplication.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -92,6 +93,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     int roleIdBundle;
     TextView tv_regFree,tv_verify;
 
+    Dialog resultbox;
 
     private long mTimeLeftInMillis;
     private CountDownTimer mCountDownTimer;
@@ -329,7 +331,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                                 };
                                 progressDialog.dismiss();
                                 Response response1 = new Gson().fromJson(response.toString(), token.getType());
-                                //Utility.launchActivity(AuthenticationActivity.this, ProfileActivity.class,true);
+                                //Utility.launchActivity(AuthenticationActivity.this, EntryProfileActivity.class,true);
                                 Toast.makeText(getApplicationContext(), "createSuccess" + response1.getMessage(), Toast.LENGTH_LONG).show();
                                 Log.e(TAG, "onResponseAuth " + response1.getMessage());
 
@@ -523,18 +525,18 @@ public class AuthenticationActivity extends AppCompatActivity {
                     public void onSuccess(Response response) {
                         progressDialog.dismiss();
 
-
                         if (response.getResult() == 0)
                         {
                             Log.e(TAG, "responseAdminLogin " + response.getMessage());
                             //Invalid credential
+                            showCustomDialog();
                             Toast.makeText(activity, response.getMessage(), Toast.LENGTH_SHORT).show();
                         }else
                         {
                             layout1.setVisibility(View.GONE);
                             layout2.setVisibility(View.VISIBLE);
 
-                            Log.e(TAG, "responseAdminLogin " + response.getMessage() +"OTP "+OTP +" "+response.getResult());
+                            Log.e(TAG, "responseAdminLogin1 " + response.getMessage() +"OTP "+OTP +" "+response.getResult());
                             String message = "Thank you for visiting Grocery Store \n Your OTP :" + OTP;
                             timerForOtp(mobileNumber,message);
                             prefManager.setUSER_ID(response.getResult());
@@ -730,6 +732,38 @@ public class AuthenticationActivity extends AppCompatActivity {
                 + (int) Math.pow(10, charLength - 1));
     }
 
+    private void showCustomDialog() {
+        // this.correct = correct;
+        resultbox = new Dialog(AuthenticationActivity.this);
+        resultbox.setContentView(R.layout.custom_dialog);
+        // resultbox.setCanceledOnTouchOutside(false);
+        Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
+        Button btn_cancel = (Button) resultbox.findViewById(R.id.btn_resume);
+        TextView text_assign = resultbox.findViewById(R.id.text_title);
+
+        text_assign.setText("Invalid Credentials !");
+
+        btn_cancel.setVisibility(View.GONE);
+
+        btn_finish.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                resultbox.cancel();
+                Utility.launchActivity(AuthenticationActivity.this,SelectRoleActivity.class,true);
+                finish();
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resultbox.cancel();
+            }
+        });
+
+        resultbox.show();
+    }
     //Back button
     @Override
     public void onBackPressed() {

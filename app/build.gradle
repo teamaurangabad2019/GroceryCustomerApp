@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "com.teammandroid.groceryapp"
+        applicationId "com.teammandroid.domaincomputeruser"
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
@@ -17,6 +17,12 @@ android {
             targetCompatibility 1.8
         }
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     buildTypes {
         release {
             minifyEnabled false

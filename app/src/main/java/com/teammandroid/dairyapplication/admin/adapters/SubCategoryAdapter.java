@@ -87,7 +87,8 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
                 .into(holder.img_title);
 
 
-      //  holder.iv_add.setVisibility(View.GONE);
+       holder.iv_edit.setVisibility(View.GONE);
+       holder.iv_delete.setVisibility(View.GONE);
 
         holder.iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override

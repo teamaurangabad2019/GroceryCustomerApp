@@ -89,6 +89,9 @@ public class CategoryViewListAdapter extends RecyclerView.Adapter<CategoryViewLi
                 .load(URL_CATEGORY_IMG+item.getImagename())
                 .into(holder.img_title);
 
+        holder.iv_edit.setVisibility(View.GONE);
+        holder.iv_delete.setVisibility(View.GONE);
+
 
         holder.iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override

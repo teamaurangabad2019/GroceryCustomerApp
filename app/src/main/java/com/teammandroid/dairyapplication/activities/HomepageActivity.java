@@ -29,7 +29,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -37,6 +41,8 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -53,12 +59,15 @@ import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.admin.activities.AddHomeProductActivity;
 import com.teammandroid.dairyapplication.admin.activities.CategoryListActivity;
 import com.teammandroid.dairyapplication.admin.activities.DeliveryboyListActivity;
+import com.teammandroid.dairyapplication.admin.activities.DeliveryboyOrderListActivity;
 import com.teammandroid.dairyapplication.admin.activities.OrderHistoryActivity;
+import com.teammandroid.dairyapplication.admin.activities.SelectRoleActivity;
 import com.teammandroid.dairyapplication.admin.adapters.CategoryHomeAdapter;
 import com.teammandroid.dairyapplication.admin.adapters.ProductListHomeAdapter;
 import com.teammandroid.dairyapplication.admin.model.CategoryModel;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
+import com.teammandroid.dairyapplication.model.Response;
 import com.teammandroid.dairyapplication.model.SliderModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 
@@ -67,6 +76,9 @@ import com.teammandroid.dairyapplication.utils.PrefManager;
 import com.teammandroid.dairyapplication.utils.SessionHelper;
 import com.teammandroid.dairyapplication.utils.Utility;
 
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,13 +177,14 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
      * Powered by Mandroid
      */
     UserModel userModel;
-    private TextView tv_poweredBy;
+    private TextView txt_userName;
     private ScrollView Scrll_Drawer;
     DrawerLayout drl_Opener;
 
     ImageView iv_add_cust;
     ProgressDialog progressDialog;
     RelativeLayout rl_video;
+    RelativeLayout rl_profileChnage;
     PrefManager prefManager;
 
     Dialog resultbox;
@@ -201,6 +214,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     RelativeLayout rl_addHomeProduct;
     ProductListHomeAdapter productListHomeAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,6 +233,25 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         getCategory();
         getImages();
         productList(0);
+
+        rl_profile.setVisibility(View.GONE);
+        rl_addHomeProduct.setVisibility(View.GONE);
+
+
+        txt_userName.setVisibility(View.VISIBLE);
+        txt_userName.setText("Customer");
+
+        Log.d(TAG," "+prefManager.getUSER_ID());
+
+        if (prefManager.getUSER_ID() <= 0)
+        {
+            rl_profileChnage.setVisibility(View.GONE);
+        }else
+        {
+            rl_profileChnage.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
     private void listener() {
@@ -235,6 +268,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         iv_add_cust.setOnClickListener(this);
         txt_contact.setOnClickListener(this);
         rl_video.setOnClickListener(this);
+        rl_profileChnage.setOnClickListener(this);
         txt_rateus.setOnClickListener(this);
         txt_aboutus.setOnClickListener(this);
         txt_logout.setOnClickListener(this);
@@ -248,6 +282,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         ib_linkedin.setOnClickListener(this);
         ib_telegram.setOnClickListener(this);
         rl_addHomeProduct.setOnClickListener(this);
+        txt_userName.setOnClickListener(this);
     }
 
     private void bindView() {
@@ -265,11 +300,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         rl_home = (RelativeLayout) findViewById(R.id.rl_home);
         rl_addHomeProduct = (RelativeLayout) findViewById(R.id.rl_addHomeProduct);
         drl_Opener =  findViewById(R.id.drl_Opener);
+        txt_userName =  findViewById(R.id.txt_userName);
 
         rl_enrolledstudent = (RelativeLayout) findViewById(R.id.rl_enrolledstudent);
 
         rl_paymentHist = (RelativeLayout) findViewById(R.id.rl_paymentHist);
         rl_video = (RelativeLayout) findViewById(R.id.rl_video);
+        rl_profileChnage = (RelativeLayout) findViewById(R.id.rl_profileChnage);
 
         rl_paidelecture = (RelativeLayout) findViewById(R.id.rl_paidelecture);
 
@@ -283,7 +320,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         txt_contact = (TextView) findViewById(R.id.txt_contact);
         txt_logout = (TextView) findViewById(R.id.txt_logout);
         txt_feedback = (TextView) findViewById(R.id.txt_feedback);
-        tv_poweredBy = (TextView) findViewById(R.id.tv_poweredBy);
+
         iv_add_cust = findViewById(R.id.iv_add_cust);
         tv_share_app = findViewById(R.id.tv_share_app);
 
@@ -307,6 +344,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         return list;
     }*/
+    
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -323,18 +361,14 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 Utility.launchActivity(HomepageActivity.this,HomepageActivity.class,false);
                 drl_Opener.closeDrawer(Gravity.LEFT);
                 break;
-            case R.id.rl_profile:
-                drl_Opener.closeDrawer(Gravity.LEFT);
-                Utility.launchActivity(HomepageActivity.this, DeliveryboyListActivity.class,false);
-                break;
+
             case R.id.rl_enrolledstudent:
                 drl_Opener.closeDrawer(Gravity.LEFT);
                 Toast.makeText(getApplicationContext(),"CLick here",Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.rl_paymentHist:
-                Utility.launchActivity(HomepageActivity.this, OrderHistoryActivity.class,false);
-
+                Utility.launchActivity(HomepageActivity.this, DeliveryboyOrderListActivity.class,false);
                 break;
             case R.id.rl_paidelecture:
                 drl_Opener.closeDrawer(Gravity.LEFT);
@@ -357,7 +391,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
                 break;
             case R.id.rl_video:
+                drl_Opener.closeDrawer(Gravity.LEFT);
                 Utility.launchActivity(HomepageActivity.this, CategoryListActivity.class,false);
+                break;
+
+             case R.id.rl_profileChnage:
+                 drl_Opener.closeDrawer(Gravity.LEFT);
+                Utility.launchActivity(HomepageActivity.this, ShowProfileActivity.class,false);
                 break;
 
             case R.id.txt_rateus:
@@ -598,7 +638,8 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 resultbox.cancel();
                 SessionHelper sessionManager=new SessionHelper(HomepageActivity.this);
                 sessionManager.logoutUser();
-                prefManager.setROLE_ID(5);
+                prefManager.setUSER_ID(0);
+                Utility.launchActivity(HomepageActivity.this,HomepageActivity.class,true);
                 finish();
             }
         });
@@ -633,66 +674,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-/*
-        private void checkAlreadyPurchased(int packageId,int userId, int total_days) {
-
-            try {
-                if (Utility.isNetworkAvailable(activity)){
-                    progressDialog.show();
-                    Log.e("CheckPackage", "Called");
-                    PaymentServices.getInstance(activity).
-                            CheckPakageExist(packageId,userId,new ApiStatusCallBack<ArrayList<PaymentCheckModel>>() {
-                                @Override
-                                public void onSuccess(ArrayList<PaymentCheckModel> arrayList) {
-                                    //  lyt_progress_employees.setVisibility(View.GONE);
-                                    progressDialog.dismiss();
-
-                                    PaymentCheckModel paymentItem = arrayList.get(0);
-                                    Log.e(TAG, "onSuccess: payment"+paymentItem +" "+packageId );
-                                    Log.e(TAG, "onSuccess: already exist");
-                                    Bundle bundle = new Bundle();
-                                    Toast.makeText(getApplicationContext(),"Exist",Toast.LENGTH_LONG).show();
-                                    bundle.putInt("Videopackageid", packageId);
-                                    bundle.putInt("total_days", total_days);
-                                    bundle.putString("Paiddate", paymentItem.getPaiddate());
-                                    // bundle.putParcelable("VideoPackagesModel", item);
-                                  //  checkDateExtendedFunction(total_days);
-                                    Log.e("Videopackageid", String.valueOf(packageId));
-                                    Utility.launchActivity(activity, VideoActivity.class, false, bundle);
-
-                                    //showCustomDialogForPaid(packageId,prefManager.getUSER_ID());
-                                   // Utility.showErrorMessage(activity, "You Already Have Purchased This program ");
-                                }
-
-
-                                @Override
-                                public void onError(ANError anError) {
-                                    //  lyt_progress_employees.setVisibility(View.GONE);
-                                    progressDialog.dismiss();
-                                    Log.e(TAG, "ANError: chkPayment "+anError.getErrorBody() );
-                                    //No Record Found
-                                    checkDateExtendedFunctionForNewPayment(total_days,  pamount);
-                                   // showCustomDialogForUnpaid(packageId,prefManager.getUSER_ID(),amount);
-                                    //Utility.showErrorMessage(activity, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
-                                }
-                                @Override
-                                public void onUnknownError(Exception e) {
-                                    //lyt_progress_employees.setVisibility(View.GONE);
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(),"Exc e"+e.getMessage(),Toast.LENGTH_LONG).show();
-                                    Utility.showErrorMessage(activity, e.getMessage(), Snackbar.LENGTH_LONG);
-                                }
-                            });
-                } else {
-                    Utility.showErrorMessage(activity, "Could not connect to the internet", Snackbar.LENGTH_LONG);
-                }
-            } catch (Exception ex) {
-                Toast.makeText(getApplicationContext(),"ex "+ex.getMessage(),Toast.LENGTH_LONG).show();
-                Utility.showErrorMessage(activity, ex.getMessage(), Snackbar.LENGTH_LONG);
-            }
-
-        }
-*/
 
     private void getCategory() {
         try {
@@ -787,10 +768,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         mWeight.add("440g");
         mPrice.add(rs+"304/-");
         mCutoff.add(rs+"500/-");
-
-
-
-
 
     }
 

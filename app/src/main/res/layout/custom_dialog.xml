@@ -6,15 +6,16 @@
     android:orientation="vertical">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@color/colorPrimary">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/customer"
+            android:background="@drawable/mandroid_logo"
             android:visibility="gone"/>
 
     </RelativeLayout>
@@ -47,6 +48,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal">
 
             <Button
@@ -66,7 +68,7 @@
                 android:layout_gravity="right"
                 android:background="@color/colorPrimary"
                 android:text="Ok"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:textColor="@color/colorWhite" />
         </LinearLayout>
     </LinearLayout>
