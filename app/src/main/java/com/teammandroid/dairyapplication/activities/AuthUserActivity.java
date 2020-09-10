@@ -370,7 +370,7 @@ public class AuthUserActivity extends AppCompatActivity {
                                     progressDialog.dismiss();
                                     sessionHelper.createLoginSession(userModel);
                                     prefManager.setaddress(userModel.getAddress());
-                                    Log.e(TAG, "isNew: " + userModel.getUserid() +"Mob "+userModel.getMobile());
+                                    Log.e(TAG, "isNew: " + userModel.getUserid() +"Addre "+userModel.getAddress());
                                     Bundle bundle=new Bundle();
                                     bundle.putParcelable("userData",userModel);
                                     bundle.putString("number", userModel.getMobile());
@@ -383,8 +383,10 @@ public class AuthUserActivity extends AppCompatActivity {
                                     //String message = "Thank you for visiting Sarvodaya International School \n Your OTP :" + OTP;
                                     //timerForOtp(mobileNumber,message);
                                 } else {
+
+                                  //  Utility.launchActivity(AuthUserActivity.this,CategoryListActivity.class,true);
                                     Log.e(TAG, "olreadyExist: " + userModel.getUserid() +"roleId "+prefManager.getROLE_ID());
-                                    UpdateUser();
+                                   UpdateUser();
                                 }
                             }
 

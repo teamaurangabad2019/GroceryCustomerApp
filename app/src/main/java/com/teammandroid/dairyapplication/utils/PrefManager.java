@@ -26,7 +26,7 @@ public class PrefManager {
     private static final String AUTH_BACK = "auth_back";
     private static final String our_price = "our_price";
     private static final String saved_price = "saved_price";
-    private static final String address = "address";
+    private static final String  address = "address";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -125,14 +125,16 @@ public class PrefManager {
         return pref.getString(saved_price, null);
     }
 
-    public void setaddress(String op) {
-            editor.putString(address, op);
-            editor.commit();
-        }
 
-        public String getaddress() {
-            return pref.getString(address, null);
-        }
+    public void setaddress(String nn) {
+        editor.putString(address, nn);
+        editor.commit();
+    }
+
+    public String getaddress() {
+        return pref.getString(address, null);
+    }
+
 
 
 

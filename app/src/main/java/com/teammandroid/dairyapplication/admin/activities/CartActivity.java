@@ -372,18 +372,30 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         radio_id2.setText("Change Address");
 
         radio_id3.setVisibility(View.GONE);
-        radio_id1.setVisibility(View.GONE);
+        radio_id1.setVisibility(View.VISIBLE);
       //  et_address.setVisibility(View.GONE);
         btn_finish.setVisibility(View.VISIBLE);
         btn_resume.setVisibility(View.VISIBLE);
         btn_all.setVisibility(View.VISIBLE);
 
-        radio_id2.isChecked();
+      //  radio_id2.isChecked();
 
         radio_id1.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
+                if(prefManager.getaddress()==null)
+                {
+                    Toast.makeText(CartActivity.this, "Profile not having address", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    et1_address.setVisibility(View.VISIBLE);
+                    Log.e( "onClick: ", prefManager.getaddress());
+                    et1_address.setText(prefManager.getaddress());
+
+                }
+
 
             }
         });
@@ -409,7 +421,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (Utility.isNetworkAvailable(CartActivity.this)) {
 
-                    String address  =  et1_address.getText().toString();
+                   // String address  =  et1_address.getText().toString();
 
                     if (et1_address.getText().toString().equals("") )
                     {
@@ -419,7 +431,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                     }else {
                         placeOrder(0,prefManager.getUSER_ID(),0,0,
                                 Utility.getCurrentDate(),
-                                address,0, Double.parseDouble(prefManager.getour_price()),
+                                et1_address.getText().toString(),0, Double.parseDouble(prefManager.getour_price()),
                                 Double.parseDouble(prefManager.getsaved_price()));
 
                         resultbox.cancel();
