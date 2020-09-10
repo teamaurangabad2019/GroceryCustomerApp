@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/txtTitleBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="Select Profile"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/textExtraLargeSize"
+            android:layout_marginTop="10dp"/>
+
+        <View
+            android:id="@+id/viewNotification"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_notifications"
+            android:backgroundTint="@color/colorPrimary"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_guest"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_credit_card"
+            app:cardBackgroundColor="#ffffff"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp"
+            android:visibility="gone">
+
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|right"
+                android:background="@drawable/ic_play"
+                android:backgroundTint="@color/colorPrimary"
+                android:padding="@dimen/padding_20"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="4dp"
+                android:layout_margin="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guest"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/textLargeSize"
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/tv_guest"
+                    />
+
+                <TextView
+                    android:id="@+id/tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Click here!.."
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/textSmallSize"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/tv_guest"
+
+
+                    />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_Trust"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_credit_card"
+            app:cardBackgroundColor="#ffffff"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|right"
+                android:background="@drawable/ic_play"
+                android:backgroundTint="@color/colorPrimary"
+                android:padding="@dimen/padding_20" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="4dp"
+                android:layout_margin="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admin"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/textLargeSize"
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/tv_trust" />
+
+                <TextView
+                    android:id="@+id/tv33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Click here!.."
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/textSmallSize"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/tv_trust"
+
+
+                    />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_Principal"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_credit_card"
+            app:cardBackgroundColor="#ffffff"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp"
+            android:layout_below="@+id/cv_Trust"
+            >
+
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|right"
+                android:background="@drawable/ic_play"
+                android:backgroundTint="@color/colorPrimary"
+                android:padding="@dimen/padding_20"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="4dp"
+                android:layout_margin="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery Boy"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/textLargeSize"
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/tv_notice"
+                    />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Click here!.."
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/textSmallSize"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/tv_notice" />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_teacher"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_credit_card"
+            app:cardBackgroundColor="#ffffff"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp"
+            android:layout_below="@id/cv_Principal"
+            android:visibility="gone">
+
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|right"
+                android:background="@drawable/ic_play"
+                android:backgroundTint="@color/colorPrimary"
+                android:padding="@dimen/padding_20"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="4dp"
+                android:layout_margin="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teacher"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/textLargeSize"
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/tv_expenses"
+                    />
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Click here!.."
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/textSmallSize"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/tv_expenses"
+
+
+                    />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_parents"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_credit_card"
+            app:cardBackgroundColor="#ffffff"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="3dp"
+            android:layout_below="@+id/cv_teacher"
+            android:layout_marginBottom="60dp"
+            android:visibility="gone">
+
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"/>
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|right"
+                android:background="@drawable/ic_play"
+                android:backgroundTint="@color/colorPrimary"
+                android:padding="@dimen/padding_20"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingRight="4dp"
+                android:layout_margin="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Parents"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/textLargeSize"
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/tv_enquiry"
+                    />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Click here!.."
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/textSmallSize"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/tv_enquiry"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>
