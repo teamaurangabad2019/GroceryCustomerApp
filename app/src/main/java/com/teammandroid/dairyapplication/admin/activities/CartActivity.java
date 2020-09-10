@@ -1,6 +1,7 @@
 package com.teammandroid.dairyapplication.admin.activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.teammandroid.dairyapplication.Network.OrderProductServices;
 import com.teammandroid.dairyapplication.Network.OrderServices;
 import com.teammandroid.dairyapplication.R;
+import com.teammandroid.dairyapplication.activities.EntryProfileActivity;
 import com.teammandroid.dairyapplication.activities.HomepageActivity;
 import com.teammandroid.dairyapplication.admin.adapters.CartAdapter;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
@@ -200,10 +207,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_continue:
 
+                updateDialog();
+                Log.e( "onClick: ",prefManager.getour_price()+"   "+prefManager.getsaved_price() );
 
-                placeOrder(0,prefManager.getUSER_ID(),0,0,Utility.getCurrentDate(),
+              /*  placeOrder(0,prefManager.getUSER_ID(),0,0,Utility.getCurrentDate(),
                         "Address",0,10,5);
-
+*/
                 break;
 
 
@@ -335,5 +344,109 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                 pid,tquantity,0,1);
 
         //  Log.e( "getQuantity: ", String.valueOf(tquantity));
+    }
+
+
+    private void updateDialog(){
+        final Dialog resultbox = new Dialog(CartActivity.this);
+        resultbox.setContentView(R.layout.staus_dialog);
+        // resultbox.setCanceledOnTouchOutside(false);
+        Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
+        Button btn_resume = (Button) resultbox.findViewById(R.id.btn_resume);
+
+        TextView tv_title = resultbox.findViewById(R.id.tv_title);
+        TextView txt_ourprice = resultbox.findViewById(R.id.txt_ourprice);
+        TextView txt_savedprice = resultbox.findViewById(R.id.txt_savedprice);
+        RadioGroup radioGroup = resultbox.findViewById(R.id.groupradio);
+        RadioButton radio_id1 = resultbox.findViewById(R.id.radio_id1);
+        RadioButton radio_id2 = resultbox.findViewById(R.id.radio_id2);
+        RadioButton radio_id3 = resultbox.findViewById(R.id.radio_id3);
+        EditText et1_address = resultbox.findViewById(R.id.et1_address);
+        LinearLayout btn_all = resultbox.findViewById(R.id.btn_all);
+
+
+        txt_ourprice.setText("Total amount: "+prefManager.getour_price());
+        txt_savedprice.setText("Saved amount: "+prefManager.getsaved_price());
+        tv_title.setText("Delivery Address");
+        radio_id1.setText("Use Profile Address");
+        radio_id2.setText("Change Address");
+
+        radio_id3.setVisibility(View.GONE);
+        radio_id1.setVisibility(View.GONE);
+      //  et_address.setVisibility(View.GONE);
+        btn_finish.setVisibility(View.VISIBLE);
+        btn_resume.setVisibility(View.VISIBLE);
+        btn_all.setVisibility(View.VISIBLE);
+
+        radio_id2.isChecked();
+
+        radio_id1.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        radio_id2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (Utility.isNetworkAvailable(CartActivity.this)) {
+
+                    et1_address.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
+
+        btn_finish.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (Utility.isNetworkAvailable(CartActivity.this)) {
+
+                    String address  =  et1_address.getText().toString();
+
+                    if (et1_address.getText().toString().equals("") )
+                    {
+
+                        Toast.makeText(activity, "Enter address", Toast.LENGTH_SHORT).show();
+                       //  Utility.showErrorMessage(CartActivity.this,"Please enter all the details !!");
+                    }else {
+                        placeOrder(0,prefManager.getUSER_ID(),0,0,
+                                Utility.getCurrentDate(),
+                                address,0, Double.parseDouble(prefManager.getour_price()),
+                                Double.parseDouble(prefManager.getsaved_price()));
+
+                        resultbox.cancel();
+
+                       // updateUserProfile(fullname, address, mobileNo, email);
+                    }
+
+                }
+                // Utility.launchActivity(EntryProfileActivity.this,HomepageActivity.class,true);
+            }
+        });
+
+        btn_resume.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                resultbox.cancel();
+            }
+        });
+
+        resultbox.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+       // Utility.launchActivity(CartActivity.this,);
     }
 }

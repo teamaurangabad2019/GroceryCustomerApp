@@ -12,147 +12,110 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
 
         <RelativeLayout
             android:id="@+id/rl_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--region Toolbar Region-->
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <!--region Toolbar Region-->
+            <!--region Toolbar Region-->
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="-8dp"
-                android:background="@color/colorPrimary"
-                android:gravity="top"
-                android:visibility="gone">
+                android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:id="@+id/originalToolbar"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/tb_actionbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_10"
-                    android:orientation="vertical"
+                    android:background="@color/colorPrimary"
                     >
-
-                    <ImageView
-                        android:id="@+id/img_copenDrawer"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@drawable/ic_menu_black_24dp"
-                        android:backgroundTint="@color/colorWhite" />
-
-                    <TextView
-                        android:id="@+id/txtTitleBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/img_copenDrawer"
-                        android:layout_centerVertical="true"
-                        android:text="@string/app_name"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/toolbarText"
-                        android:textStyle="bold"/>
-
-
-                    <ImageView
-                        android:id="@+id/img_whatsapp"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="@dimen/padding_20"
-                        android:background="@drawable/ic_arrow_back"
-                        android:backgroundTint="@color/colorGreen"
-                        android:layout_alignParentRight="true"
-                        android:visibility="gone"/>
-
-                    <ImageView
-                        android:id="@+id/img_call"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/home_phone_call"
-                        android:layout_marginRight="30dp"
-                        android:layout_toLeftOf="@+id/img_whatsapp"
-                        android:visibility="gone"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/img_openDrawer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_clear_all_black_24dp"
+                            android:backgroundTint="@color/colorWhite"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            />
+                        <TextView
+                            android:id="@+id/txtTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/img_openDrawer"
+                            android:layout_centerVertical="true"
+                            android:text="@string/app_name"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/toolbarText"
+                            android:textStyle="bold"/>
 
 
-
-                </RelativeLayout>
-
-            </androidx.appcompat.widget.Toolbar>
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tb_actionbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/lightPink"
-                >
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:contentDescription="@string/image"
-                        android:id="@+id/img_openDrawer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_burgur"
-                        />
-
-                    <ImageView
-                        android:contentDescription="@string/share"
-                        android:layout_toLeftOf="@id/iv_notification"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_share"
-                        android:layout_marginRight="24dp"
-                        android:layout_toStartOf="@id/iv_notification"
-                        android:layout_marginEnd="24dp" />
+                        <ImageView
+                            android:contentDescription="@string/share"
+                            android:layout_toLeftOf="@id/iv_notification"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_share"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="24dp"
+                            android:layout_toStartOf="@id/iv_notification"
+                            android:layout_marginEnd="24dp"
+                            android:visibility="visible"/>
 
 
-                    <ImageView
-                        android:contentDescription="@string/notification"
-                        android:layout_marginRight="24dp"
-                        android:id="@+id/iv_notification"
-                        android:layout_toLeftOf="@id/iv_cart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_notifications"
-                        android:layout_marginEnd="24dp"
-                        android:layout_toStartOf="@id/iv_cart" />
+                        <ImageView
+                            android:contentDescription="@string/notification"
+                            android:layout_marginRight="24dp"
+                            android:id="@+id/iv_notification"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/badgeLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_search"
+                            android:backgroundTint="@color/colorWhite"
+                            android:layout_marginEnd="24dp"
+                            android:layout_toStartOf="@id/badgeLayout" />
 
-                    <ImageView
-                        android:contentDescription="@string/cart"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginRight="16dp"
-                        android:id="@+id/iv_cart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_shopping"
-                        android:layout_marginEnd="16dp"
-                        android:layout_alignParentRight="true" />
+                        <com.steelkiwi.library.view.BadgeHolderLayout
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/badgeLayout"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            app:bhl_default_badge_background="@color/colorAccent"
+                            app:bhl_text_color="@android:color/white"
+                            app:bhl_text_size="12sp"
+                            app:bhl_badge_radius="10dp">
 
-                </RelativeLayout>
+                            <ImageView
+                                android:contentDescription="@string/cart"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginRight="16dp"
+                                android:id="@+id/iv_cart"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_shopping_cart"
+                                android:backgroundTint="@color/colorWhite"
+                                android:layout_marginEnd="16dp"
+                                android:layout_alignParentRight="true" />
+
+                        </com.steelkiwi.library.view.BadgeHolderLayout>
+
+                    </RelativeLayout>
 
 
 
-            </androidx.appcompat.widget.Toolbar>
+                </androidx.appcompat.widget.Toolbar>
 
 
-        </com.google.android.material.appbar.AppBarLayout>
-        <!--endregion-->
-
+            </com.google.android.material.appbar.AppBarLayout>
+            <!--endregion-->            <!--endregion-->
         <ScrollView
             android:id="@+id/ScrollView011"
             android:layout_width="match_parent"
@@ -166,17 +129,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--region Slider Region-->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_slider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                app:cardCornerRadius="5dp"
-                android:layout_marginTop="@dimen/padding_10">
+
 
                 <LinearLayout
-                    android:id="@+id/sliderlayout"
+                    android:id="@+id/cv_slider"
                     android:background="@color/colorGrey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -194,7 +150,6 @@
                         android:gravity="center" />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
             <!--endregion-->
 
             <androidx.cardview.widget.CardView
@@ -223,18 +178,21 @@
                     android:id="@+id/iv_video"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/book_home"/>
+                    android:background="@drawable/ic_adjust_black_24dp"
+                    android:tint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/iv_video"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Product category"
+                    android:layout_marginLeft="5dp"
+                    android:text="Shop By Product Category"
                     android:textSize="@dimen/txtTitle"
                     android:textStyle="bold"
-                    android:textColor="@color/colorText"/>
+                    android:textColor="@color/colorPrimary"/>
 
                 <TextView
                     android:layout_centerVertical="true"
@@ -242,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="View All"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/TextsubTitle"
                     android:textStyle="bold"
                     android:id="@+id/tv_view_all_test"/>
@@ -251,7 +209,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center"
                 android:layout_below="@id/rl_video"
                 android:layout_marginLeft="5dp"
@@ -273,9 +231,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Title1"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="16sp" />
+                    android:text="Product Offers"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_products1"

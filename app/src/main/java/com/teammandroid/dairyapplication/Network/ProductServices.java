@@ -11,6 +11,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.teammandroid.dairyapplication.admin.model.CategoryModel;
+import com.teammandroid.dairyapplication.admin.model.ProductImageModel;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.utils.Constants;
@@ -50,7 +51,7 @@ public class ProductServices {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("type", 2);
-                jsonObject.put("Action", 1);
+                jsonObject.put("Action", 3);
                 jsonObject.put("Subcategoryid", Subcategoryid);
 
                // jsonObject.put("Subjectid", Subjectid);
@@ -148,4 +149,58 @@ public class ProductServices {
             apiStatusCallBack.onUnknownError(ex);
         }
     }
+
+
+    public void fetchProductImages(int Productid, final ApiStatusCallBack apiStatusCallBack) {
+
+        //{"type":2,"Action":3, "Productid":5}
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("type", 2);
+                jsonObject.put("Action", 3);
+                jsonObject.put("Productid", Productid);
+
+                // jsonObject.put("Subjectid", Subjectid);
+            } catch (Exception e) {
+                Log.e("JSONOBJECTerr", "" + e);
+                apiStatusCallBack.onUnknownError(e);
+            }
+
+            AndroidNetworking.post(Constants.URL_Product_MULTIPLE_IMG)
+                    .addJSONObjectBody(jsonObject)
+                    .setTag("test")
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            try {
+                                TypeToken<ArrayList<ProductImageModel>> token = new TypeToken<ArrayList<ProductImageModel>>() {
+                                };
+                                ArrayList<ProductImageModel> notesPackages = new Gson().fromJson(response.toString(), token.getType());
+                                Log.e("productImages", "" + notesPackages);
+                                apiStatusCallBack.onSuccess(notesPackages);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e("productImages", e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Log.e("productImages:anError", "" + anError);
+                            Log.e("productImages:anError", "" + anError.getErrorBody());
+                            apiStatusCallBack.onError(anError);
+                        }
+                    });
+
+        } catch (Exception ex) {
+            Log.e("onUnknownError", "" + ex);
+            apiStatusCallBack.onUnknownError(ex);
+        }
+    }
+
 }

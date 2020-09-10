@@ -79,21 +79,6 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_delete"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5">
-
-            <ImageView
-                android:id="@+id/iv_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="visible"
-                android:src="@drawable/ic_delete_black_24dp" />
-
-        </RelativeLayout>
 
     </LinearLayout>
 
@@ -167,6 +152,15 @@
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
             android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_delete_black_24dp" />
+
 
             <ImageView
                 android:id="@+id/iv_remove"

@@ -2,13 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.teammandroid.dairyapplication">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
@@ -20,19 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".admin.activities.ProductListActivity">
-
-        </activity>
-        <activity android:name=".admin.activities.DeliveryboyListActivity"></activity>
+        <activity android:name=".wishlist.WishlistActivity"></activity>
+        <activity android:name=".activities.ProductDetailsActivity" />
+        <activity android:name=".admin.activities.ProductListActivity" />
+        <activity android:name=".admin.activities.DeliveryboyListActivity" />
         <activity android:name=".admin.activities.EditDeliveryBoyActivity" />
         <activity android:name=".admin.activities.AddDeliveryboyActivity" />
         <activity android:name=".admin.activities.OrderActivity" />
         <activity android:name=".activities.BookingActivity" />
-        <activity android:name=".admin.activities.CartActivity" >
-
-        </activity>
+        <activity android:name=".admin.activities.CartActivity" />
         <activity android:name=".admin.activities.AddProductActivity" />
-
         <activity android:name=".admin.activities.AddSubCategoryActivity" />
         <activity android:name=".admin.activities.SubcategoryListActivity" />
         <activity android:name=".admin.activities.AddCategoryActivity" />
@@ -41,25 +35,19 @@
         <activity android:name=".activities.EntryProfileActivity" />
         <activity android:name=".activities.AuthenticationActivity" />
         <activity android:name=".admin.activities.EditSubcategoryActivity" />
-        <activity android:name=".activities.UserSplashActivity" >
+        <activity android:name=".activities.UserSplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ShowProfileActivity" >
-
-        </activity>
-        <activity android:name=".activities.SplashActivity" >
-
-        </activity>
+        <activity android:name=".activities.ShowProfileActivity" />
+        <activity android:name=".activities.SplashActivity" />
         <activity android:name=".activities.AboutUsActivity" />
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".admin.activities.SelectRoleActivity" />
-        <activity android:name=".activities.HomepageActivity">
-
-        </activity>
+        <activity android:name=".activities.HomepageActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".admin.activities.OrderHistoryActivity" />
         <activity android:name=".admin.activities.DeliveryboyStatusListActivity" />

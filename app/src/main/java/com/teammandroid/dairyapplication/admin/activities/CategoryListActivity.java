@@ -248,7 +248,7 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onBackPressed() {
-        //onBackPressed();
+        onBackPressed();
         Utility.launchActivity(CategoryListActivity.this, HomepageActivity.class,true);
     }
 

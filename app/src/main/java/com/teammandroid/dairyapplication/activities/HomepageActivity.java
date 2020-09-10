@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,15 +53,18 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.razorpay.Checkout;
+import com.steelkiwi.library.view.BadgeHolderLayout;
 import com.teammandroid.dairyapplication.Network.CategoryServices;
 import com.teammandroid.dairyapplication.Network.ProductServices;
 import com.teammandroid.dairyapplication.Network.SliderService;
 import com.teammandroid.dairyapplication.R;
 
 import com.teammandroid.dairyapplication.admin.activities.AddHomeProductActivity;
+import com.teammandroid.dairyapplication.admin.activities.CartActivity;
 import com.teammandroid.dairyapplication.admin.activities.CategoryListActivity;
 import com.teammandroid.dairyapplication.admin.activities.DeliveryboyListActivity;
 import com.teammandroid.dairyapplication.admin.activities.DeliveryboyOrderListActivity;
+import com.teammandroid.dairyapplication.admin.activities.DeliveryboyStatusListActivity;
 import com.teammandroid.dairyapplication.admin.activities.OrderHistoryActivity;
 import com.teammandroid.dairyapplication.admin.activities.SelectRoleActivity;
 import com.teammandroid.dairyapplication.admin.adapters.CategoryHomeAdapter;
@@ -71,10 +76,12 @@ import com.teammandroid.dairyapplication.model.Response;
 import com.teammandroid.dairyapplication.model.SliderModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 
+import com.teammandroid.dairyapplication.offline.DatabaseHelper;
 import com.teammandroid.dairyapplication.utils.Constants;
 import com.teammandroid.dairyapplication.utils.PrefManager;
 import com.teammandroid.dairyapplication.utils.SessionHelper;
 import com.teammandroid.dairyapplication.utils.Utility;
+import com.teammandroid.dairyapplication.wishlist.WishlistActivity;
 
 import org.json.JSONObject;
 
@@ -84,6 +91,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.teammandroid.dairyapplication.offline.DatabaseHelper.QUANTITY_2;
+import static com.teammandroid.dairyapplication.offline.DatabaseHelper.QUANTITY_3;
+import static com.teammandroid.dairyapplication.offline.DatabaseHelper.QUANTITY_4;
 
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener,
         BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener
@@ -99,7 +110,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     private SliderLayout mDemoSlider;
     private PagerIndicator custom_indicator;
     private LinearLayout sliderlayout;
-    private CardView cv_slider;
     private EditText toolbarEditText;
     private View viewReplaceClear;
     private RelativeLayout replaceToolbar;
@@ -123,14 +133,11 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
      * Profile
      */
     private TextView tv_profile;
-    private RelativeLayout rl_profile;
     private ImageView iv_daily_service_request;
     /**
      * Monthly Service Record
      */
-    private TextView tv_daily_service_request;
-    private RelativeLayout rl_enrolledstudent;
-    private ImageView iv_payment;
+
     /**
      * Payment
      */
@@ -177,14 +184,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
      * Powered by Mandroid
      */
     UserModel userModel;
-    private TextView txt_userName;
     private ScrollView Scrll_Drawer;
     DrawerLayout drl_Opener;
 
     ImageView iv_add_cust;
     ProgressDialog progressDialog;
     RelativeLayout rl_video;
-    RelativeLayout rl_profileChnage;
+    RelativeLayout rl_profileChnage, rl_Category, rl_track_order, rl_wishlist;
     PrefManager prefManager;
 
     Dialog resultbox;
@@ -212,9 +218,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> mPrice = new ArrayList<>();
     private ArrayList<String> mCutoff = new ArrayList<>();
 
-    RelativeLayout rl_addHomeProduct;
     ProductListHomeAdapter productListHomeAdapter;
 
+    TextView tv_view_all_test;
+
+    DatabaseHelper dbHelper;
+
+    BadgeHolderLayout badgeLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,12 +244,15 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         getImages();
         productList(0);
 
-        rl_profile.setVisibility(View.GONE);
-        rl_addHomeProduct.setVisibility(View.GONE);
+        if(prefManager.getUSER_ID()==0)
+        {
+            getCountForNotLogin();
+        }
+        else {
 
+            getCount();
 
-        txt_userName.setVisibility(View.VISIBLE);
-        txt_userName.setText("Customer");
+        }
 
         Log.d(TAG," "+prefManager.getUSER_ID());
 
@@ -256,19 +269,8 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     private void listener() {
         img_openDrawer.setOnClickListener(this);
-        rl_headerprofile.setOnClickListener(this);
-        rl_home.setOnClickListener(this);
-        rl_profile.setOnClickListener(this);
-        rl_enrolledstudent.setOnClickListener(this);
-        rl_paymentHist.setOnClickListener(this);
-        rl_paidelecture.setOnClickListener(this);
-        rl_insert_video_link.setOnClickListener(this);
-        rl_demo_lecture.setOnClickListener(this);
-        rl_delete_count.setOnClickListener(this);
-        iv_add_cust.setOnClickListener(this);
-        txt_contact.setOnClickListener(this);
-        rl_video.setOnClickListener(this);
         rl_profileChnage.setOnClickListener(this);
+        rl_paymentHist.setOnClickListener(this);
         txt_rateus.setOnClickListener(this);
         txt_aboutus.setOnClickListener(this);
         txt_logout.setOnClickListener(this);
@@ -281,8 +283,13 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         ib_whatsapp.setOnClickListener(this);
         ib_linkedin.setOnClickListener(this);
         ib_telegram.setOnClickListener(this);
-        rl_addHomeProduct.setOnClickListener(this);
-        txt_userName.setOnClickListener(this);
+        tv_view_all_test.setOnClickListener(this);
+
+        badgeLayout.setOnClickListener(this);
+        rl_Category.setOnClickListener(this);
+        rl_track_order.setOnClickListener(this);
+        rl_home.setOnClickListener(this);
+        rl_wishlist.setOnClickListener(this);
     }
 
     private void bindView() {
@@ -291,18 +298,18 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         img_call = (ImageView) findViewById(R.id.img_call);
         mDemoSlider = (SliderLayout) findViewById(R.id.slider);
         custom_indicator = (PagerIndicator) findViewById(R.id.custom_indicator);
-        sliderlayout = (LinearLayout) findViewById(R.id.sliderlayout);
-        cv_slider = (CardView) findViewById(R.id.cv_slider);
         rv_home_video_pkg = (RecyclerView) findViewById(R.id.rv_home_video_pkg);
         recyclerView = findViewById(R.id.rv_products1);
         rl_headerprofile = (RelativeLayout) findViewById(R.id.rl_headerprofile);
-        rl_profile = (RelativeLayout) findViewById(R.id.rl_profile);
         rl_home = (RelativeLayout) findViewById(R.id.rl_home);
-        rl_addHomeProduct = (RelativeLayout) findViewById(R.id.rl_addHomeProduct);
+        rl_track_order = (RelativeLayout) findViewById(R.id.rl_track_order);
+        rl_Category = (RelativeLayout) findViewById(R.id.rl_Category);
         drl_Opener =  findViewById(R.id.drl_Opener);
-        txt_userName =  findViewById(R.id.txt_userName);
+        tv_view_all_test =  findViewById(R.id.tv_view_all_test);
+        rl_wishlist =  findViewById(R.id.rl_wishlist);
 
-        rl_enrolledstudent = (RelativeLayout) findViewById(R.id.rl_enrolledstudent);
+        badgeLayout = findViewById(R.id.badgeLayout);
+        dbHelper = new DatabaseHelper(HomepageActivity.this);
 
         rl_paymentHist = (RelativeLayout) findViewById(R.id.rl_paymentHist);
         rl_video = (RelativeLayout) findViewById(R.id.rl_video);
@@ -361,14 +368,17 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 Utility.launchActivity(HomepageActivity.this,HomepageActivity.class,false);
                 drl_Opener.closeDrawer(Gravity.LEFT);
                 break;
-
-            case R.id.rl_enrolledstudent:
+        case R.id.tv_view_all_test:
+                Utility.launchActivity(HomepageActivity.this,CategoryListActivity.class,false);
                 drl_Opener.closeDrawer(Gravity.LEFT);
-                Toast.makeText(getApplicationContext(),"CLick here",Toast.LENGTH_SHORT).show();
                 break;
 
+
+
             case R.id.rl_paymentHist:
-                Utility.launchActivity(HomepageActivity.this, DeliveryboyOrderListActivity.class,false);
+                //Utility.launchActivity(HomepageActivity.this, DeliveryboyOrderListActivity.class,false);
+                Utility.launchActivity(HomepageActivity.this, DeliveryboyStatusListActivity.class,false);
+
                 break;
             case R.id.rl_paidelecture:
                 drl_Opener.closeDrawer(Gravity.LEFT);
@@ -401,16 +411,16 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.txt_rateus:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.rate_us_link)));
-                startActivity(intent);
+               /* Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.rate_us_link)));
+                startActivity(intent);*/
                 break;
 
             case R.id.tv_share_app:
-                Intent sendIntent = new Intent();
+              /*  Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, (getResources().getString(R.string.rate_us_link)));
                 sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                startActivity(sendIntent);*/
                 break;
 
             case R.id.txt_contact:
@@ -423,6 +433,14 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.txt_aboutus:
                 Utility.launchActivity(HomepageActivity.this, AboutUsActivity.class,false);
+                break;
+
+            case R.id.rl_track_order:
+                Utility.launchActivity(HomepageActivity.this, DeliveryboyStatusListActivity.class,false);
+                break;
+
+            case R.id.rl_Category:
+                Utility.launchActivity(HomepageActivity.this, CategoryListActivity.class,false);
                 break;
 
             case R.id.txt_logout:
@@ -494,10 +512,16 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
 
-            case R.id.rl_addHomeProduct:
-                Utility.launchActivity(HomepageActivity.this, AddHomeProductActivity.class,false);
-                drl_Opener.closeDrawer(Gravity.LEFT);
+            case R.id.badgeLayout:
+                Utility.launchActivity(HomepageActivity.this, CartActivity.class,
+                        false);
                 break;
+
+            case R.id.rl_wishlist:
+                Utility.launchActivity(HomepageActivity.this, WishlistActivity.class,
+                        false);
+                break;
+
 
         }
     }
@@ -843,4 +867,34 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private  void getCount()
+    {
+
+        SQLiteDatabase db=dbHelper.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT SUM (" + QUANTITY_4 + ") FROM " +
+                dbHelper.TABLE_QUANTITY +" WHERE userid="+prefManager.getUSER_ID(), null);
+
+        int id = 0;
+
+        if(cursor.moveToNext()){
+
+            id = cursor.getInt(0);//to get id, 0 is the column index
+            //productId=cursor.getInt(1);
+            //userid=cursor.getInt(1);
+            //prefManager.setCOUNT_ID(id);
+        }
+
+        // int count = bookingSqliteOperations.GetBookings().size();
+        badgeLayout.setCountWithAnimation(id);
+        //Toast.makeText(activity,"count "+ id , Toast.LENGTH_LONG).show();
+
+    }
+
+    private  void getCountForNotLogin()
+    {
+
+        badgeLayout.setCountWithAnimation(0);
+
+    }
 }

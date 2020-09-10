@@ -330,5 +330,55 @@ public class OrderServices {
         }
     }
 
+    public void FetchOrderusingUserid(int Userid,final ApiStatusCallBack apiStatusCallBack) {
+        //{"type":2,"Action":5, "Deliveryboyid":35} //All order
+        try {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("type", 2);
+                jsonObject.put("Action", 6);
+                jsonObject.put("Userid", Userid);
+
+            } catch (Exception e) {
+                Log.e("JSONOBJECTerr", "" + e);
+                apiStatusCallBack.onUnknownError(e);
+            }
+
+            AndroidNetworking.post(Constants.URL_ORDER)
+                    .addJSONObjectBody(jsonObject)
+                    .setTag("test")
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONArray(new JSONArrayRequestListener() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            try {
+                                TypeToken<ArrayList<DeliveryboyStatusModel>> token = new TypeToken<ArrayList<DeliveryboyStatusModel>>() {
+                                };
+                                ArrayList<DeliveryboyStatusModel> notesPackages = new Gson().fromJson(response.toString(), token.getType());
+                                Log.e("DeliveryboyStatusModel", "" + notesPackages);
+                                apiStatusCallBack.onSuccess(notesPackages);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e("error", e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            Log.e("OrderusingDB:anError", "" + anError);
+                            Log.e("OrderusingDB:anError", "" + anError.getErrorBody());
+                            apiStatusCallBack.onError(anError);
+                        }
+                    });
+
+        } catch (Exception ex) {
+            Log.e("onUnknownError", "" + ex);
+            apiStatusCallBack.onUnknownError(ex);
+        }
+    }
+
 
 }

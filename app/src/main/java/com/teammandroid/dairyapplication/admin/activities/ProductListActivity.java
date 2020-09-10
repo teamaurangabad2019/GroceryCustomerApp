@@ -39,6 +39,7 @@ import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.admin.model.SubcategoryModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
+import com.teammandroid.dairyapplication.utils.PrefManager;
 import com.teammandroid.dairyapplication.utils.Utility;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     DatabaseHelper dbHelper;
 
     BadgeHolderLayout badgeLayout;
+    PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +95,19 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
         txtTitleBar.setText("Product List");
 
-       // productList(subcategoryModel.getSubcategoryid());
-        productList(22);
-        getCount();
+        productList(subcategoryModel.getSubcategoryid());
+       // productList(22);
+
+        Log.e( "onCreate: ", String.valueOf(subcategoryModel.getSubcategoryid()));
+        if(prefManager.getUSER_ID()==0)
+        {
+            getCountForNotLogin();
+        }
+        else {
+
+            getCount();
+
+        }
         //getExpenseList(expenseCategoryHolder.getCategoryid());
 
         iv_add.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +242,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         dbHelper = new DatabaseHelper(ProductListActivity.this);
         progressDialog=new ProgressDialog(ProductListActivity.this);
         activity= ProductListActivity.this;
+        prefManager=new PrefManager(ProductListActivity.this);
     }
 
     private void btnlistener() {
@@ -313,13 +326,15 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         resultbox.show();
     }
 
+
+
     private  void getCount()
     {
 
         SQLiteDatabase db=dbHelper.getWritableDatabase();
 
-        //SELECT sum(count) from quantity where productid = 21;
-        Cursor cursor = db.rawQuery("SELECT SUM (" + QUANTITY_4 + ") FROM " + dbHelper.TABLE_QUANTITY +" WHERE "+ QUANTITY_2 , null);
+        Cursor cursor = db.rawQuery("SELECT SUM (" + QUANTITY_4 + ") FROM " +
+                dbHelper.TABLE_QUANTITY +" WHERE userid="+prefManager.getUSER_ID(), null);
 
         int id = 0;
 
@@ -337,9 +352,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void ReloadActivity() {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    private  void getCountForNotLogin()
+    {
+
+        badgeLayout.setCountWithAnimation(0);
+
     }
 }

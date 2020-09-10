@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="left|start"
-    android:background="@color/colorBackground"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:scrollbars="none"
@@ -21,12 +21,12 @@
         <!--region profile-->
         <RelativeLayout
             android:id="@+id/rl_headerprofile"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="180dp"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/padding_20">
@@ -37,19 +37,6 @@
                     android:layout_height="150dp"
                     android:src="@drawable/mandroid_logo" />
 
-                <TextView
-                    android:id="@+id/txt_userName"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:drawablePadding="15dp"
-                    android:gravity="center_horizontal"
-                    android:text="txt_userName"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@+id/iv_logo"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
-                    android:visibility="gone"
-                    android:textStyle="bold"/>
 
             </RelativeLayout>
 
@@ -137,7 +124,7 @@
 
             <!--region profile -->
             <RelativeLayout
-                android:id="@+id/rl_profile"
+                android:id="@+id/rl_wishlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -159,7 +146,7 @@
                     android:layout_marginBottom="0dp"
                     android:layout_toRightOf="@+id/iv_profile"
                     android:gravity="center_vertical"
-                    android:text="Delivery Boy"
+                    android:text="Wishlist"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/nav_drawer_text"
                     android:textStyle="bold" />
@@ -202,7 +189,7 @@
 
             <!--region Payment-->
             <RelativeLayout
-                android:id="@+id/rl_addHomeProduct"
+                android:id="@+id/rl_Category"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:visibility="visible">
@@ -224,7 +211,7 @@
                     android:layout_toRightOf="@+id/iv_addhome"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
-                    android:text="Add Home Product"
+                    android:text="Category"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/nav_drawer_text" />
 
@@ -232,10 +219,10 @@
             <!--endregion-->
             <!--region Todays Count-->
             <RelativeLayout
-                android:id="@+id/rl_enrolledstudent"
+                android:id="@+id/rl_track_order"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/iv_todays_count"
@@ -254,7 +241,7 @@
                     android:layout_toRightOf="@+id/iv_todays_count"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
-                    android:text="Enrolled Student"
+                    android:text="Track Order"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/nav_drawer_text"
                     />

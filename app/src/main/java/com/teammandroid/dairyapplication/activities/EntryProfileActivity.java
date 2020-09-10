@@ -35,6 +35,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.Network.AuthServices;
 import com.teammandroid.dairyapplication.R;
+import com.teammandroid.dairyapplication.admin.activities.CategoryListActivity;
 import com.teammandroid.dairyapplication.admin.model.DeliveryboyStatusModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.model.Response;
@@ -175,8 +176,11 @@ public class EntryProfileActivity extends AppCompatActivity implements View.OnCl
                 }
                 else
                 {
+
+                    updateUserProfile(fullname, et_address.getText().toString(), mobileNo, email);
+
                     //updateUserProfile(fullname,address,mobileNo,email);
-                    updateDialog();
+                    //updateDialog();
                     //Utility.launchActivity(EntryProfileActivity.this,HomepageActivity.class,true);
                 }
                 break;
@@ -311,7 +315,7 @@ public class EntryProfileActivity extends AppCompatActivity implements View.OnCl
                                     };
                                     progressDialog.dismiss();
                                     Response response1 = new Gson().fromJson(response.toString(), token.getType());
-                                    Utility.launchActivity(EntryProfileActivity.this, HomepageActivity.class,true);
+                                    Utility.launchActivity(EntryProfileActivity.this, CategoryListActivity.class,true);
                                     Toast.makeText(getApplicationContext(), "" + response1.getMessage(), Toast.LENGTH_LONG).show();
                                     Log.e(TAG, "onResponseParent " + response1.getMessage());
                                 }
@@ -364,7 +368,7 @@ public class EntryProfileActivity extends AppCompatActivity implements View.OnCl
                                     };
                                     progressDialog.dismiss();
                                     Response response1 = new Gson().fromJson(response.toString(), token.getType());
-                                    Utility.launchActivity(EntryProfileActivity.this, HomepageActivity.class,true);
+                                    Utility.launchActivity(EntryProfileActivity.this, CategoryListActivity.class,true);
                                     //updateDialog();
                                     Toast.makeText(getApplicationContext(), "" + response1.getMessage(), Toast.LENGTH_LONG).show();
                                     Log.e(TAG, "onResponse: Profile " + response1.getMessage());
@@ -425,154 +429,6 @@ public class EntryProfileActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    private void updateDialog(){
-        final Dialog resultbox = new Dialog(EntryProfileActivity.this);
-        resultbox.setContentView(R.layout.staus_dialog);
-        // resultbox.setCanceledOnTouchOutside(false);
-        Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
-        Button btn_resume = (Button) resultbox.findViewById(R.id.btn_resume);
-
-        TextView tv_title = resultbox.findViewById(R.id.tv_title);
-        RadioGroup radioGroup = resultbox.findViewById(R.id.groupradio);
-        RadioButton radio_id1 = resultbox.findViewById(R.id.radio_id1);
-        RadioButton radio_id2 = resultbox.findViewById(R.id.radio_id2);
-        RadioButton radio_id3 = resultbox.findViewById(R.id.radio_id3);
-        EditText et1_address = resultbox.findViewById(R.id.et1_address);
-        LinearLayout btn_all = resultbox.findViewById(R.id.btn_all);
-
-
-        tv_title.setText("Delivery Address");
-        radio_id1.setText("Do not Change Address");
-        radio_id2.setText("Change Address");
-
-        radio_id3.setVisibility(View.GONE);
-        et_address.setVisibility(View.GONE);
-        btn_finish.setVisibility(View.VISIBLE);
-        btn_resume.setVisibility(View.VISIBLE);
-        btn_all.setVisibility(View.VISIBLE);
-
-        radio_id1.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-        radio_id2.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                if (Utility.isNetworkAvailable(EntryProfileActivity.this)) {
-
-                    et1_address.setVisibility(View.VISIBLE);
-
-                }
-            }
-        });
-
-        btn_finish.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                if (Utility.isNetworkAvailable(EntryProfileActivity.this)) {
-
-                    String address  =  et1_address.getText().toString();
-
-                    if (et1_address.getText().toString().equals("") )
-                    {
-                        Utility.showErrorMessage(EntryProfileActivity.this,"Please enter all the details !!");
-                    }else {
-                        resultbox.cancel();
-                        Log.d(TAG,"dd "+fullname +" "+address +" "+mobileNo+" "+email);
-                        updateUserProfile(fullname, address, mobileNo, email);
-                    }
-
-                }
-               // Utility.launchActivity(EntryProfileActivity.this,HomepageActivity.class,true);
-            }
-        });
-
-        btn_resume.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                resultbox.cancel();
-                Log.d(TAG," "+fullname +" "+address +" "+mobileNo+" "+email);
-                updateUserProfile(fullname, address, mobileNo, email);
-
-
-            }
-        });
-
-
-
-
-
-       /* radio_id1.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                resultbox.cancel();
-                if (Utility.isNetworkAvailable(activity)) {
-
-               // Is the current Radio Button checked?
-                boolean checked = ((RadioButton) v).isChecked();
-
-                int status =0;
-                switch(v.getId()){
-
-                    case R.id.radio_id1:
-                        if(checked)
-                            status=0;
-
-                        placeOrder(deliveryboyOrderModel.getOrderid(),status,deliveryboyOrderModel.getDeliveryboyid()
-                                ,deliveryboyOrderModel.getDeliverydate(),deliveryboyOrderModel.getAddress(),deliveryboyOrderModel.getPaymentmode()
-                                ,deliveryboyOrderModel.getTotalprice(),deliveryboyOrderModel.getSavedprice());
-                        break;
-
-                    case R.id.radio_id2:
-                        if(checked)
-                            status=1;
-                        placeOrder(deliveryboyOrderModel.getOrderid(),status,deliveryboyOrderModel.getDeliveryboyid()
-                                ,deliveryboyOrderModel.getDeliverydate(),deliveryboyOrderModel.getAddress(),deliveryboyOrderModel.getPaymentmode()
-                                ,deliveryboyOrderModel.getTotalprice(),deliveryboyOrderModel.getSavedprice());
-
-                        break;
-
-                       case R.id.radio_id3:
-                        if(checked)
-                            status=2;
-                           placeOrder(deliveryboyOrderModel.getOrderid(),status,deliveryboyOrderModel.getDeliveryboyid()
-                                   ,deliveryboyOrderModel.getDeliverydate(),deliveryboyOrderModel.getAddress(),deliveryboyOrderModel.getPaymentmode()
-                                   ,deliveryboyOrderModel.getTotalprice(),deliveryboyOrderModel.getSavedprice());
-
-                           break;
-
-                }
-
-
-                } else {
-                    Utility.showErrorMessage(activity, "No Internet Connection", Snackbar.LENGTH_SHORT);
-                }
-       }
-        });*/
-
-        btn_resume.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                resultbox.cancel();
-            }
-        });
-
-        resultbox.show();
-    }
 
 
 }

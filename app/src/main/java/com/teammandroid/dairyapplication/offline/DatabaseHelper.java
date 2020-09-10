@@ -84,6 +84,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+    public final static String TABLE_WISHLIST = "wishlist";
+
+    public final static String WISH_1 = "autoid";
+    public final static String WISH_2 = "productid";
+    public final static String WISH_3 = "title";
+    public final static String WISH_4 = "details";
+    public final static String WISH_5 = "price";
+    public final static String WISH_6 = "ourprice";
+    public final static String WISH_7 = "offer";
+    public final static String WISH_8 = "isavailable";
+    public final static String WISH_9 = "subcategory";
+    public final static String WISH_10 = "image";
+    public final static String WISH_11 = "isactive";
+    public final static String WISH_12 = "created";
+    public final static String WISH_13 = "createdby";
+    public final static String WISH_14 = "modified";
+    public final static String WISH_15 = "modifiedby";
+    public final static String WISH_16 = "RowCount";
+    public final static String WISH_17 = "userid";
+
+
+
+
     Context context;
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -139,6 +162,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "pmcount INTEGER," +
                 "pmamount REAL)" );
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS "
+                + TABLE_WISHLIST+
+                " (autoid INTEGER PRIMARY KEY AUTOINCREMENT," + //1
+                "productid INTEGER," +                      //2
+                "title TEXT," +                            //3
+                "details TEXT," +                            //3
+                "price REAL," +                        //4
+                "ourprice REAL," +                        //4//5
+                "offer INTEGER," +                        //6//6
+                "isavailable INTEGER," +                        //6//6
+                "subcategory INTEGER," +                        //6//7
+                "image TEXT ,"+
+                "isactive INTEGER," +
+                "created TEXT," +
+                "createdby INTEGER," +
+                "modified TEXT," +
+                "modifiedby INTEGER," +
+                "RowCount INTEGER,"+                          //10
+                "userid INTEGER )");                          //10
+
+
+
 
     }
 
@@ -193,7 +238,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //AlreadyExistEntry
-    public boolean alreadyExistProductEntry(int productId) {
+    public boolean alreadyExistProductEntry(int productId, int userid) {
 
         // array of columns to fetch
         String[] columns = {
@@ -209,7 +254,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // selection arguments
         String[] selectionArgs = {Integer.toString(productId)};
 
-        Cursor cursor = db.rawQuery("SELECT " + QUANTITY_2 +" FROM " + TABLE_QUANTITY +" WHERE "+ QUANTITY_2 +" = "+ productId,null);
+        Cursor cursor = db.rawQuery("SELECT " + QUANTITY_2 +" FROM " + TABLE_QUANTITY +
+                " WHERE "+ QUANTITY_2 +" = "+ productId + " and userid= "+userid,null);
         int cursorCount = cursor.getCount();
 
         Log.d("DATABASEHELPER ",String.valueOf(cursorCount));
@@ -347,6 +393,79 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return array_list;
     }
+
+
+
+    public Integer deleteWishlistItem(int productId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //DELETE from wishlist where productid = 1;
+        //Cursor cursor = db.rawQuery("DELETE FROM " + dbHelper.TABLE_WISHLIST +" WHERE "+ WISH_2 +" = "+productId , null);
+
+        return db.delete(TABLE_WISHLIST, "productid=?", new String[]{String.valueOf(productId)});
+
+
+    }
+
+    //AlreadyExistEntry
+    public boolean alreadyExistWishlistEntry(int productId) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT " + WISH_2 +" FROM " + TABLE_WISHLIST +" WHERE "+ WISH_2 +" = "+ productId,null);
+        int cursorCount = cursor.getCount();
+
+        Log.d("WISH_2 ",String.valueOf(cursorCount));
+
+        cursor.close();
+        db.close();
+        if (cursorCount > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean insertWishlistInfo(int productid,String title,String details,
+                                      double price,double ourprice,
+                                      int offer,int subcategory,String image ,int isavailable,int isactive
+            ,String created,int createdby,String modified,int modifiedby,int RowCount, int userid)
+    {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        //price,subcategory,title,offer,image,ourprice,productid,details
+        contentValues.put(WISH_5,price);
+        contentValues.put(WISH_9,subcategory);
+        contentValues.put(WISH_3,title);
+        contentValues.put(WISH_7,offer);
+        contentValues.put(WISH_10,image);
+        contentValues.put(WISH_6,ourprice);
+        contentValues.put(WISH_2,productid);
+        contentValues.put(WISH_4,details);
+        contentValues.put(WISH_8,isavailable);
+        contentValues.put(WISH_11,isactive);
+        contentValues.put(WISH_12,created);
+        contentValues.put(WISH_13,createdby);
+        contentValues.put(WISH_14,modified);
+        contentValues.put(WISH_15,modifiedby);
+        contentValues.put(WISH_16,RowCount);
+        contentValues.put(WISH_17,userid);
+
+        //long result = db.insert(TABLE_PRODUCT, null, contentValues);
+
+        long result = db.insert(TABLE_WISHLIST, null, contentValues);
+
+        if (result == -1){
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+
 }
 
 

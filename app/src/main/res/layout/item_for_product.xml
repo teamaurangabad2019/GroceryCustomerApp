@@ -81,7 +81,8 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/ic_add"
                     android:layout_toLeftOf="@+id/iv_edit"
-                    android:backgroundTint="@color/colorPrimary" />
+                    android:backgroundTint="@color/colorPrimary"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/iv_edit"
@@ -91,7 +92,7 @@
                     android:layout_marginRight="17dp"
                     android:layout_toLeftOf="@+id/iv_delete"
                     android:padding="@dimen/padding_5"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:background="@drawable/ic_edit_black_24dp"
                     android:backgroundTint="@color/colorPrimary"
                     />
@@ -158,6 +159,34 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_add_wish"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Wish Add"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:layout_below="@id/rl_category"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        />
+
+    <Button
+        android:id="@+id/btn_allreadyadded"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:layout_below="@id/rl_category"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"/>
+
+
+
 
     <Button
         android:id="@+id/btn_add"

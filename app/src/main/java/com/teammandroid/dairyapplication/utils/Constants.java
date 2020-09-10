@@ -11,10 +11,9 @@ public class Constants {
 
     public static final String URL_LOGIN =BASE_HOST_NAME+BASE_ROUTE_END_POINT1+"user.php/";
     public static final String URL_DELETE =BASE_HOST_NAME+BASE_ROUTE_END_POINT+"deleterecord.php/";
-    public static final String GET_SLIDE =BASE_HOST_NAME+BASE_ROUTE_END_POINT+"images.php/";
     public static final String GET_CATEGORY =BASE_HOST_NAME+BASE_ROUTE_END_POINT+"category.php/";
     public static final String URL_USER_PROFILE_PIC = BASE_HOST_NAME+"successacademy/api/attachments/profilepic/";
-    public static final String URL_USER_PIC = BASE_HOST_NAME+"successacademy/api/attachments/sliderimages/";
+    public static final String URL_USER_PIC = BASE_HOST_NAME+"grocery/api/attachments/sliderimages/";
     public static final String URL_PACKAGE = BASE_HOST_NAME+"successacademy/api/attachments/packageimage/";
 
     public static final String URL_CATEGORY = BASE_HOST_NAME + BASE_ROUTE_END_POINT1 + "pcategory.php/";
@@ -34,6 +33,7 @@ public class Constants {
     public static final String URL_USER = BASE_HOST_NAME + BASE_ROUTE_END_POINT1 + "user.php/";
     public static final String URL_USER_PROFILE_PICTURE = BASE_HOST_NAME+"grocery/api/attachments/profilepic/";
 
+    public static final String GET_SLIDE =BASE_HOST_NAME+BASE_ROUTE_END_POINT1+"images.php/";
 
     public static final String URL_AUTH = BASE_HOST_NAME + BASE_ROUTE_END_POINT1 + "auth.php/";
 

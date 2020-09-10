@@ -1,6 +1,7 @@
 package com.teammandroid.dairyapplication.admin.adapters;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.activities.AuthenticationActivity;
 import com.teammandroid.dairyapplication.activities.BookingActivity;
@@ -32,6 +36,7 @@ import java.util.ArrayList;
 
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_2;
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_4;
+import static com.teammandroid.dairyapplication.utils.Constants.URL_PRODUCT_IMG;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
@@ -71,7 +76,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_newcart, parent, false);
 
         prefManager = new PrefManager(mContext);
         dbHelper = new DatabaseHelper(mContext);
@@ -86,12 +91,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         Log.d("adpaterCart" ,item.getDetails());
 
         viewHolder.mTitle.setText(item.getTitle());
-        viewHolder.mDesp.setText(item.getDetails());
+       /* viewHolder.mDesp.setText(item.getDetails());
         viewHolder.mOffer.setText("Rs " + item.getPrice());
-        viewHolder.mOfferprice.setText(String.valueOf("("+item.getOffer() + "% off ) "));
+       */
+       // viewHolder.mOfferprice.setText(String.valueOf("("+item.getOffer() + "% off ) "));
         viewHolder.mPrice.setText(String.valueOf(item.getOurprice()));
         viewHolder.txt_quantity.setText(String.valueOf(item.getRowCount()));
         // viewHolder.txt_total_amount.setText(String.valueOf(item.getOurprice()));
+
+        Picasso.with(mContext)
+                .load(URL_PRODUCT_IMG + item.getImagename())
+                .into(viewHolder.img);
 
 
 
@@ -146,22 +156,70 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 } else {
                     Utility.launchActivity(mContext, AuthenticationActivity.class, false, bundle);
                 }
-               /* AppUserSqliteOperations appUserSqliteOperations = new AppUserSqliteOperations(mContext);
-                AppUser appUser=appUserSqliteOperations.GetAppUser();
 
-                if(appUser.getIslogin()==0){
-                    Utility.launchActivity(mContext, OTPLoginActivity.class, false, bundle);
-                }
-                else{
-
-                    Utility.launchActivity(mContext, BookingActivity.class, false, bundle);
-                }*/
             }
         });
 
 
+        viewHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialogForDeleteRecord(item.getProductid(), prefManager.getUSER_ID() );
+
+            }
+        });
 
     }
+    private void dialogForDeleteRecord(int productid, int userid){
+        final Dialog resultbox = new Dialog(mContext);
+        resultbox.setContentView(R.layout.delete_teacher_dialog);
+        // resultbox.setCanceledOnTouchOutside(false);
+        Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
+        Button btn_resume = (Button) resultbox.findViewById(R.id.btn_resume);
+
+        btn_finish.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                resultbox.cancel();
+                if (Utility.isNetworkAvailable(mContext)) {
+
+                    SQLiteDatabase db=dbHelper.getWritableDatabase();
+
+                    String sql1="DELETE FROM product WHERE  productid =  " +productid+ " AND userid = "
+                            + userid;
+                    db.execSQL(sql1);
+
+
+                    String sql2="DELETE FROM quantity WHERE  productid =  " +productid+ " AND userid = "
+                            + userid;
+                    db.execSQL(sql1);
+                    db.execSQL(sql2);
+
+                    mContext.finish();
+                    mContext.overridePendingTransition( 0, 0);
+                    mContext.startActivity(mContext.getIntent());
+                    mContext.overridePendingTransition( 0, 0);
+
+                } else {
+                    Utility.showErrorMessage(mContext, "No Internet Connection", Snackbar.LENGTH_SHORT);
+                }
+            }
+        });
+
+        btn_resume.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                resultbox.cancel();
+            }
+        });
+
+        resultbox.show();
+    }
+
 
     private boolean validateUser() {
         boolean result = false;
@@ -190,7 +248,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView iv_cart,iv_remove,iv_addImg;
+        ImageView iv_cart,iv_remove,iv_addImg, iv_delete, img;
         RelativeLayout rl_delete;
         int count = 0;
         TextView mTitle, mDesp, mOfferprice, mOffer, mPrice, txt_quantity, txt_total_amount, btn_booknow;
@@ -200,19 +258,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             super(itemView);
             mOffer = itemView.findViewById(R.id.offer);
             mOfferprice = itemView.findViewById(R.id.offerprice);
-            mPrice = itemView.findViewById(R.id.price);
-            mTitle = itemView.findViewById(R.id.title);
+            mPrice = itemView.findViewById(R.id.tv_price);
+            mTitle = itemView.findViewById(R.id.tv_title);
             mDesp = itemView.findViewById(R.id.desc);
             txt_quantity = itemView.findViewById(R.id.txt_quantity);
             txt_total_amount = itemView.findViewById(R.id.txt_total_amount);
             btn_booknow = itemView.findViewById(R.id.btn_booknow);
             iv_cart = itemView.findViewById(R.id.iv_cart);
-            rl_delete = itemView.findViewById(R.id.rl_delete);
+            img = itemView.findViewById(R.id.img);
+
             iv_remove = itemView.findViewById(R.id.iv_remove);
             totalview = itemView.findViewById(R.id.totalview);
             iv_addImg = itemView.findViewById(R.id.iv_addImg);
+            iv_delete = itemView.findViewById(R.id.iv_delete);
 
             mOffer.setPaintFlags(mOffer.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            grandTotal();
+            Toast.makeText(mContext, "mm"+grandTotal(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -253,31 +315,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
             Toast.makeText(mContext, "Added Quantity " +id, Toast.LENGTH_SHORT).show();
 
-            /*
-            try
-            {
-                String title = String.valueOf(price);
-                totlAmt.add(price);
-                Log.d(TAG, "amt "+title);
-            }
-            catch (Exception e)
-            {
-                Log.d(TAG, "ex "+e.getMessage());
-            }
+            grandTotal();
+            Toast.makeText(mContext, "added"+grandTotal(), Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(mContext, "Clicked : "
-                    + totlAmt.toString(), Toast.LENGTH_LONG).show();*/
-
-            double tsum = 0;
-            for (int i = 0; i < list.size(); i++){
-               // tsum = tsum + price;
-                totlAmt.add(price);
-            }
-            Log.d("CartAdapter : ", String.valueOf(tsum));
-            Toast.makeText(mContext, "Clicked : "
-                    + totlAmt.toString(), Toast.LENGTH_LONG).show();
-
-           // for (int i=0; i<totlAmt.size(); i++);
 
         } else {
             Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -285,12 +325,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     }
 
-    private int grandTotal() {
-        int totalPrice = 0;
+    private double grandTotal() {
+        double totalOurPrice = 0;
+        double totalPrice = 0;
+        double totalSavedPrice = 0;
         for (int i = 0; i < list.size(); i++) {
-            totalPrice += list.get(i).getPrice();
+
+            int sum = 0;
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery("SELECT SUM (" + PMQUANTITY_4 + ") FROM " +
+                    dbHelper.TABLE_PLUS_MINUS_QUANTITY + " WHERE " + PMQUANTITY_2 + " = " +
+                    list.get(i).getProductid() +" AND " +dbHelper.PMQUANTITY_3 + " = "
+                    + prefManager.getUSER_ID(), null);
+
+            if (cursor.moveToNext()) {
+
+                sum = cursor.getInt(0);//to get id, 0 is the column index
+
+            }
+           // double price=list.get(i).getOurprice()*sum;
+            totalOurPrice += list.get(i).getOurprice()* sum;
+            totalPrice += list.get(i).getPrice()* sum;
+            totalSavedPrice =totalPrice-totalOurPrice;
+            prefManager.setour_price(String.valueOf(totalOurPrice));
+            prefManager.setsaved_price(String.valueOf(totalSavedPrice));
         }
-        return totalPrice;
+        return totalOurPrice;
     }
 
 
@@ -326,6 +387,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         double price =  id * item.getOurprice();
         txt_total_amount.setText(String.valueOf(price));
         Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
+
+        grandTotal();
+        Toast.makeText(mContext, "deleted"+grandTotal(), Toast.LENGTH_SHORT).show();
 
         // Toast.makeText(mContext, "Deleted " , Toast.LENGTH_SHORT).show();
 

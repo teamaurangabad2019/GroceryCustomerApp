@@ -16,13 +16,13 @@
 
     <RelativeLayout
         android:id="@+id/rl_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="350dp"
+        android:layout_height="200dp">
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+        <ImageView
+            android:layout_width="350dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
@@ -42,7 +42,8 @@
             android:gravity="center"
             android:textColor="#000"
             android:layout_marginBottom="5dp"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
