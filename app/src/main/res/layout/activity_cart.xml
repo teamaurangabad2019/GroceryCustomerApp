@@ -101,6 +101,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_cart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey_5"
@@ -123,7 +124,8 @@
         android:layout_height="match_parent"
         android:text="Total"
         android:layout_above="@id/btn_continue"
-        />
+        android:layout_below="@id/rl_cart"/>
+
     <Button
         android:id="@+id/btn_continue"
         android:layout_width="match_parent"
@@ -132,7 +134,7 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true" />
     <!--endregion-->
 
 </RelativeLayout>

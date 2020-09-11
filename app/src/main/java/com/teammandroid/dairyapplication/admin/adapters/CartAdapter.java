@@ -97,6 +97,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
        // viewHolder.mOfferprice.setText(String.valueOf("("+item.getOffer() + "% off ) "));
         viewHolder.mPrice.setText(String.valueOf(item.getOurprice()));
         viewHolder.txt_quantity.setText(String.valueOf(item.getRowCount()));
+        viewHolder.desc.setText(String.valueOf(item.getDetails()));
+
         // viewHolder.txt_total_amount.setText(String.valueOf(item.getOurprice()));
 
         Picasso.with(mContext)
@@ -252,7 +254,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         RelativeLayout rl_delete;
         int count = 0;
         TextView mTitle, mDesp, mOfferprice, mOffer, mPrice, txt_quantity, txt_total_amount, btn_booknow;
-        TextView totalview;
+        TextView totalview,desc;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -266,6 +268,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             btn_booknow = itemView.findViewById(R.id.btn_booknow);
             iv_cart = itemView.findViewById(R.id.iv_cart);
             img = itemView.findViewById(R.id.img);
+            desc = itemView.findViewById(R.id.desc);
 
             iv_remove = itemView.findViewById(R.id.iv_remove);
             totalview = itemView.findViewById(R.id.totalview);

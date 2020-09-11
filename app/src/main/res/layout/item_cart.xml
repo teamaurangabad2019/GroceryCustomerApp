@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="@color/colorWhite"
+    android:layout_marginTop="@dimen/padding_5"
+    android:layout_marginBottom="@dimen/padding_5">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="5">
+        android:orientation="vertical">
+    <ImageView
+        android:id="@+id/img_title"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:contentDescription="@string/remove"
+        android:src="@drawable/male_avatar"
+        android:layout_marginRight="@dimen/padding_5"/>
+
+    <LinearLayout
+        android:id="@+id/ll_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5"
+        android:gravity="end"
+        android:layout_toRightOf="@id/img_title">
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3">
+            android:layout_weight="5">
 
             <TextView
                 android:id="@+id/title"
@@ -37,55 +56,31 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <!--<RelativeLayout
+            android:id="@+id/rl_delete"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.5">
+            android:gravity="end">-->
 
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="MRP"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/price"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/offer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/offerprice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="8sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
+        <ImageView
+            android:id="@+id/rl_delete"
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="0.5"
+            android:src="@drawable/ic_clear_black_24dp"
+            android:visibility="visible" />
+        <!--    </RelativeLayout>-->
 
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/ll_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_below="@id/ll_details"
+        android:layout_toRightOf="@id/img_title">
 
         <TextView
             android:layout_width="wrap_content"
@@ -111,13 +106,14 @@
 
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/layout_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_below="@id/ll_price"
+        android:layout_toRightOf="@id/img_title">
 
         <TextView
             android:id="@+id/tv_subtotalView"
@@ -145,22 +141,22 @@
             android:id="@+id/ll_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:gravity="center"
-            android:paddingStart="10dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="10dp"
-            android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/iv_delete"
-                android:padding="10dp"
+            android:paddingRight="10dp"
+            android:visibility="visible"
+            android:layout_below="@id/tv_subtotalView">
+
+            <TextView
+                android:id="@+id/txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_delete_black_24dp" />
-
+                android:text="QTY  :    "
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/tv_subtotalView"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/iv_remove"
@@ -193,8 +189,51 @@
                 android:src="@drawable/ic_add_circle" />
         </LinearLayout>
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true">
 
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="MRP"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/price">
+
+                <TextView
+                    android:id="@+id/offer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/offerprice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="00.00"
+                    android:textSize="8sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <TextView
         android:padding="5dp"
@@ -217,6 +256,8 @@
         android:layout_width="match_parent"
         android:layout_height="0.4dp"
         android:layout_marginTop="8dp"
-        android:background="@color/grey_455" />
+        android:background="@color/grey_455"
+        android:visibility="gone"/>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

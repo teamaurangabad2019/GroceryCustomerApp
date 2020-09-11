@@ -483,7 +483,6 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
             //DELETE from wishlist where productid = 1;
             Log.d("ProductviewListAdapter", "productAdapter " + title + " " + Productid);
-
             deleteWishlistItem(Productid,btn_add_wish);
         } else {
             boolean isInserted = dbHelper.
@@ -511,10 +510,10 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
                     title = cursor.getString(2);
                 }
 
-                activity.finish();
+               /* activity.finish();
                 activity.overridePendingTransition( 0, 0);
                 activity.startActivity(activity.getIntent());
-                activity.overridePendingTransition( 0, 0);
+                activity.overridePendingTransition( 0, 0);*/
 
                 Toast.makeText(activity, "Added to wishlist", Toast.LENGTH_SHORT).show();
 
