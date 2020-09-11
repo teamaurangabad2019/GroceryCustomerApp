@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -24,6 +25,7 @@ import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.razorpay.Card;
 import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.admin.activities.AddSubCategoryActivity;
@@ -72,7 +74,7 @@ public class CategoryViewListAdapter extends RecyclerView.Adapter<CategoryViewLi
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_for_category, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_for_category_grid, null);
         progressDialog = new ProgressDialog(activity);
         return new  MyViewHolder(view);
     }
@@ -104,7 +106,7 @@ public class CategoryViewListAdapter extends RecyclerView.Adapter<CategoryViewLi
             }
         });
 
-         holder.iv_add.setOnClickListener(new View.OnClickListener() {
+         holder.cv_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle=new Bundle();
@@ -137,8 +139,9 @@ public class CategoryViewListAdapter extends RecyclerView.Adapter<CategoryViewLi
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tv_title, tv_amount, tv_reason,tv_day;
-        CircleImageView img_title;
+        ImageView img_title;
         ImageView iv_edit,iv_delete,iv_add;
+        CardView cv_list;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -149,6 +152,7 @@ public class CategoryViewListAdapter extends RecyclerView.Adapter<CategoryViewLi
             iv_edit =  itemView.findViewById(R.id.iv_edit);
             iv_delete =  itemView.findViewById(R.id.iv_delete);
             iv_add =  itemView.findViewById(R.id.iv_add);
+            cv_list =  itemView.findViewById(R.id.cv_list);
 
             img_title =  itemView.findViewById(R.id.img_title);
             itemView.setOnClickListener(this); // bind the listener

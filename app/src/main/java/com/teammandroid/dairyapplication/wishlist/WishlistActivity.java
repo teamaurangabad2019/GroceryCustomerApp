@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.admin.adapters.CartAdapter;
@@ -17,10 +18,11 @@ import com.teammandroid.dairyapplication.offline.DatabaseHelper;
 
 import java.util.ArrayList;
 
-public class WishlistActivity extends AppCompatActivity {
+public class WishlistActivity extends AppCompatActivity implements View.OnClickListener {
 
     ArrayList<ProductModel> productModelslist;
     DatabaseHelper dbHelper;
+    View viewMenuIconBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class WishlistActivity extends AppCompatActivity {
 
     private void initView() {
         dbHelper = new DatabaseHelper(WishlistActivity.this);
+        viewMenuIconBack = findViewById(R.id.viewMenuIconBack);
     }
 
 
@@ -120,4 +123,13 @@ public class WishlistActivity extends AppCompatActivity {
         return list;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.viewMenuIconBack:
+                onBackPressed();
+                break;
+        }
+    }
 }

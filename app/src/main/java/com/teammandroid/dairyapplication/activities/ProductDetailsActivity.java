@@ -15,8 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.error.ANError;
@@ -27,17 +26,13 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.google.android.material.snackbar.Snackbar;
 import com.steelkiwi.library.view.BadgeHolderLayout;
-import com.teammandroid.dairyapplication.Network.CategoryServices;
 import com.teammandroid.dairyapplication.Network.ProductServices;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.adapters.ProductImagesAdapter;
 import com.teammandroid.dairyapplication.admin.activities.CartActivity;
-import com.teammandroid.dairyapplication.admin.activities.ProductListActivity;
-import com.teammandroid.dairyapplication.admin.adapters.CategoryHomeAdapter;
 import com.teammandroid.dairyapplication.admin.model.ProductImageModel;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
-import com.teammandroid.dairyapplication.model.SliderModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
 import com.teammandroid.dairyapplication.utils.Constants;
@@ -122,6 +117,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
         getImages(productModel.getProductid());
         getCount();
+
+        if (dbHelper.alreadyExistProductEntry(productModel.getProductid(),prefManager.getUSER_ID()))
+        {
+            iv_wishlist.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
+            // holder.btn_allreadyadded.setText("Check cart");
+        }else
+        {
+            iv_wishlist.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
+        }
+
         title.setText(productModel.getTitle());
         tv_details.setText(productModel.getDetails());
         ourprice.setText(" ₹ "+String.valueOf(productModel.getOurprice()));
@@ -129,6 +134,19 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
         offerprice.setText(" ₹ "+String.valueOf(productModel.getPrice()));
         offerprice.setPaintFlags(offerprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        if (productModel.getIsavailable()==0)
+        {
+            weight.setText("Out of Stock");
+            //holder.tv_pending.setTextColor(Color.parseColor("#00933C"));
+            weight.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this, R.color.logoRed));
+        }
+        else
+        {
+            weight.setText("In Stock");
+            weight.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this, R.color.colorPrimary));
+        }
+
 
     }
 
@@ -184,7 +202,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         productModel.getModifiedby(),productModel.getRowCount(), prefManager.getUSER_ID());
                 break;
             case R.id.badgeLayout:
-                Utility.launchActivity(ProductDetailsActivity.this,CartActivity.class,false);
+                Utility.launchActivity(ProductDetailsActivity.this, CartActivity.class,false);
                 //Utility.launchActivity(ProductDetailsActivity.this, CartActivity.class,false);
                 break;
             case R.id.iv_remove:
@@ -210,7 +228,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.btn_continue:
-
+                Toast.makeText(ProductDetailsActivity.this,"Checkout",Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -423,7 +441,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                                     public void onError(ANError anError) {
                                         Log.e("CheckReponseanError", ""+anError.getMessage());
                                         progressDialog.dismiss();
-                                        Utility.showErrorMessage(ProductDetailsActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                        Utility.showErrorMessage(ProductDetailsActivity.this, "Sorry ! Images not Available .." , Snackbar.LENGTH_LONG);
                                     }
 
                                     @Override
@@ -504,7 +522,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 }
 
                 Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
-
+                iv_wishlist.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
                 Log.d("ProductviewListAdapter", "productAdapter " + title + " " + productId);
                 //Utility.launchActivity(getActivity(), HomepageActivity.class,false);
 
@@ -522,6 +540,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
         if (deletedRow > 0){
             Toast.makeText(ProductDetailsActivity.this, "Removed from Wishlist !", Toast.LENGTH_SHORT).show();
+            iv_wishlist.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
             //clear();
         } else {
             Toast.makeText(ProductDetailsActivity.this, "Wishlist is Empty !", Toast.LENGTH_SHORT).show();

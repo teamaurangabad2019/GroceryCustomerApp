@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -172,9 +173,8 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());
 
-             rv_categorylist.setLayoutManager(new LinearLayoutManager(SubcategoryListActivity.this,
-                    LinearLayoutManager.VERTICAL, false));
-            rv_categorylist.setItemAnimator(new DefaultItemAnimator());
+             rv_categorylist.setLayoutManager(new GridLayoutManager(SubcategoryListActivity.this,2));
+              rv_categorylist.setItemAnimator(new DefaultItemAnimator());
             rv_categorylist.setHasFixedSize(true);
 
             subCategoryAdapter = new SubCategoryAdapter(SubcategoryListActivity.this,
@@ -255,12 +255,12 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
         }
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         super.onBackPressed();
         Utility.launchActivity(SubcategoryListActivity.this,CategoryListActivity.class,true);
     }
-
+*/
     private void showCustomDialogNoRecord() {
         // this.correct = correct;
         resultbox = new Dialog(SubcategoryListActivity.this);

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -112,6 +113,18 @@ public class ProductListHomeAdapter extends RecyclerView.Adapter<ProductListHome
                     .into(holder.iv_items);
         }
 
+        if (item.getIsavailable()==0)
+        {
+            holder.tv_available.setText("Out of Stock");
+            //holder.tv_pending.setTextColor(Color.parseColor("#00933C"));
+            holder.tv_available.setTextColor(ContextCompat.getColor(activity, R.color.logoRed));
+        }
+        else
+        {
+            holder.tv_available.setText("In Stock");
+            holder.tv_available.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
+        }
+
         holder.iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +180,7 @@ public class ProductListHomeAdapter extends RecyclerView.Adapter<ProductListHome
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView tv_offer, tv_iv_label, tv_quantity,tv_ourprice,tv_ActualPrice,tv_details;
+        TextView tv_offer, tv_iv_label, tv_quantity,tv_ourprice,tv_ActualPrice,tv_details,tv_available;
         CircleImageView img_title;
         LinearLayout ll_add;
         ImageView iv_items,iv_delete,iv_add,iv_remove,iv_addImg,iv_edit;
@@ -177,6 +190,7 @@ public class ProductListHomeAdapter extends RecyclerView.Adapter<ProductListHome
         public MyViewHolder(View itemView) {
             super(itemView);
 
+            tv_available = (TextView) itemView.findViewById(R.id.tv_available);
             tv_details = (TextView) itemView.findViewById(R.id.tv_details);
             tv_offer = (TextView) itemView.findViewById(R.id.tv_offer);
             tv_iv_label = (TextView) itemView.findViewById(R.id.tv_iv_label);

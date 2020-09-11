@@ -154,6 +154,7 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
         if (dbHelper.alreadyExistProductEntry(item.getProductid(), prefManager.getUSER_ID()))
         {
             holder.btn_add.setVisibility(View.GONE);
+            holder.btn_allreadyadded.setVisibility(View.VISIBLE);
             holder.btn_allreadyadded.setText("Check cart");
         }
         else {
@@ -184,20 +185,29 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
         if (dbHelper.alreadyExistWishlistEntry(item.getProductid())) {
 
-            holder.btn_add_wish.setText("Added to wishlist");
+            holder.btn_add_wish.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
         }
         else {
 
             holder.btn_add_wish.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Log.d("CartAdapter ", item.getProductid() + " " + item.getImagename() + " " + item.getTitle() + " " + item.getDetails());
-                    addWishlist(item.getProductid(), item.getTitle(), item.getDetails(), item.getPrice(), item.getOurprice(),
-                            item.getOffer(), item.getIsavailable(), item.getSubcategory(), item.getImagename(), item.getIsactive(),
-                            item.getCreated(), item.getCreatedby(), item.getModified(),
-                            item.getModifiedby(), item.getRowCount(), prefManager.getUSER_ID());
-                }
+                /*addWishlist(item.getProductid(), item.getTitle(), item.getDetails(), item.getPrice(), item.getOurprice(),
+                        item.getOffer(), item.getIsavailable(), item.getSubcategory(), item.getImagename(), item.getIsactive(),
+                        item.getCreated(), item.getCreatedby(), item.getModified(),
+                        item.getModifiedby(), item.getRowCount(), prefManager.getUSER_ID());*/
+
+                    if (validateUser()) {
+
+                        addWishlist(item.getProductid(), item.getTitle(), item.getDetails(), item.getPrice(), item.getOurprice(),
+                                item.getOffer(), item.getIsavailable(), item.getSubcategory(), item.getImagename(), item.getIsactive(),
+                                item.getCreated(), item.getCreatedby(), item.getModified(),
+                                item.getModifiedby(), item.getRowCount(), prefManager.getUSER_ID(),holder.btn_add_wish);
+                    } else {
+                        Utility.launchActivity(activity, AuthUserActivity.class, false);//,bundle);
+
+                    }   }
             });
 
 
@@ -213,11 +223,12 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tv_title, tv_amount, tv_reason,totalview;
-        CircleImageView img_title;
+        ImageView img_title;
         LinearLayout ll_add;
         ImageView iv_edit,iv_delete,iv_add,iv_remove,iv_addImg;
-        Button btn_add, btn_allreadyadded, btn_add_wish;
+        Button btn_add, btn_allreadyadded;
         RelativeLayout rl_category;
+        ImageView btn_add_wish;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -466,14 +477,14 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
     private void addWishlist(int Productid, String title, String Details, double Price, double Ourprice,
                              int Offer, int Isavailable, int Subcategory, String imgpath, int isactive,
-                             String created, int createdby, String modified, int modifiedby, int RowCount, int userid) {
+                             String created, int createdby, String modified, int modifiedby, int RowCount, int userid, ImageView btn_add_wish) {
 
         if (dbHelper.alreadyExistWishlistEntry(Productid)) {
 
             //DELETE from wishlist where productid = 1;
             Log.d("ProductviewListAdapter", "productAdapter " + title + " " + Productid);
 
-            deleteWishlistItem(Productid);
+            deleteWishlistItem(Productid,btn_add_wish);
         } else {
             boolean isInserted = dbHelper.
                     insertWishlistInfo(
@@ -507,6 +518,9 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
                 Toast.makeText(activity, "Added to wishlist", Toast.LENGTH_SHORT).show();
 
+                btn_add_wish.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
+                //Utility.launchActivity(getActivity(), HomepageActivity.class,false);
+
                 Log.d("ProductviewListAdapter", "productAdapter " + title + " " + productId);
                 //Utility.launchActivity(getActivity(), HomepageActivity.class,false);
 
@@ -516,12 +530,13 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
         }
     }
 
-    private void deleteWishlistItem(int productid) {
+    private void deleteWishlistItem(int productid, ImageView btn_add_wish) {
 
         //progressDialog.dismiss();
         Integer deletedRow = dbHelper.deleteWishlistItem(productid);
 
         if (deletedRow > 0){
+            btn_add_wish.setBackgroundResource(R.drawable.ic_favorite_border_black_24dp);
             Toast.makeText(activity, "Removed from Wishlist !", Toast.LENGTH_SHORT).show();
             //clear();
         } else {

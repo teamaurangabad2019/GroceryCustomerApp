@@ -10,9 +10,11 @@
     android:background="@color/colorWhite"
     tools:context=".activities.HomepageActivity">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" >
+        <RelativeLayout
+            android:id="@+id/rl_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp">
 
         <RelativeLayout
             android:id="@+id/rl_slider"
@@ -320,13 +322,10 @@
 
         </ScrollView>
 
-
-
     </RelativeLayout>
 
-
-                <!--region TITLE YOUTUBE VIDEOS-->
-                <RelativeLayout
+        <!--region TITLE YOUTUBE VIDEOS-->
+        <RelativeLayout
                     android:padding="10dp"
                     android:id="@+id/rl_recyoutubevideos"
                     android:layout_width="match_parent"
@@ -412,10 +411,9 @@
 
 
                 </RelativeLayout>
-                <!--endregion-->
+        <!--endregion-->
 
-                <!--region RecyclerView YoutubeVideos-->
-
+        <!--region RecyclerView YoutubeVideos-->
         <ImageView
         android:id="@+id/iv_add_cust"
         android:layout_width="50dp"
@@ -427,11 +425,36 @@
         android:tint="@color/colorPrimary"
             android:visibility="gone"/>
 
-    </RelativeLayout>
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:labelFor="@id/rl_data">
 
+            <FrameLayout
+                android:id="@+id/frame_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <include layout="@layout/drawer_layout" />
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="?android:attr/windowBackground"
+                app:itemBackground="@color/colorPrimary"
+                android:foreground="?attr/selectableItemBackground"
+                app:itemIconTint="@color/colorWhite"
+                app:itemTextColor="@color/colorWhite"
+                app:menu="@menu/bottom_navigation"
+                app:labelVisibilityMode="labeled"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+
+        <include layout="@layout/drawer_layout" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -24,10 +25,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +45,7 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -243,6 +247,39 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         getCategory();
         getImages();
         productList(0);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+
+                    case R.id.navigation_dashboard:
+                        Intent a = new Intent(HomepageActivity.this, HomepageActivity.class);
+                        startActivity(a);
+                        break;
+                    case R.id.navigation_alloffers:
+                        Intent a1 = new Intent(HomepageActivity.this, CategoryListActivity.class);
+                        startActivity(a1);
+                        break;
+
+                    case R.id.navigation_allorders:
+                        Intent b = new Intent(HomepageActivity.this, WishlistActivity.class);
+                        startActivity(b);
+                        break;
+
+                    case R.id.navigation_settings:
+                        Intent b1 = new Intent(HomepageActivity.this, CartActivity.class);
+                        startActivity(b1);
+                        break;
+
+
+                }
+                return false;
+            }
+        });
 
         if(prefManager.getUSER_ID()==0)
         {
@@ -846,9 +883,10 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());
+            recyclerView.setLayoutManager(new GridLayoutManager(HomepageActivity.this,2));
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(HomepageActivity.this,
-                    LinearLayoutManager.HORIZONTAL, false));
+           // recyclerView.setLayoutManager(new LinearLayoutManager(HomepageActivity.this,
+            //        LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);
 

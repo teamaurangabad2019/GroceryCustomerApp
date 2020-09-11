@@ -22,6 +22,7 @@
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ic_left_arrow_long"
                 android:backgroundTint="@color/colorBlack"
                 android:layout_centerVertical="true" />
 
@@ -54,6 +55,7 @@
                     android:id="@+id/iv_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/ic_bordered_shopping_cart"
                     android:layout_marginRight="20dp"/>
 
             </com.steelkiwi.library.view.BadgeHolderLayout>
@@ -95,6 +97,7 @@
         android:contentDescription="@string/add"
         android:focusable="true"
         android:layout_marginRight="20dp"
+        android:background="@drawable/ic_favorite_border_black_24dp"
         android:backgroundTint="@color/colorPrimary"
         android:layout_below="@id/sliderlayout"/>
 
@@ -143,13 +146,13 @@
             android:id="@+id/weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/title"
             android:gravity="center_vertical"
             android:text="Weight"
             android:textColor="@color/grey_40"
-            android:textSize="10sp"
-            android:visibility="visible"
-            android:layout_below="@id/title" />
-
+            android:textSize="18sp"
+            android:layout_marginTop="15dp"
+            android:visibility="visible" />
         <RelativeLayout
             android:id="@+id/rl_price"
             android:layout_width="match_parent"

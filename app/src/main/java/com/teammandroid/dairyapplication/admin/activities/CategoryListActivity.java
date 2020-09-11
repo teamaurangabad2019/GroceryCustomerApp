@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -164,8 +165,9 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());
 
-             rv_categorylist.setLayoutManager(new LinearLayoutManager(CategoryListActivity.this,
-                    LinearLayoutManager.VERTICAL, false));
+             rv_categorylist.setLayoutManager(new GridLayoutManager(CategoryListActivity.this,2));
+            // rv_categorylist.setLayoutManager(new LinearLayoutManager(CategoryListActivity.this,
+             //       LinearLayoutManager.VERTICAL, false));
             rv_categorylist.setItemAnimator(new DefaultItemAnimator());
             rv_categorylist.setHasFixedSize(true);
 
@@ -246,11 +248,10 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         onBackPressed();
-        Utility.launchActivity(CategoryListActivity.this, HomepageActivity.class,true);
-    }
+    }*/
 
     private void showCustomDialogNoRecord() {
         // this.correct = correct;
