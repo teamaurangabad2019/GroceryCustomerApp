@@ -12,8 +12,11 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.teammandroid.dairyapplication.R;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -214,12 +217,21 @@ public class Utility {
 //        context.startService(intent);
 //    }
 
-      public static String getCurrentMonthFirstDate(){
-    Calendar c = Calendar.getInstance();
-    c.set(Calendar.DAY_OF_MONTH, 1);
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    //System.out.println(df.format(c.getTime()));
-    return df.format(c.getTime());
+    public static String getCurrentMonthFirstDate() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        //System.out.println(df.format(c.getTime()));
+        return df.format(c.getTime());
+    }
+
+
+    public static void setError(RelativeLayout parentlayout, RelativeLayout childlayout, TextView  txt_error, String msg)
+    {
+        parentlayout.setVisibility(View.GONE);
+        childlayout.setVisibility(View.VISIBLE);
+        txt_error.setText(msg);
+    }
 }
 
 
@@ -240,4 +252,3 @@ public class Utility {
             //java.text.ParseException: Unparseable date: Geting error
             System.out.println("Excep"+e);
         }*/
-}
