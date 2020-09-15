@@ -32,6 +32,7 @@ import com.teammandroid.dairyapplication.Network.OrderServices;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.activities.HomepageActivity;
 import com.teammandroid.dairyapplication.admin.adapters.CartAdapter;
+import com.teammandroid.dairyapplication.admin.adapters.WishlistAdapter;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.model.Response;
@@ -79,6 +80,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     double amt= 0;
     String deliveryAmt;
 
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
 
 
     @Override
@@ -92,6 +95,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         progressDialog = new ProgressDialog(CartActivity.this);
         prefManager = new PrefManager(CartActivity.this);
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
         appBarLayout = findViewById(R.id.appBarLayout);
         dbHelper = new DatabaseHelper(CartActivity.this);
         activity = CartActivity.this;
@@ -120,10 +126,20 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_cart);
 
-        /*recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));*/
         recyclerView.setLayoutManager(layoutManager);
-        CartAdapter adapter = new CartAdapter(this, productModelslist);
-        recyclerView.setAdapter(adapter);
+
+        if(productModelslist.size()==0)
+        {
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
+        }
+        else
+        {
+            CartAdapter adapter = new CartAdapter(this, productModelslist);
+            recyclerView.setAdapter(adapter);
+        }
+
+
 
         product_array_list = dbHelper.getAllCotacts(String.valueOf(prefManager.getUSER_ID()));
 

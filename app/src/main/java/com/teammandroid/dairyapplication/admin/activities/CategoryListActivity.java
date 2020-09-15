@@ -73,6 +73,8 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
     Dialog resultbox;
     SwipeRefreshLayout swipeLayout;
 
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,7 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
         btnlistener();
         Log.e("itemee", String.valueOf(categoryid));
 
-       // expenseCategoryHolder=getIntent().getParcelableExtra("expenseCategory");
+        // expenseCategoryHolder=getIntent().getParcelableExtra("expenseCategory");
 
         categoryList();
         //getExpenseList(expenseCategoryHolder.getCategoryid());
@@ -152,22 +154,30 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
                             @Override
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
-                                Utility.showErrorMessage(CategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(CategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 Log.e(TAG, "exc " + e.getMessage());
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
 
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(CategoryListActivity.this, "Could not connect to the internet");
+                // Utility.showErrorMessage(CategoryListActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         } catch (Exception ex) {
-            Utility.showErrorMessage(CategoryListActivity.this, ex.getMessage());
+            // Utility.showErrorMessage(CategoryListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
 
@@ -194,7 +204,9 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(CategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                // Utility.showErrorMessage(CategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
@@ -202,17 +214,21 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
                                 progressDialog.dismiss();
                                 Log.e(TAG, "exc " + e.getMessage());
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
 
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(CategoryListActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
             progressDialog.dismiss();
-            Utility.showErrorMessage(CategoryListActivity.this, ex.getMessage());
+            // Utility.showErrorMessage(CategoryListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
 
@@ -223,9 +239,9 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());
 
-             rv_categorylist.setLayoutManager(new GridLayoutManager(CategoryListActivity.this,2));
+            rv_categorylist.setLayoutManager(new GridLayoutManager(CategoryListActivity.this,2));
             // rv_categorylist.setLayoutManager(new LinearLayoutManager(CategoryListActivity.this,
-             //       LinearLayoutManager.VERTICAL, false));
+            //       LinearLayoutManager.VERTICAL, false));
             rv_categorylist.setItemAnimator(new DefaultItemAnimator());
             rv_categorylist.setHasFixedSize(true);
 
@@ -249,13 +265,13 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
         for (CategoryModel member : mList) {
 
             String name = member.getTitle().toLowerCase();
-           // String code = member.getInstituteid();
+            // String code = member.getInstituteid();
 
             if (name.contains(text.toLowerCase()) )
                 filterdNames.add(member);
         }
 
-       //categoryListAdapter.setFilter(filterdNames);
+        //categoryListAdapter.setFilter(filterdNames);
     }
 
     private void bindView() {
@@ -275,6 +291,10 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
 
         progressDialog=new ProgressDialog(CategoryListActivity.this);
         activity=CategoryListActivity.this;
+
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
     }
 
     private void btnlistener() {
@@ -300,8 +320,8 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
                 replaceToolbar.setVisibility(View.GONE);
                 break;
 
-              case R.id.viewMenuIconBack:
-                  Utility.launchActivity(CategoryListActivity.this, HomepageActivity.class,true);
+            case R.id.viewMenuIconBack:
+                Utility.launchActivity(CategoryListActivity.this, HomepageActivity.class,true);
                 break;
 
 

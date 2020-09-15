@@ -1,241 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/drl_Opener"
-    tools:context="com.teammandroid.dairyapplication.admin.activities.DeliveryboyListActivity">
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarreg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary">
-
-            <ImageView
-                android:contentDescription="@string/image"
-                android:id="@+id/img_openDrawer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_order_black_24dp"
-                android:backgroundTint="@color/white"
-                android:visibility="gone"
-                android:layout_marginRight="10dp"/>
-
-            <ImageView
-                android:id="@+id/iv_backprofile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_arrow_back"
-                android:visibility="gone"
-                android:layout_marginRight="10dp"/>
-
-            <TextView
-                android:id="@+id/tv_toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:text=" Deliveryboy List"
-                android:textColor="@color/colorWhite"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </androidx.appcompat.widget.Toolbar>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_stafflist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@id/toolbarreg"/>
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_20"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/rv_stafflist"
-            android:visibility="gone">
-
-        </View>
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/drl_Opener"
+        >
         <RelativeLayout
-            android:id="@+id/rl_status"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_below="@+id/view"
-            android:layout_centerVertical="true"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:layout_marginLeft="20dp"
-            android:paddingRight="10dp"
-            android:visibility="visible"
-            android:layout_centerHorizontal="true">
+            android:layout_height="match_parent"
+            android:id="@+id/parentlayout"
+            android:visibility="visible">
 
-            <LinearLayout
-                android:id="@+id/ll_status1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_pending"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center_horizontal"
-                    android:text="Pending"
-                    android:textSize="@dimen/textSmallSize"
-                    android:textStyle="bold" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarreg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary">
 
                 <ImageView
-                    android:id="@+id/iv_staus1"
+                    android:contentDescription="@string/image"
+                    android:id="@+id/img_openDrawer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/view_vert1"
-                android:layout_width="70dp"
-                android:layout_height="1dp"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="6dp"
-                android:layout_toRightOf="@id/ll_status1"
-                android:background="@color/grey_20"
-                android:visibility="visible"/>
-
-            <LinearLayout
-                android:id="@+id/ll_status2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_toRightOf="@id/view_vert1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/tv_approved"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Approved"
-                    android:textSize="@dimen/textSmallSize"
-                    android:textStyle="bold" />
+                    android:background="@drawable/ic_order_black_24dp"
+                    android:backgroundTint="@color/white"
+                    android:visibility="gone"
+                    android:layout_marginRight="10dp"/>
 
                 <ImageView
-                    android:id="@+id/iv_staus2"
+                    android:id="@+id/iv_backprofile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center_horizontal" />
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_arrow_back"
+                    android:visibility="visible"
+                    android:layout_marginRight="10dp"/>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text=" Deliveryboy List"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.Toolbar>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_stafflist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/toolbarreg"/>
 
             <View
-                android:id="@+id/view_vert2"
-                android:layout_width="70dp"
+                android:id="@+id/view"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@id/ll_status2"
                 android:background="@color/grey_20"
-                android:visibility="visible">
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/rv_stafflist"
+                android:visibility="gone">
 
             </View>
 
-            <LinearLayout
-                android:id="@+id/ll_status3"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_toRightOf="@id/view_vert2"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/tv_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Cancel"
-                    android:textSize="@dimen/textSmallSize"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/iv_staus3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true" />
-
-            </LinearLayout>
-
             <RelativeLayout
-                android:id="@+id/rl_registrationNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:paddingTop="3dp"
-                android:visibility="visible">
+                android:id="@+id/rl_status"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_below="@+id/view"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:layout_marginLeft="20dp"
+                android:paddingRight="10dp"
+                android:visibility="visible"
+                android:layout_centerHorizontal="true">
 
-
-                <ImageView
-                    android:id="@+id/iv_update"
+                <LinearLayout
+                    android:id="@+id/ll_status1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@+id/iv_order"
-                    android:padding="@dimen/padding_5"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_edit_black_24dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/iv_order"
+                    <TextView
+                        android:id="@+id/tv_pending"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_horizontal"
+                        android:text="Pending"
+                        android:textSize="@dimen/textSmallSize"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/iv_staus1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view_vert1"
+                    android:layout_width="70dp"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_toRightOf="@id/ll_status1"
+                    android:background="@color/grey_20"
+                    android:visibility="visible"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_status2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@id/view_vert1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_approved"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Approved"
+                        android:textSize="@dimen/textSmallSize"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/iv_staus2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_horizontal" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view_vert2"
+                    android:layout_width="70dp"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@id/ll_status2"
+                    android:background="@color/grey_20"
+                    android:visibility="visible">
+
+                </View>
+
+                <LinearLayout
+                    android:id="@+id/ll_status3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@id/view_vert2"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Cancel"
+                        android:textSize="@dimen/textSmallSize"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/iv_staus3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_registrationNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/order_list"
-                    android:padding="@dimen/padding_5"
-                    android:visibility="gone" />
+                    android:layout_marginRight="10dp"
+                    android:paddingTop="3dp"
+                    android:visibility="visible">
+
+
+                    <ImageView
+                        android:id="@+id/iv_update"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/iv_order"
+                        android:padding="@dimen/padding_5"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/order_list"
+                        android:padding="@dimen/padding_5"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fb_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:src="@drawable/pencil"
+                app:rippleColor="@color/colorWhite"
+                android:background="@color/colorWhite"/>
+
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/childlayout"
+            android:visibility="gone">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
-            android:src="@drawable/pencil"
-            app:rippleColor="@color/colorWhite"
-            android:background="@color/colorWhite"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_height="200dp"
+                android:layout_width="200dp"
+                android:src="@drawable/errorimage"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#ffffff"
+                android:layout_centerHorizontal="true"
+                android:padding="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/img"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="www.teammandroid.in"
+                android:textAlignment="center"
+                android:layout_below="@+id/img"
+                android:id="@+id/txt_error"
+                android:textColor="@color/colorPrimary"/>
+
+
+        </RelativeLayout>
 
     </RelativeLayout>
-    <include layout="@layout/drawer_layout" />
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

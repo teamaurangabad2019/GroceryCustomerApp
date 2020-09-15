@@ -86,6 +86,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     PrefManager prefManager;
     SwipeRefreshLayout swipeLayout;
 
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,7 +185,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(ProductListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                //   Utility.showErrorMessage(ProductListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
@@ -190,17 +195,23 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                                 progressDialog.dismiss();
                                 Log.e(TAG, "exc " + e.getMessage());
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
 
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(ProductListActivity.this, "Could not connect to the internet");
+                // Utility.showErrorMessage(ProductListActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
             progressDialog.dismiss();
-            Utility.showErrorMessage(ProductListActivity.this, ex.getMessage());
+            //Utility.showErrorMessage(ProductListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
     private void productListWithoutDialog(int Subcategoryid) {
@@ -219,23 +230,31 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
-                                Utility.showErrorMessage(ProductListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(ProductListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 Log.e(TAG, "exc " + e.getMessage());
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
 
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(ProductListActivity.this, "Could not connect to the internet");
+                // Utility.showErrorMessage(ProductListActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
-            Utility.showErrorMessage(ProductListActivity.this, ex.getMessage());
+            // Utility.showErrorMessage(ProductListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
 
@@ -298,6 +317,11 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         progressDialog=new ProgressDialog(ProductListActivity.this);
         activity= ProductListActivity.this;
         prefManager=new PrefManager(ProductListActivity.this);
+
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
+
     }
 
     private void btnlistener() {
