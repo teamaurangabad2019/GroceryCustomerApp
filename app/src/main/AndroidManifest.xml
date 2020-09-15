@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".wishlist.WishlistActivity"></activity>
+        <activity android:name=".admin.activities.CheckoutActivity"></activity>
+        <activity android:name=".wishlist.WishlistActivity" />
         <activity android:name=".activities.ProductDetailsActivity" />
         <activity android:name=".admin.activities.ProductListActivity" />
         <activity android:name=".admin.activities.DeliveryboyListActivity" />

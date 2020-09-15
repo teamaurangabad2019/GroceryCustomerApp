@@ -115,7 +115,7 @@ public class WishlistActivity extends AppCompatActivity implements View.OnClickL
 
             ProductModel productModel = new ProductModel(productid, title,
                     details, price, ourprice, offer, isavailable, subcategory, image, isactive, created, createdby, modified
-                    , modifiedby, RowCount);
+                    , modifiedby, RowCount,0,0);
 
             list.add(productModel);
 

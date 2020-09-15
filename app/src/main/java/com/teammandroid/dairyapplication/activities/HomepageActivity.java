@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -229,10 +231,12 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     DatabaseHelper dbHelper;
 
     BadgeHolderLayout badgeLayout;
+    SwipeRefreshLayout swipeLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        //   getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(R.layout.activity_homepage);
         activity=HomepageActivity.this;
@@ -245,7 +249,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         requestPermission();
         getCategory();
-        getImages();
         productList(0);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -300,6 +303,25 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         {
             rl_profileChnage.setVisibility(View.VISIBLE);
         }
+
+        swipeLayout = findViewById(R.id.swipe_container);
+        // Adding Listener
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+
+                getCategoryWithoutDialog();
+                productListWithoutDialog(0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 3 seconds)
+                        swipeLayout.setRefreshing(false);
+
+                    }
+                }, 4000); // Delay in millis
+            }
+        });
 
 
     }
@@ -388,7 +410,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         return list;
     }*/
-    
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -405,7 +427,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 Utility.launchActivity(HomepageActivity.this,HomepageActivity.class,false);
                 drl_Opener.closeDrawer(Gravity.LEFT);
                 break;
-        case R.id.tv_view_all_test:
+            case R.id.tv_view_all_test:
                 Utility.launchActivity(HomepageActivity.this,CategoryListActivity.class,false);
                 drl_Opener.closeDrawer(Gravity.LEFT);
                 break;
@@ -442,8 +464,8 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                 Utility.launchActivity(HomepageActivity.this, CategoryListActivity.class,false);
                 break;
 
-             case R.id.rl_profileChnage:
-                 drl_Opener.closeDrawer(Gravity.LEFT);
+            case R.id.rl_profileChnage:
+                drl_Opener.closeDrawer(Gravity.LEFT);
                 Utility.launchActivity(HomepageActivity.this, ShowProfileActivity.class,false);
                 break;
 
@@ -777,6 +799,41 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
             Utility.showErrorMessage(HomepageActivity.this, "No record found", Snackbar.LENGTH_LONG);
         }
     }
+    private void getCategoryWithoutDialog() {
+        try {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
+
+                Log.e("CheckReponseVideostry", "Called");
+                CategoryServices.getInstance(HomepageActivity.this).fetchCategory(
+                        new ApiStatusCallBack<ArrayList<CategoryModel>>() {
+
+                            @Override
+                            public void onSuccess(ArrayList<CategoryModel> arraylist) {
+                                Log.e("CheckReponseVideosSucs", "Called");
+                                bindVideoPackages(arraylist);
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.e("CheckReponseanError", ""+anError.getMessage());
+                                Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                            }
+
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                Log.e("CheckReponseUnknown", "Called");
+                                //   Utility.showErrorMessage(getActivity(), e.getMessage(), Snackbar.LENGTH_LONG);
+                            }
+                        });
+            } else {
+                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+            }
+        }catch (Exception ex) {
+            Log.e("CheckReponseOther", "Called");
+            Log.e("GetVideoPackages","InsideGetVideoPackagesExtra"+ex);
+            Utility.showErrorMessage(HomepageActivity.this, "No record found", Snackbar.LENGTH_LONG);
+        }
+    }
 
     private void bindVideoPackages(final ArrayList<CategoryModel> mVideoPackages) {
         Log.e("adapter called","yes");
@@ -801,36 +858,6 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    /**RECYCLERVIEW PRODUCT LIST **/
-    private void getImages(){
-        Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
-
-        String offerprice="30%OFF";
-        String rs="Rs.";
-
-
-        mOffersprice.add(offerprice);
-        mImage.add("https://us.123rf.com/450wm/atoss/atoss1510/atoss151000013/46938944-ripe-mango-isolated-on-white-clipping-path.jpg?ver=6");
-        mLabel.add("Mongo 1 Kg/Dozen sell");
-        mWeight.add("240g");
-        mPrice.add(rs+"994/-");
-        mCutoff.add(rs+"1000/-");
-
-        mOffersprice.add(offerprice);
-        mImage.add("https://media.istockphoto.com/photos/pineapple-isolated-picture-id90965948?k=6&m=90965948&s=612x612&w=0&h=hbUfhxwZe3-yJ20Xkeo8pns9nMU0iHARNV0yIGu86WY=");
-        mLabel.add("Pineapple 1 Kg/Dozen sell");
-        mWeight.add("270g");
-        mPrice.add(rs+"704/-");
-        mCutoff.add(rs+"1400/-");
-
-        mOffersprice.add(offerprice);
-        mImage.add("https://media.istockphoto.com/photos/red-apple-with-leaf-picture-id683494078?k=6&m=683494078&s=612x612&w=0&h=aVyDhOiTwUZI0NeF_ysdLZkSvDD4JxaJMdWSx2p3pp4=");
-        mLabel.add("Apple 1 Kg/Dozen sell");
-        mWeight.add("440g");
-        mPrice.add(rs+"304/-");
-        mCutoff.add(rs+"500/-");
-
-    }
 
     private void productList(int Subcategoryid) {
         try {
@@ -876,16 +903,48 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
             Utility.showErrorMessage(HomepageActivity.this, ex.getMessage());
         }
     }
+    private void productListWithoutDialog(int Subcategoryid) {
+        try {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
+
+                ProductServices.getInstance(getApplicationContext()).
+                        fetchHomeProduct(Subcategoryid,new ApiStatusCallBack<ArrayList<ProductModel>>() {
+                            @Override
+                            public void onSuccess(ArrayList<ProductModel> productModels) {
+                                BindList(productModels);
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.e(TAG, "ANError " + anError.getMessage());
+                                Utility.showErrorMessage(HomepageActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                            }
+
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                Log.e(TAG, "exc " + e.getMessage());
+                                //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                            }
+
+                        });
+            } else {
+                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet");
+            }
+        } catch (Exception ex) {
+            //  lyt_progress_reg.setVisibility(View.GONE);
+            Utility.showErrorMessage(HomepageActivity.this, ex.getMessage());
+        }
+    }
 
     private void BindList(final ArrayList<ProductModel> mUserList) {
         try {
-            progressDialog.dismiss();
 
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());
             recyclerView.setLayoutManager(new GridLayoutManager(HomepageActivity.this,2));
 
-           // recyclerView.setLayoutManager(new LinearLayoutManager(HomepageActivity.this,
+            // recyclerView.setLayoutManager(new LinearLayoutManager(HomepageActivity.this,
             //        LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setHasFixedSize(true);

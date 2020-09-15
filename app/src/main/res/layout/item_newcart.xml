@@ -275,9 +275,5 @@
             android:background="@color/grey_455"
             android:visibility="gone"/>
     </RelativeLayout>
-    
-
-
-
 
 </RelativeLayout>

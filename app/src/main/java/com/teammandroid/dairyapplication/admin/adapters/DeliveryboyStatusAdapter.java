@@ -72,17 +72,20 @@ public class DeliveryboyStatusAdapter extends RecyclerView.Adapter<DeliveryboySt
        holder.tv_name.setText(userModelArrayList.get(position).getFullname());
        holder.tv_address.setText(userModelArrayList.get(position).getAddress());
        holder.tv_mob.setText(userModelArrayList.get(position).getMobile());
-       if (userModelArrayList.get(position).getPaymentmode()==0)
-       {
-           holder.tv_paymentmode.setText("Cash");
-       }
-       else
-       {
-           holder.tv_paymentmode.setText("Cash");
-       }
+
+
        holder.tv_savePrice.setText("Saved Price : "+String.valueOf(userModelArrayList.get(position).getSavedprice()));
        holder.tv_ActualPrice.setText("Total Price : "+String.valueOf(userModelArrayList.get(position).getTotalprice()));
        //holder.tv_approved.setText(userModelArrayList.get(position).getDeliverydate());
+
+        if (userModelArrayList.get(position).getPaymentmode()==0)
+        {
+            holder.tv_paymentmode.setText("Cash");
+        }
+        else
+        {
+            holder.tv_paymentmode.setText("Paid");
+        }
 
         //0 pending
         // 1 approve

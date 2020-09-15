@@ -43,6 +43,8 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
     private ArrayList<ProductModel> mList = new ArrayList<>();
     RecyclerView rv_stafflist;
 
+    RelativeLayout rl_status;
+
     Dialog resultbox;
     DeliveryboyOrderAdapter teacherListAdapter;
     private FloatingActionButton fb_create;
@@ -54,6 +56,7 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
     PrefManager prefManager;
 
     DeliveryboyStatusModel deliveryboyStatusModel;
+    ImageView iv_staus1,iv_staus2,iv_staus3;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -62,21 +65,48 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
         setContentView(R.layout.activity_deliveryboy_list);
         initView();
 
+
+        rl_status.setVisibility(View.VISIBLE);
         fb_create.setVisibility(View.GONE);
 
         tv_toolbar_title.setText("Product List");
 
 
-            img_openDrawer.setVisibility(View.VISIBLE);
+        img_openDrawer.setVisibility(View.VISIBLE);
 
-            deliveryboyStatusModel=getIntent().getParcelableExtra("DeliveryboyStatusModel");
-            getOrderList(deliveryboyStatusModel.getOrderid());
+        deliveryboyStatusModel=getIntent().getParcelableExtra("DeliveryboyStatusModel");
+        getOrderList(deliveryboyStatusModel.getOrderid(),deliveryboyStatusModel.getStatus(),deliveryboyStatusModel.getPaymentmode());
 
-            Log.d(TAG, "DB dbID  " + prefManager.getUSER_ID());
+        Log.d(TAG, "DB dbID  " + prefManager.getUSER_ID()+" "+deliveryboyStatusModel.getOrderid()+" "+deliveryboyStatusModel.getStatus());
+
+        if (deliveryboyStatusModel.getStatus()==0)
+        {
+            iv_staus1.setBackgroundResource(R.drawable.ic_radio_button_checked_primarycolor_24dp);
+            iv_staus2.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+            iv_staus3.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+            //holder.tv_pending.setTextColor(Color.parseColor("#00933C"));
+            // holder.tv_pending.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
+        }
+        else if (deliveryboyStatusModel.getStatus()==1)
+        {
+            //holder.tv_pending.setTextColor(Color.parseColor("#00933C"));
+           iv_staus1.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+            iv_staus2.setBackgroundResource(R.drawable.ic_radio_button_checked_primarycolor_24dp);
+            iv_staus3.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+            //holder.tv_pending.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
+        }
+        else if (deliveryboyStatusModel.getStatus()==2)
+        {
+            // holder.tv_pending.setTextColor(Color.parseColor("#00933C"));
+            iv_staus1.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+            iv_staus2.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+            iv_staus3.setBackgroundResource(R.drawable.ic_radio_button_checked_primarycolor_24dp);
+            // holder.tv_pending.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
+        }
 
     }
 
-    private void getOrderList(int orderId) {
+    private void getOrderList(int orderId, int status, int paymentmode) {
         try {
             if (Utility.isNetworkAvailable(getApplicationContext())) {
 
@@ -92,7 +122,7 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
 
                                 progressDialog.dismiss();
                                 mList = userModels;
-                                BindList(userModels);
+                                BindList(userModels,status,paymentmode);
                                 //user = response.get(0);
 
                             }
@@ -123,7 +153,7 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
         }
     }
 
-    private void BindList(final ArrayList<ProductModel> mUserList) {
+    private void BindList(final ArrayList<ProductModel> mUserList,int status,int paymentMode) {
         try {
             rv_stafflist.setVisibility(View.VISIBLE);
 
@@ -136,7 +166,7 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
             rv_stafflist.setItemAnimator(new DefaultItemAnimator());
             rv_stafflist.setHasFixedSize(true);
 
-            teacherListAdapter = new DeliveryboyOrderAdapter(DeliveryboyOrderListActivity.this, mUserList,
+            teacherListAdapter = new DeliveryboyOrderAdapter(DeliveryboyOrderListActivity.this, mUserList,status,paymentMode,
                     new DeliveryboyOrderAdapter.ItemClickListener() {
                         @Override
                         public void onClick(View view, int position) {
@@ -189,15 +219,17 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
         resultbox.show();
     }
 
-
     private void initView() {
         fb_create = (FloatingActionButton) findViewById(R.id.fb_create);
         fb_create.setOnClickListener(this);
 
         iv_backprofile =  findViewById(R.id.iv_backprofile);
+        rl_status =  findViewById(R.id.rl_status);
         iv_backprofile.setOnClickListener(this);
 
-
+        iv_staus1 =  findViewById(R.id.iv_staus1);
+        iv_staus2 =  findViewById(R.id.iv_staus2);
+        iv_staus3 =  findViewById(R.id.iv_staus3);
 
 
         img_openDrawer =  findViewById(R.id.img_openDrawer);

@@ -101,40 +101,158 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_cart"
+        android:id="@+id/ll_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/grey_5"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@id/appBarLayout">
+
+        <RelativeLayout
+            android:id="@+id/rl_cart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey_5">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_cart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/grey_3"
             android:paddingTop="@dimen/padding_10"
             android:scrollbars="vertical"
             android:scrollingCache="true" />
 
+     </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+
+            <RelativeLayout
+                android:id="@+id/rl_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_5">
+
+                <TextView
+                    android:id="@+id/tv_subtotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subotal"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorBlack" />
+
+                <TextView
+                    android:id="@+id/tv_subtotalAmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:hint="0.0"
+                    android:textColor="@color/colorBlack" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_two"
+                android:layout_below="@id/rl_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_5">
+
+                <TextView
+                    android:id="@+id/tv_deliveryCharge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery Charge"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorBlack" />
+
+                <TextView
+                    android:id="@+id/tv_deliveryAmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:hint="0.0"
+                    android:textColor="@color/colorBlack" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_three"
+                android:layout_below="@id/rl_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_5">
+
+                <TextView
+                    android:id="@+id/tv_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorBlack" />
+
+                <TextView
+                    android:id="@+id/tv_totalAmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.0"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/colorBlack" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_four"
+                android:layout_below="@+id/rl_three"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_10"
+                android:background="@color/colorPrimary">
+
+                <TextView
+                    android:id="@+id/tv_finalTotalAmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Rs 435"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/colorWhite" />
+
+                <TextView
+                    android:id="@+id/tv_finalTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Checkout"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:drawableTint="@color/colorWhite"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/colorWhite" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"/>
+
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_total"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Total"
-        android:layout_above="@id/btn_continue"
-        android:layout_below="@id/rl_cart"/>
-
-    <Button
-        android:id="@+id/btn_continue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Continue"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"
-        android:layout_alignParentBottom="true" />
     <!--endregion-->
+
+
 
 </RelativeLayout>

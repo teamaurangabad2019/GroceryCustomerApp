@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.androidnetworking.error.ANError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -69,6 +71,8 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
 
     ImageView iv_add;
     Dialog resultbox;
+    SwipeRefreshLayout swipeLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,7 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
         Log.e("itemee", String.valueOf(categoryid));
 
        // expenseCategoryHolder=getIntent().getParcelableExtra("expenseCategory");
-        
+
         categoryList();
         //getExpenseList(expenseCategoryHolder.getCategoryid());
 
@@ -111,6 +115,60 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
                 filter(s.toString());
             }
         });
+        // Adding Listener
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code here
+
+                categoryListWithoutDialog();
+                // Toast.makeText(getApplicationContext(), "Works!", Toast.LENGTH_LONG).show();
+                // To keep animation for 4 seconds
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 3 seconds)
+                        swipeLayout.setRefreshing(false);
+
+                    }
+                }, 4000); // Delay in millis
+            }
+        });
+    }
+
+
+    private void categoryListWithoutDialog() {
+        try {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
+
+                Log.e(TAG, "LoginUser: ");
+
+                CategoryServices.getInstance(getApplicationContext()).
+                        fetchCategory(new ApiStatusCallBack<ArrayList<CategoryModel>>() {
+                            @Override
+                            public void onSuccess(ArrayList<CategoryModel> classModels) {
+                                BindList(classModels);
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.e(TAG, "ANError " + anError.getMessage());
+                                Utility.showErrorMessage(CategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                            }
+
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                Log.e(TAG, "exc " + e.getMessage());
+                                //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                            }
+
+                        });
+            } else {
+                Utility.showErrorMessage(CategoryListActivity.this, "Could not connect to the internet");
+            }
+        } catch (Exception ex) {
+            Utility.showErrorMessage(CategoryListActivity.this, ex.getMessage());
+        }
     }
 
     private void categoryList() {
@@ -185,7 +243,7 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
             //Utility.showErrorMessage(this, ex.getMessage(), Snackbar.LENGTH_LONG);
         }
     }
-    
+
     private void filter(String text) {
         ArrayList<CategoryModel> filterdNames = new ArrayList<>();
         for (CategoryModel member : mList) {
@@ -199,7 +257,7 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
 
        //categoryListAdapter.setFilter(filterdNames);
     }
-    
+
     private void bindView() {
 
         lyt_progress =  findViewById(R.id.lyt_progress);
@@ -213,6 +271,8 @@ public class CategoryListActivity extends AppCompatActivity implements View.OnCl
         viewMenuIconBack =  findViewById(R.id.viewMenuIconBack);
         floating_create =   findViewById(R.id.floating_create);
         iv_add =   findViewById(R.id.iv_add);
+        swipeLayout = findViewById(R.id.swipe_container);
+
         progressDialog=new ProgressDialog(CategoryListActivity.this);
         activity=CategoryListActivity.this;
     }

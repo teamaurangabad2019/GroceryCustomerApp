@@ -7,6 +7,7 @@ import android.app.Service;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.androidnetworking.error.ANError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -82,6 +84,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
     BadgeHolderLayout badgeLayout;
     PrefManager prefManager;
+    SwipeRefreshLayout swipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +99,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         txtTitleBar.setText("Product List");
 
         productList(subcategoryModel.getSubcategoryid());
-       // productList(22);
+        // productList(22);
 
         Log.e( "onCreate: ", String.valueOf(subcategoryModel.getSubcategoryid()));
         if(prefManager.getUSER_ID()==0)
@@ -134,6 +137,24 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 imm.showSoftInput(toolbarEditText, 0);
                 //imm.showSoftInputFromWindow(mainActivity.toolbarEditText.getWindowToken(), 0);
                 filter(s.toString());
+            }
+        });
+
+        swipeLayout = findViewById(R.id.swipe_container);
+        // Adding Listener
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code here
+
+                productListWithoutDialog(subcategoryModel.getSubcategoryid());
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 3 seconds)
+                        swipeLayout.setRefreshing(false);
+
+                    }
+                }, 4000); // Delay in millis
             }
         });
     }
@@ -182,10 +203,44 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
             Utility.showErrorMessage(ProductListActivity.this, ex.getMessage());
         }
     }
+    private void productListWithoutDialog(int Subcategoryid) {
+        try {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
+
+                Log.e(TAG, "LoginUser: ");
+
+                ProductServices.getInstance(getApplicationContext()).
+                        fetchProduct(Subcategoryid,new ApiStatusCallBack<ArrayList<ProductModel>>() {
+                            @Override
+                            public void onSuccess(ArrayList<ProductModel> productModels) {
+                                BindList(productModels);
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.e(TAG, "ANError " + anError.getMessage());
+                                Utility.showErrorMessage(ProductListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                            }
+
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                Log.e(TAG, "exc " + e.getMessage());
+                                //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                            }
+
+                        });
+            } else {
+                Utility.showErrorMessage(ProductListActivity.this, "Could not connect to the internet");
+            }
+        } catch (Exception ex) {
+            //  lyt_progress_reg.setVisibility(View.GONE);
+            Utility.showErrorMessage(ProductListActivity.this, ex.getMessage());
+        }
+    }
 
     private void BindList(final ArrayList<ProductModel> mUserList) {
         try {
-            progressDialog.dismiss();
 
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());

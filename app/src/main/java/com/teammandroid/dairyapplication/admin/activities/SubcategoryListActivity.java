@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.androidnetworking.error.ANError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -72,7 +74,7 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
     Dialog resultbox;
     CategoryModel categoryModel;
     TextView txtTitleBar;
-
+    SwipeRefreshLayout swipeLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +88,7 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
 
         categoryModel = getIntent().getParcelableExtra("CategoryModel");
 
-       // Log.e(TAG," chk "+categoryModel.getDetails() +" "+ categoryModel.getImagename());
+        // Log.e(TAG," chk "+categoryModel.getDetails() +" "+ categoryModel.getImagename());
         txtTitleBar.setText("Subcategory List");
 
         subcategoryList(categoryModel.getCategoryid());
@@ -119,6 +121,27 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
                 filter(s.toString());
             }
         });
+
+        swipeLayout = findViewById(R.id.swipe_container);
+        // Adding Listener
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code here
+
+                subcategoryListWithoutDialog(categoryModel.getCategoryid());
+                // Toast.makeText(getApplicationContext(), "Works!", Toast.LENGTH_LONG).show();
+                // To keep animation for 4 seconds
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 3 seconds)
+                        swipeLayout.setRefreshing(false);
+
+                    }
+                }, 4000); // Delay in millis
+            }
+        });
+
     }
 
     private void subcategoryList(int Categoryid) {
@@ -165,6 +188,41 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
             Utility.showErrorMessage(SubcategoryListActivity.this, ex.getMessage());
         }
     }
+    private void subcategoryListWithoutDialog(int Categoryid) {
+        try {
+            if (Utility.isNetworkAvailable(getApplicationContext())) {
+
+                Log.e(TAG, "LoginUser: ");
+
+                SubCategoryServices.getInstance(getApplicationContext()).
+                        fetchSubCategorywise(Categoryid,new ApiStatusCallBack<ArrayList<SubcategoryModel>>() {
+                            @Override
+                            public void onSuccess(ArrayList<SubcategoryModel> classModels) {
+                                BindList(classModels);
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.e(TAG, "ANError " + anError.getMessage());
+                                Utility.showErrorMessage(SubcategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                            }
+
+                            @Override
+                            public void onUnknownError(Exception e) {
+                                Log.e(TAG, "exc " + e.getMessage());
+                                //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                            }
+
+                        });
+            } else {
+                Utility.showErrorMessage(SubcategoryListActivity.this, "Could not connect to the internet");
+            }
+        } catch (Exception ex) {
+            //  lyt_progress_reg.setVisibility(View.GONE);
+            Utility.showErrorMessage(SubcategoryListActivity.this, ex.getMessage());
+        }
+    }
 
     private void BindList(final ArrayList<SubcategoryModel> mUserList) {
         try {
@@ -173,8 +231,8 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
             setTitle("NotesPackages (" + mUserList.size() + ")");
             Log.e(TAG, "CAtemUserList: "+mUserList.toString());
 
-             rv_categorylist.setLayoutManager(new GridLayoutManager(SubcategoryListActivity.this,2));
-              rv_categorylist.setItemAnimator(new DefaultItemAnimator());
+            rv_categorylist.setLayoutManager(new GridLayoutManager(SubcategoryListActivity.this,2));
+            rv_categorylist.setItemAnimator(new DefaultItemAnimator());
             rv_categorylist.setHasFixedSize(true);
 
             subCategoryAdapter = new SubCategoryAdapter(SubcategoryListActivity.this,
@@ -191,21 +249,21 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
             //Utility.showErrorMessage(this, ex.getMessage(), Snackbar.LENGTH_LONG);
         }
     }
-    
+
     private void filter(String text) {
         ArrayList<CategoryModel> filterdNames = new ArrayList<>();
         for (CategoryModel member : mList) {
 
             String name = member.getTitle().toLowerCase();
-           // String code = member.getInstituteid();
+            // String code = member.getInstituteid();
 
             if (name.contains(text.toLowerCase()) )
                 filterdNames.add(member);
         }
 
-       //SubCategoryAdapter.setFilter(filterdNames);
+        //SubCategoryAdapter.setFilter(filterdNames);
     }
-    
+
     private void bindView() {
 
         lyt_progress =  findViewById(R.id.lyt_progress);
@@ -247,20 +305,20 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
                 replaceToolbar.setVisibility(View.GONE);
                 break;
 
-              case R.id.viewMenuIconBack:
-                  Utility.launchActivity(SubcategoryListActivity.this,CategoryListActivity.class,true);
+            case R.id.viewMenuIconBack:
+                Utility.launchActivity(SubcategoryListActivity.this,CategoryListActivity.class,true);
                 break;
 
 
         }
     }
 
-   /* @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Utility.launchActivity(SubcategoryListActivity.this,CategoryListActivity.class,true);
-    }
-*/
+    /* @Override
+     public void onBackPressed() {
+         super.onBackPressed();
+         Utility.launchActivity(SubcategoryListActivity.this,CategoryListActivity.class,true);
+     }
+ */
     private void showCustomDialogNoRecord() {
         // this.correct = correct;
         resultbox = new Dialog(SubcategoryListActivity.this);

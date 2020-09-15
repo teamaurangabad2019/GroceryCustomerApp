@@ -60,102 +60,102 @@
                 android:layout_below="@id/tv_address"
                 android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/tv_mob"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title"
-                android:drawableLeft="@drawable/ic_phone_black_24dp"
-                android:drawablePadding="10dp"
-                android:drawableTint="@color/colorPrimary"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textSize="@dimen/textMediumSize"
-                android:layout_marginLeft="10dp"
-                />
+                <TextView
+                    android:id="@+id/tv_mob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title"
+                    android:drawableLeft="@drawable/ic_phone_black_24dp"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/textMediumSize"
+                    android:layout_marginLeft="10dp"
+                    />
 
-            <View
-                android:id="@+id/view_vert"
-                android:layout_width="1dp"
-                android:layout_height="18dp"
-                android:background="@color/grey_20"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_below="@id/tv_address"
-                android:layout_toRightOf="@id/tv_mob"
-                android:visibility="visible"
-                android:layout_marginTop="6dp">
-            </View>
+                <View
+                    android:id="@+id/view_vert"
+                    android:layout_width="1dp"
+                    android:layout_height="18dp"
+                    android:background="@color/grey_20"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_below="@id/tv_address"
+                    android:layout_toRightOf="@id/tv_mob"
+                    android:visibility="visible"
+                    android:layout_marginTop="6dp">
+                </View>
 
-            <TextView
-                android:id="@+id/tv_paymentmode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title"
-                android:drawableLeft="@drawable/ic_credit_card"
-                android:drawablePadding="10dp"
-                android:drawableTint="@color/colorPrimary"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_toRightOf="@+id/tv_mob"
-                android:textSize="@dimen/textMediumSize"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@id/tv_address"/>
+                <TextView
+                    android:id="@+id/tv_paymentmode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title"
+                    android:drawableLeft="@drawable/ic_credit_card"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_toRightOf="@+id/tv_mob"
+                    android:textSize="@dimen/textMediumSize"
+                    android:layout_marginLeft="10dp"
+                    android:layout_below="@id/tv_address"/>
 
             </LinearLayout>
 
-          <LinearLayout
+            <LinearLayout
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_below="@id/ll_con"
-               android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp">
 
                 <TextView
-                android:id="@+id/tv_savePrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title"
-                android:drawableLeft="@drawable/ic_credit_card"
-                android:drawablePadding="10dp"
-                android:drawableTint="@color/colorPrimary"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textSize="@dimen/textMediumSize"
-                android:layout_marginLeft="10dp"
-                />
+                    android:id="@+id/tv_savePrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title"
+                    android:drawableLeft="@drawable/ic_credit_card"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="@dimen/textMediumSize"
+                    android:layout_marginLeft="10dp"
+                    />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="18dp"
-                android:background="@color/grey_20"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_below="@id/tv_address"
-                android:layout_toRightOf="@id/tv_mob"
-                android:visibility="visible"
-                android:layout_marginTop="6dp">
-            </View>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="18dp"
+                    android:background="@color/grey_20"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_below="@id/tv_address"
+                    android:layout_toRightOf="@id/tv_mob"
+                    android:visibility="visible"
+                    android:layout_marginTop="6dp">
+                </View>
 
-            <TextView
-                android:id="@+id/tv_ActualPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title"
-                android:drawableLeft="@drawable/ic_credit_card"
-                android:drawablePadding="10dp"
-                android:drawableTint="@color/colorPrimary"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_toRightOf="@+id/tv_mob"
-                android:textSize="@dimen/textMediumSize"
-                android:layout_marginLeft="10dp"
-                android:layout_below="@id/tv_address"/>
+                <TextView
+                    android:id="@+id/tv_ActualPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title"
+                    android:drawableLeft="@drawable/ic_credit_card"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_toRightOf="@+id/tv_mob"
+                    android:textSize="@dimen/textMediumSize"
+                    android:layout_marginLeft="10dp"
+                    android:layout_below="@id/tv_address"/>
 
             </LinearLayout>
 
@@ -177,12 +177,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_staus1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:padding="@dimen/padding_5" />
+                <ImageView
+                    android:id="@+id/iv_staus1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:padding="@dimen/padding_5" />
 
                 <TextView
                     android:id="@+id/tv_pending"
@@ -217,13 +217,13 @@
                 android:layout_below="@id/view_vert1"
                 android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/iv_staus2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:padding="@dimen/padding_5"
-                />
+                <ImageView
+                    android:id="@+id/iv_staus2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:padding="@dimen/padding_5"
+                    />
 
                 <TextView
                     android:id="@+id/tv_approved"
@@ -259,12 +259,12 @@
                 android:layout_below="@id/view_vert2"
                 android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/iv_staus3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:padding="@dimen/padding_5" />
+                <ImageView
+                    android:id="@+id/iv_staus3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:padding="@dimen/padding_5" />
 
                 <TextView
                     android:id="@+id/tv_cancel"

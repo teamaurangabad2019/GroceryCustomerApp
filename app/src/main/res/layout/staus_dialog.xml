@@ -1,45 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="5dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/colorPrimary">
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="35dp"
-            android:layout_centerInParent="true"
-            />
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update Delivery Status"
-            android:textSize="@dimen/textMediumSize"
-            android:textColor="@color/white"
+            android:text="Confirm Order Amount"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:textColor="@color/colorBlack"
             android:layout_centerInParent="true"
             android:textStyle="bold"/>
 
-    </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.4dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey_455"
+            android:visibility="visible"/>
 
-    <TextView
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="total"
-        android:justificationMode="inter_word"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorBlack"
-        android:visibility="visible"
-        android:id="@+id/txt_ourprice"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:visibility="gone">
+        <RelativeLayout
+            android:id="@+id/rl_two"
+            android:layout_below="@id/rl_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_5">
 
+            <TextView
+                android:id="@+id/tv_savedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saved Price"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:id="@+id/txt_savedprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="0.0"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/colorBlack" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_two1"
+            android:layout_below="@id/rl_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_5">
+
+            <TextView
+                android:id="@+id/tv_deliveryCharge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delivery Charge"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:id="@+id/tv_deliveryAmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:hint="0.0"
+                android:textColor="@color/colorBlack" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_5">
+
+            <TextView
+                android:id="@+id/tv_subtotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:id="@+id/txt_ourprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:hint="0.0"
+                android:textColor="@color/colorBlack" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_three"
+            android:layout_below="@id/rl_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_5">
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grand Total"
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorBlack" />
+
+            <TextView
+                android:id="@+id/tv_totalAmt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="0.0"
+                android:textStyle="bold"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/colorBlack" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -49,9 +150,10 @@
         android:justificationMode="inter_word"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorBlack"
-        android:visibility="visible"
-        android:id="@+id/txt_savedprice"
-        android:gravity="center"/>
+        android:visibility="gone"
+        android:id="@+id/txt_savedprice1"
+        android:gravity="center"
+        />
 
 
     <RadioGroup
@@ -116,8 +218,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:weightSum="2"
+        android:visibility="visible">
 
         <TextView
             android:layout_width="match_parent"
@@ -139,9 +241,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:weightSum="2"
             android:layout_gravity="center_horizontal">
 
             <Button
@@ -150,8 +252,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@color/colorPrimary"
-                android:text="No"
-                android:layout_margin="10dp"
+                android:text="Cancel"
+                android:layout_marginRight="@dimen/padding_5"
+                android:layout_weight="1"
                 android:textColor="@color/colorWhite" />
 
             <Button
@@ -160,8 +263,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@color/colorPrimary"
-                android:text="yes"
-                android:layout_margin="10dp"
+                android:text="Confirm"
+                android:layout_weight="1"
                 android:textColor="@color/colorWhite" />
         </LinearLayout>
 

@@ -23,10 +23,12 @@ public class PrefManager {
     private static final String ProfilePath = "ProfilePath";
 
     private static final String D_BOY_ID = "D_BOY_ID";
+    private static final String Select = "select";
     private static final String AUTH_BACK = "auth_back";
     private static final String our_price = "our_price";
     private static final String saved_price = "saved_price";
     private static final String  address = "address";
+    private static final String  grandTotal = "grandTotal";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -98,6 +100,15 @@ public class PrefManager {
         return pref.getInt(D_BOY_ID, 0);
     }
 
+     public void setSelect(int p) {
+        editor.putInt(Select, p);
+        editor.commit();
+    }
+
+    public int getSelect() {
+        return pref.getInt(Select, 0);
+    }
+
     public void setAUTH_BACK(int uid) {
         editor.putInt(AUTH_BACK, uid);
         editor.commit();
@@ -123,6 +134,15 @@ public class PrefManager {
 
     public String getsaved_price() {
         return pref.getString(saved_price, null);
+    }
+
+    public void setgrandTotal(String op) {
+        editor.putString(grandTotal, op);
+        editor.commit();
+    }
+
+    public String getgrandTotal() {
+        return pref.getString(grandTotal, null);
     }
 
 

@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.activities.AuthenticationActivity;
 import com.teammandroid.dairyapplication.activities.BookingActivity;
+import com.teammandroid.dairyapplication.admin.activities.CartActivity;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.model.UserModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
@@ -88,14 +89,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         ProductModel item = list.get(i);
 
-        Log.d("adpaterCart" ,item.getDetails());
+        Log.d("adpaterCart" ," "+item.getDetails());
 
-        viewHolder.mTitle.setText(item.getTitle());
+        if (item.getTitle()!= null) {
+            viewHolder.mTitle.setText(item.getTitle());
+        }
        /* viewHolder.mDesp.setText(item.getDetails());
         viewHolder.mOffer.setText("Rs " + item.getPrice());
        */
-       // viewHolder.mOfferprice.setText(String.valueOf("("+item.getOffer() + "% off ) "));
-        viewHolder.mPrice.setText(String.valueOf(item.getOurprice()));
+        // viewHolder.mOfferprice.setText(String.valueOf("("+item.getOffer() + "% off ) "));
+        viewHolder.mPrice.setText("₹ "+String.valueOf(item.getOurprice()));
         viewHolder.txt_quantity.setText(String.valueOf(item.getRowCount()));
         viewHolder.desc.setText(String.valueOf(item.getDetails()));
 
@@ -130,10 +133,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             @Override
             public void onClick(View v)
             {
-
                 addPmQuantity(item,viewHolder.totalview ,viewHolder.txt_total_amount);
-
-
             }
         });
 
@@ -158,7 +158,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 } else {
                     Utility.launchActivity(mContext, AuthenticationActivity.class, false, bundle);
                 }
-
             }
         });
 
@@ -281,7 +280,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
     }
 
-
     private void addPmQuantity(ProductModel item,  TextView totalview,TextView txt_total_amount)
     {
         Log.d("CartAdapter ",String.valueOf(item.getProductid()));
@@ -318,7 +316,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
             Toast.makeText(mContext, "Added Quantity " +id, Toast.LENGTH_SHORT).show();
 
-            grandTotal();
+            double d= grandTotal();
+            prefManager.setgrandTotal(String.valueOf(d));
+            ((CartActivity) mContext).ReloadActivity(d);
             Toast.makeText(mContext, "added"+grandTotal(), Toast.LENGTH_SHORT).show();
 
 
@@ -347,7 +347,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 sum = cursor.getInt(0);//to get id, 0 is the column index
 
             }
-           // double price=list.get(i).getOurprice()*sum;
+            // double price=list.get(i).getOurprice()*sum;
             totalOurPrice += list.get(i).getOurprice()* sum;
             totalPrice += list.get(i).getPrice()* sum;
             totalSavedPrice =totalPrice-totalOurPrice;
@@ -392,6 +392,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         Log.d("CartAdapterd ",String.valueOf(id) + " "+price);
 
         grandTotal();
+
+        double d= grandTotal();
+        prefManager.setgrandTotal(String.valueOf(d));
+        ((CartActivity) mContext).ReloadActivity(d);
+
         Toast.makeText(mContext, "deleted"+grandTotal(), Toast.LENGTH_SHORT).show();
 
         // Toast.makeText(mContext, "Deleted " , Toast.LENGTH_SHORT).show();

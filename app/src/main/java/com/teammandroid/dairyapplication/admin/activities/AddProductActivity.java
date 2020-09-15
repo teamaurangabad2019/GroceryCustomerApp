@@ -427,7 +427,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 // CALL THIS METHOD TO GET THE ACTUAL PATH
                 File finalFile = new File(getRealPathFromURI(tempUri));
 
-                System.out.println(tempUri);
+                //System.out.println(tempUri);
                 Log.d(TAG, "pthth " + tempUri + " final " + finalFile);
 
                 fullpath = String.valueOf(finalFile);

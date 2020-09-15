@@ -143,13 +143,13 @@ public class OrderHistoryActivity extends AppCompatActivity implements View.OnCl
                         @Override
                         public void onClick(View view, int position) {
 
-                            OrderModel requestDetailsForAdminModel=mQuizPackages.get(position);
+                       /*     OrderModel requestDetailsForAdminModel=mQuizPackages.get(position);
 
                             final ServiceBoy_Dialog dialog = new ServiceBoy_Dialog(OrderHistoryActivity.this,
                                     requestDetailsForAdminModel);
                             dialog.show();
                             dialog.setCanceledOnTouchOutside(true);
-
+*/
                         }
                     });
             recycler_view_quizpackages.setAdapter(orderDetailsForAdminAdapter);

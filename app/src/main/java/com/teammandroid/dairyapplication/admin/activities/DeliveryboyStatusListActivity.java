@@ -183,6 +183,8 @@ public class DeliveryboyStatusListActivity extends AppCompatActivity implements 
             Utility.showErrorMessage(DeliveryboyStatusListActivity.this, ex.getMessage());
         }
     }*/
+
+
     private void BindList(final ArrayList<DeliveryboyStatusModel> mUserList) {
         try {
             rv_stafflist.setVisibility(View.VISIBLE);

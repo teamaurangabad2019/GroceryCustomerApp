@@ -19,6 +19,65 @@ public class ProductModel implements Parcelable {
     String modified;
     int modifiedby;
     int RowCount;
+    int quantity;
+    double totalamount;
+
+    public ProductModel(int productid, String title, String details, double price, double ourprice, int offer, int isavailable, int subcategory, String imagename, int isactive, String created, int createdby, String modified, int modifiedby, int rowCount, int quantity, double totalamount) {
+        this.productid = productid;
+        this.title = title;
+        this.details = details;
+        this.price = price;
+        this.ourprice = ourprice;
+        this.offer = offer;
+        this.isavailable = isavailable;
+        this.subcategory = subcategory;
+        this.imagename = imagename;
+        this.isactive = isactive;
+        this.created = created;
+        this.createdby = createdby;
+        this.modified = modified;
+        this.modifiedby = modifiedby;
+        RowCount = rowCount;
+        this.quantity = quantity;
+        this.totalamount = totalamount;
+    }
+
+    public ProductModel(String title, double price) {
+        this.title = title;
+        this.price = price;
+    }
+
+    protected ProductModel(Parcel in) {
+        productid = in.readInt();
+        title = in.readString();
+        details = in.readString();
+        price = in.readDouble();
+        ourprice = in.readDouble();
+        offer = in.readInt();
+        isavailable = in.readInt();
+        subcategory = in.readInt();
+        imagename = in.readString();
+        isactive = in.readInt();
+        created = in.readString();
+        createdby = in.readInt();
+        modified = in.readString();
+        modifiedby = in.readInt();
+        RowCount = in.readInt();
+        quantity = in.readInt();
+        totalamount = in.readDouble();
+    }
+
+    public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
+        @Override
+        public ProductModel createFromParcel(Parcel in) {
+            return new ProductModel(in);
+        }
+
+        @Override
+        public ProductModel[] newArray(int size) {
+            return new ProductModel[size];
+        }
+    };
 
     public int getProductid() {
         return productid;
@@ -34,27 +93,6 @@ public class ProductModel implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductModel{" +
-                "productid=" + productid +
-                ", title='" + title + '\'' +
-                ", details='" + details + '\'' +
-                ", price=" + price +
-                ", ourprice=" + ourprice +
-                ", offer=" + offer +
-                ", isavailable=" + isavailable +
-                ", subcategory=" + subcategory +
-                ", imagename='" + imagename + '\'' +
-                ", isactive=" + isactive +
-                ", created='" + created + '\'' +
-                ", createdby=" + createdby +
-                ", modified='" + modified + '\'' +
-                ", modifiedby=" + modifiedby +
-                ", RowCount=" + RowCount +
-                '}';
     }
 
     public String getDetails() {
@@ -161,61 +199,21 @@ public class ProductModel implements Parcelable {
         RowCount = rowCount;
     }
 
-    public static Creator<ProductModel> getCREATOR() {
-        return CREATOR;
+    public int getQuantity() {
+        return quantity;
     }
 
-
-
-    public ProductModel(int productid, String title, String details, double price, double ourprice, int offer, int isavailable, int subcategory, String imagename, int isactive, String created, int createdby, String modified, int modifiedby, int rowCount) {
-        this.productid = productid;
-        this.title = title;
-        this.details = details;
-        this.price = price;
-        this.ourprice = ourprice;
-        this.offer = offer;
-        this.isavailable = isavailable;
-        this.subcategory = subcategory;
-        this.imagename = imagename;
-        this.isactive = isactive;
-        this.created = created;
-        this.createdby = createdby;
-        this.modified = modified;
-        this.modifiedby = modifiedby;
-        RowCount = rowCount;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-
-
-    protected ProductModel(Parcel in) {
-        productid = in.readInt();
-        title = in.readString();
-        details = in.readString();
-        price = in.readDouble();
-        ourprice = in.readDouble();
-        offer = in.readInt();
-        isavailable = in.readInt();
-        subcategory = in.readInt();
-        imagename = in.readString();
-        isactive = in.readInt();
-        created = in.readString();
-        createdby = in.readInt();
-        modified = in.readString();
-        modifiedby = in.readInt();
-        RowCount = in.readInt();
+    public double getTotalamount() {
+        return totalamount;
     }
 
-    public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
-        @Override
-        public ProductModel createFromParcel(Parcel in) {
-            return new ProductModel(in);
-        }
-
-        @Override
-        public ProductModel[] newArray(int size) {
-            return new ProductModel[size];
-        }
-    };
+    public void setTotalamount(double totalamount) {
+        this.totalamount = totalamount;
+    }
 
     @Override
     public int describeContents() {
@@ -223,21 +221,46 @@ public class ProductModel implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(productid);
-        parcel.writeString(title);
-        parcel.writeString(details);
-        parcel.writeDouble(price);
-        parcel.writeDouble(ourprice);
-        parcel.writeInt(offer);
-        parcel.writeInt(isavailable);
-        parcel.writeInt(subcategory);
-        parcel.writeString(imagename);
-        parcel.writeInt(isactive);
-        parcel.writeString(created);
-        parcel.writeInt(createdby);
-        parcel.writeString(modified);
-        parcel.writeInt(modifiedby);
-        parcel.writeInt(RowCount);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(productid);
+        dest.writeString(title);
+        dest.writeString(details);
+        dest.writeDouble(price);
+        dest.writeDouble(ourprice);
+        dest.writeInt(offer);
+        dest.writeInt(isavailable);
+        dest.writeInt(subcategory);
+        dest.writeString(imagename);
+        dest.writeInt(isactive);
+        dest.writeString(created);
+        dest.writeInt(createdby);
+        dest.writeString(modified);
+        dest.writeInt(modifiedby);
+        dest.writeInt(RowCount);
+        dest.writeInt(quantity);
+        dest.writeDouble(totalamount);
+    }
+
+    @Override
+    public String toString() {
+        return "ProductModel{" +
+                "productid=" + productid +
+                ", title='" + title + '\'' +
+                ", details='" + details + '\'' +
+                ", price=" + price +
+                ", ourprice=" + ourprice +
+                ", offer=" + offer +
+                ", isavailable=" + isavailable +
+                ", subcategory=" + subcategory +
+                ", imagename='" + imagename + '\'' +
+                ", isactive=" + isactive +
+                ", created='" + created + '\'' +
+                ", createdby=" + createdby +
+                ", modified='" + modified + '\'' +
+                ", modifiedby=" + modifiedby +
+                ", RowCount=" + RowCount +
+                ", quantity=" + quantity +
+                ", totalamount=" + totalamount +
+                '}';
     }
 }

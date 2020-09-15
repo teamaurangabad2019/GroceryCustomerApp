@@ -108,6 +108,7 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
                 .into(holder.img_title);
 
         holder.iv_add.setVisibility(View.GONE);
+
         holder.iv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +150,6 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
             }
         });
-
 
         if (dbHelper.alreadyExistProductEntry(item.getProductid(), prefManager.getUSER_ID()))
         {
@@ -310,7 +310,6 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
 
     }
-
 
     private void addQuantity(ProductModel item)
     {
