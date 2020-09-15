@@ -6,205 +6,239 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <RelativeLayout
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!--region progress bar-->
-        <LinearLayout
-            android:id="@+id/lyt_progress"
-            android:layout_width="wrap_content"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/spacing_medium"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:id="@+id/parentlayout"
+            >
 
-            <TextView
+            <!--region progress bar-->
+            <LinearLayout
+                android:id="@+id/lyt_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_large"
-                android:text="Please Wait...."
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/colorPrimaryDark" />
-
-            <ProgressBar
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="true" />
-
-        </LinearLayout>
-        <!--endregion-->
-
-
-        <!--region Toolbar Start-->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginLeft="-8dp"
-            android:background="@color/colorPrimary"
-            android:gravity="top">
-
-            <RelativeLayout
-                android:id="@+id/replaceToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/spacing_medium"
+                android:orientation="vertical"
                 android:visibility="gone">
 
-
-                <EditText
-                    android:id="@+id/toolbarEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="35dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:textColor="@color/colorTextWhite"
-                    android:hint="Type"/>
-
-
-                <View
-                    android:id="@+id/viewReplaceClear"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/ic_clear_black_24dp" />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/originalToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
-                    android:id="@+id/viewMenuIconBack"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp"
-                    android:background="@drawable/ic_arrow_back"
-                    android:backgroundTint="@color/colorTextWhite"
-                    android:visibility="visible" />
-
                 <TextView
-                    android:id="@+id/txtTitleBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/viewMenuIconBack"
-                    android:text="Category"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/toolbarText" />
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:text="Please Wait...."
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <ProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true" />
+
+            </LinearLayout>
+            <!--endregion-->
 
 
-                <View
-                    android:id="@+id/viewSearch"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/iv_add"
-                    android:background="@drawable/ic_search"
-                    android:backgroundTint="@color/colorTextWhite" />
+            <!--region Toolbar Start-->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginLeft="-8dp"
+                android:background="@color/colorPrimary"
+                android:gravity="top">
 
-                <ImageView
-                    android:id="@+id/iv_add"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/ic_add"
-                    android:visibility="gone"
-                    android:layout_toLeftOf="@+id/badgeLayout"
-                    android:backgroundTint="@color/colorTextWhite" />
+                <RelativeLayout
+                    android:id="@+id/replaceToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
 
-                <com.steelkiwi.library.view.BadgeHolderLayout
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/badgeLayout"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    app:bhl_default_badge_background="@color/colorAccent"
-                    app:bhl_text_color="@android:color/white"
-                    app:bhl_text_size="12sp"
-                    app:bhl_badge_radius="10dp"
-                    >
+
+                    <EditText
+                        android:id="@+id/toolbarEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="35dp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="@color/colorTextWhite"
+                        android:hint="Type"/>
+
+
+                    <View
+                        android:id="@+id/viewReplaceClear"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/ic_clear_black_24dp" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/originalToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <View
+                        android:id="@+id/viewMenuIconBack"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/ic_arrow_back"
+                        android:backgroundTint="@color/colorTextWhite"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/txtTitleBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/viewMenuIconBack"
+                        android:text="Category"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/toolbarText" />
+
+
+                    <View
+                        android:id="@+id/viewSearch"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/iv_add"
+                        android:background="@drawable/ic_search"
+                        android:backgroundTint="@color/colorTextWhite" />
 
                     <ImageView
-                        android:id="@+id/iv_cart"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_shopping" />
+                        android:id="@+id/iv_add"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_add"
+                        android:visibility="gone"
+                        android:layout_toLeftOf="@+id/badgeLayout"
+                        android:backgroundTint="@color/colorTextWhite" />
 
-                </com.steelkiwi.library.view.BadgeHolderLayout>
+                    <com.steelkiwi.library.view.BadgeHolderLayout
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/badgeLayout"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        app:bhl_default_badge_background="@color/colorAccent"
+                        app:bhl_text_color="@android:color/white"
+                        app:bhl_text_size="12sp"
+                        app:bhl_badge_radius="10dp"
+                        >
 
-            </RelativeLayout>
-        </androidx.appcompat.widget.Toolbar>
-        <!--endregion-->
+                        <ImageView
+                            android:id="@+id/iv_cart"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/ic_shopping" />
+
+                    </com.steelkiwi.library.view.BadgeHolderLayout>
+
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+            <!--endregion-->
 
 
-        <TextView
-            android:id="@+id/selectCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Select Category"
-            android:layout_below="@id/toolbar"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginTop="@dimen/padding_10"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/selectCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Select Category"
+                android:layout_below="@id/toolbar"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/padding_10"
+                android:visibility="gone"/>
 
-        <Spinner
-            android:id="@+id/sp_category"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="5dp"
-            android:spinnerMode="dialog"
-            android:layout_below="@id/selectCategory"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:visibility="gone"/>
+            <Spinner
+                android:id="@+id/sp_category"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:spinnerMode="dialog"
+                android:layout_below="@id/selectCategory"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_categorylist"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_categorylist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_below="@id/sp_category"
+                android:layout_margin="15dp"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floating_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/padding_10"
+                android:elevation="8dp"
+                android:padding="6dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/pencil"
+                app:backgroundTint="@android:color/white"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_below="@id/sp_category"
-            android:layout_margin="15dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/padding_10"
-            android:elevation="8dp"
-            android:padding="6dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/pencil"
-            app:backgroundTint="@android:color/white"
-            android:visibility="gone" />
-
-    </RelativeLayout>
+            android:id="@+id/childlayout"
+            android:visibility="gone">
 
 
-</LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_height="200dp"
+                android:layout_width="200dp"
+                android:src="@drawable/errorimage"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#ffffff"
+                android:layout_centerHorizontal="true"
+                android:padding="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/img"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="www.teammandroid.in"
+                android:textAlignment="center"
+                android:layout_below="@+id/img"
+                android:id="@+id/txt_error"
+                android:textColor="@color/colorPrimary"/>
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
