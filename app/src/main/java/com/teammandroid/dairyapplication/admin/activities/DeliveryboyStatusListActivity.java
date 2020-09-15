@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.androidnetworking.error.ANError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -54,18 +56,11 @@ public class DeliveryboyStatusListActivity extends AppCompatActivity implements 
 
     PrefManager prefManager;
 
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
 
-    ImageView img_openDrawer;
+    SwipeRefreshLayout swipeLayout;
 
-    TextView txt_logout;
-
-    DeliveryboyStatusModel statusModel;
-    DrawerLayout drl_Opener;
-    RelativeLayout rl_addHomeProduct;
-    RelativeLayout rl_paymentHist;
-    RelativeLayout rl_profile;
-    RelativeLayout rl_home;
-    RelativeLayout rl_profileChnage;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -86,7 +81,26 @@ public class DeliveryboyStatusListActivity extends AppCompatActivity implements 
 
             getOrderList(prefManager.getUSER_ID());
         }
-        // getOrderList(35);
+
+        swipeLayout = findViewById(R.id.swipe_container);
+        // Adding Listener
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+
+                getOrderListWithoutDialog(prefManager.getUSER_ID());
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        // Stop animation (This will be after 3 seconds)
+                        swipeLayout.setRefreshing(false);
+
+                    }
+                }, 4000); // Delay in millis
+            }
+        });
+
     }
 
     private void getOrderList(int DeliveryboyId) {
@@ -115,43 +129,36 @@ public class DeliveryboyStatusListActivity extends AppCompatActivity implements 
                                 // lyt_progress_reg.setVisibility(View.GONE);
                                 progressDialog.dismiss();
                                 Log.e("ANErrorTeacher", anError.getMessage());
-                                showCustomDialogNoRecord();
-                                //Utility.showErrorMessage(AssignSubjecttoTeacherActivity.this, "anError " + anError.getMessage());
+                                //  showCustomDialogNoRecord();
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 //  lyt_progress_reg.setVisibility(View.GONE);
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(DeliveryboyStatusListActivity.this, e.getMessage());
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
                             }
                         });
             } else {
-                Utility.showErrorMessage(DeliveryboyStatusListActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
             progressDialog.dismiss();
-            Utility.showErrorMessage(DeliveryboyStatusListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
         }
     }
-
-
-    /*private void getOrderList() {
+    private void getOrderListWithoutDialog(int DeliveryboyId) {
         try {
             if (Utility.isNetworkAvailable(getApplicationContext())) {
 
-                progressDialog.setMessage("Please Wait...");
-                progressDialog.setCancelable(false);
-                // progressDialog.setProgressStyle(R.id.abbreviationsBar);
-                progressDialog.show();
 
                 OrderServices.getInstance(getApplicationContext()).
-                        FetchOrderAll(new ApiStatusCallBack<ArrayList<DeliveryboyStatusModel>>() {
+                        FetchOrderusingUserid(DeliveryboyId,new ApiStatusCallBack<ArrayList<DeliveryboyStatusModel>>() {
                             @Override
                             public void onSuccess(ArrayList<DeliveryboyStatusModel> userModels) {
 
-                                progressDialog.dismiss();
                                 mList = userModels;
                                 BindList(userModels);
                                 //user = response.get(0);
@@ -161,28 +168,25 @@ public class DeliveryboyStatusListActivity extends AppCompatActivity implements 
                             @Override
                             public void onError(ANError anError) {
                                 // lyt_progress_reg.setVisibility(View.GONE);
-                                progressDialog.dismiss();
                                 Log.e("ANErrorTeacher", anError.getMessage());
-                                showCustomDialogNoRecord();
-                                //Utility.showErrorMessage(AssignSubjecttoTeacherActivity.this, "anError " + anError.getMessage());
+                                //  showCustomDialogNoRecord();
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 //  lyt_progress_reg.setVisibility(View.GONE);
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(DeliveryboyStatusListActivity.this, e.getMessage());
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
                             }
                         });
             } else {
-                Utility.showErrorMessage(DeliveryboyStatusListActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
             }
         } catch (Exception ex) {
-            //  lyt_progress_reg.setVisibility(View.GONE);
-            progressDialog.dismiss();
-            Utility.showErrorMessage(DeliveryboyStatusListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
         }
-    }*/
+    }
 
 
     private void BindList(final ArrayList<DeliveryboyStatusModel> mUserList) {
@@ -260,29 +264,15 @@ public class DeliveryboyStatusListActivity extends AppCompatActivity implements 
         iv_backprofile.setOnClickListener(this);
 
 
-        rl_profileChnage =  findViewById(R.id.rl_profileChnage);
-        rl_profileChnage.setOnClickListener(this);
-
-        drl_Opener =  findViewById(R.id.drl_Opener);
-
-
-        img_openDrawer =  findViewById(R.id.img_openDrawer);
-        img_openDrawer.setOnClickListener(this);
-
-        rl_paymentHist =  findViewById(R.id.rl_paymentHist);
-        rl_paymentHist.setOnClickListener(this);
-
-        rl_home =  findViewById(R.id.rl_home);
-        rl_home.setOnClickListener(this);
-
-        txt_logout =  findViewById(R.id.txt_logout);
-        txt_logout.setOnClickListener(this);
-
         tv_toolbar_title =  findViewById(R.id.tv_toolbar_title);
         prefManager = new PrefManager(DeliveryboyStatusListActivity.this);
 
         rv_stafflist = findViewById(R.id.rv_stafflist);
         progressDialog = new ProgressDialog(DeliveryboyStatusListActivity.this);
+
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
 
     }
 
@@ -300,74 +290,8 @@ public class DeliveryboyStatusListActivity extends AppCompatActivity implements 
                 break;
 
 
-
-            case R.id.img_openDrawer:
-                drl_Opener.openDrawer(Gravity.LEFT);
-                break;
-
-
-            case R.id.rl_paymentHist:
-                drl_Opener.closeDrawer(Gravity.LEFT);
-                // Utility.launchActivity(DeliveryboyOrderListActivity.this, DeliveryboyListActivity.class,false);
-                Toast.makeText(getApplicationContext(),"CLick here",Toast.LENGTH_SHORT).show();
-                break;
-
-
-             case R.id.rl_profileChnage:
-                drl_Opener.closeDrawer(Gravity.LEFT);
-                 if (prefManager.getUSER_ID() > 0)
-                 {
-                     Utility.launchActivity(DeliveryboyStatusListActivity.this, ShowProfileActivity.class,false);
-                 }
-                 else {
-                     Toast.makeText(getApplicationContext(), "You have not verified OTP yet !!", Toast.LENGTH_SHORT).show();
-                 }
-                break;
-
-            case R.id.rl_home:
-                drl_Opener.closeDrawer(Gravity.LEFT);
-                // Utility.launchActivity(DeliveryboyOrderListActivity.this, DeliveryboyListActivity.class,false);
-                //Toast.makeText(getApplicationContext(),"CLick here",Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.txt_logout:
-                showCustomDialogLogout();
-                break;
         }
     }
 
-    private void showCustomDialogLogout() {
-        // this.correct = correct;
-        resultbox = new Dialog(DeliveryboyStatusListActivity.this);
-        resultbox.setContentView(R.layout.custom_dialog);
-        // resultbox.setCanceledOnTouchOutside(false);
-        Button btn_finish = (Button) resultbox.findViewById(R.id.btn_finish);
-        Button btn_cancel = (Button) resultbox.findViewById(R.id.btn_resume);
-        TextView text_assign = resultbox.findViewById(R.id.text_title);
-
-        text_assign.setText("Are you sure you want to exit ?");
-
-        btn_finish.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                resultbox.cancel();
-                SessionHelper sessionManager=new SessionHelper(DeliveryboyStatusListActivity.this);
-                sessionManager.logoutUser();
-                prefManager.setROLE_ID(7);
-                Utility.launchActivity(DeliveryboyStatusListActivity.this,SelectRoleActivity.class,false);
-                finish();
-            }
-        });
-
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resultbox.cancel();
-            }
-        });
-
-        resultbox.show();
-    }
 
 }

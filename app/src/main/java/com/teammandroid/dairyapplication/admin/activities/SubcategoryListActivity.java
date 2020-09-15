@@ -75,6 +75,10 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
     CategoryModel categoryModel;
     TextView txtTitleBar;
     SwipeRefreshLayout swipeLayout;
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,25 +171,33 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(SubcategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(SubcategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 progressDialog.dismiss();
                                 Log.e(TAG, "exc " + e.getMessage());
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
 
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(SubcategoryListActivity.this, "Could not connect to the internet");
+                //   Utility.showErrorMessage(SubcategoryListActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
             progressDialog.dismiss();
-            Utility.showErrorMessage(SubcategoryListActivity.this, ex.getMessage());
+            // Utility.showErrorMessage(SubcategoryListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
     private void subcategoryListWithoutDialog(int Categoryid) {
@@ -204,23 +216,32 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
                             @Override
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
-                                Utility.showErrorMessage(SubcategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(SubcategoryListActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 Log.e(TAG, "exc " + e.getMessage());
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
 
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(SubcategoryListActivity.this, "Could not connect to the internet");
+                // Utility.showErrorMessage(SubcategoryListActivity.this, "Could not connect to the internet");
+
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
-            Utility.showErrorMessage(SubcategoryListActivity.this, ex.getMessage());
+            //  Utility.showErrorMessage(SubcategoryListActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
 
@@ -280,6 +301,11 @@ public class SubcategoryListActivity extends AppCompatActivity implements View.O
         txtTitleBar =   findViewById(R.id.txtTitleBar);
         progressDialog=new ProgressDialog(SubcategoryListActivity.this);
         activity= SubcategoryListActivity.this;
+
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
+
     }
 
     private void btnlistener() {

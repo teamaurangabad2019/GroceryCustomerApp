@@ -7,103 +7,106 @@
     android:layout_height="match_parent"
     tools:context="com.teammandroid.dairyapplication.wishlist.WishlistActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!--region Toolbar Start-->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginLeft="-8dp"
-            android:gravity="top">
-
-            <RelativeLayout
-                android:id="@+id/replaceToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-
-                <View
-                    android:id="@+id/viewReplaceBack"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/ic_arrow_back" />
-
-
-                <EditText
-                    android:id="@+id/toolbarEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="35dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:textColor="@color/colorTextWhite" />
-
-
-                <View
-                    android:id="@+id/viewReplaceClear"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/ic_clear_black_24dp" />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/originalToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
-                    android:id="@+id/viewMenuIconBack"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp"
-                    android:background="@drawable/ic_arrow_back"
-                    android:backgroundTint="@color/colorTextWhite" />
-
-                <TextView
-                    android:id="@+id/txtTitleBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/viewMenuIconBack"
-                    android:text="Wishlist"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/toolbarText" />
-
-
-                <View
-                    android:id="@+id/viewHome"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/ic_home_black_24dp"
-                    android:backgroundTint="@color/colorTextWhite" />
-
-            </RelativeLayout>
-        </androidx.appcompat.widget.Toolbar>
-        <!--endregion-->
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/grey_5"
-        android:layout_below="@id/appBarLayout">
+        android:id="@+id/parentlayout"
+        android:visibility="visible"
+        >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--region Toolbar Start-->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginLeft="-8dp"
+                android:gravity="top">
+
+                <RelativeLayout
+                    android:id="@+id/replaceToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <View
+                        android:id="@+id/viewReplaceBack"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/ic_arrow_back" />
+
+
+                    <EditText
+                        android:id="@+id/toolbarEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="35dp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="@color/colorTextWhite" />
+
+
+                    <View
+                        android:id="@+id/viewReplaceClear"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/ic_clear_black_24dp" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/originalToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <View
+                        android:id="@+id/viewMenuIconBack"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/ic_arrow_back"
+                        android:backgroundTint="@color/colorTextWhite" />
+
+                    <TextView
+                        android:id="@+id/txtTitleBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/viewMenuIconBack"
+                        android:text="Wishlist"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/toolbarText" />
+
+
+                    <View
+                        android:id="@+id/viewHome"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:visibility="gone"
+                        android:background="@drawable/ic_home_black_24dp"
+                        android:backgroundTint="@color/colorTextWhite" />
+
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+            <!--endregion-->
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_cart"
@@ -112,7 +115,40 @@
             android:background="@color/grey_3"
             android:paddingTop="@dimen/padding_10"
             android:scrollbars="vertical"
-            android:scrollingCache="true" />
+            android:scrollingCache="true"
+            android:layout_below="@+id/appBarLayout"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/childlayout"
+        android:visibility="gone">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_height="200dp"
+            android:layout_width="200dp"
+            android:src="@drawable/errorimage"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:padding="20dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/img"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="www.teammandroid.in"
+            android:textAlignment="center"
+            android:layout_below="@+id/img"
+            android:id="@+id/txt_error"
+            android:textColor="@color/colorPrimary"/>
+
 
     </RelativeLayout>
 

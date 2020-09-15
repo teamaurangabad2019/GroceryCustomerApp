@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,8 +42,9 @@ public class SplashActivity extends AppCompatActivity {
     double version_code;
 
     Handler handler;
-    Dialog resultbox;
 
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,9 @@ public class SplashActivity extends AppCompatActivity {
 
         sessionHelper = new SessionHelper(SplashActivity.this);
         prefManager = new PrefManager(SplashActivity.this);
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
 
         // current version
         PackageManager manager = getPackageManager();
@@ -100,22 +105,30 @@ public class SplashActivity extends AppCompatActivity {
                             @Override
                             public void onError(ANError anError) {
                                 Log.e("CheckReponseanError", "" + anError.getMessage());
-                                Utility.showErrorMessage(SplashActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                // Utility.showErrorMessage(SplashActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,anError.getMessage());
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 Log.e("CheckReponseUnknown", "Called");
                                 //   Utility.showErrorMessage(getActivity(), e.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,e.getMessage());
+
                             }
                         });
             } else {
-                Utility.showErrorMessage(SplashActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                //  Utility.showErrorMessage(SplashActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                Utility.setError(parentlayout,childlayout,txt_error,"Please check internet connection");
+
             }
         } catch (Exception ex) {
             Log.e("CheckReponseOther", "Called");
             Log.e("GetVideoPackages", "InsideGetVideoPackagesExtra" + ex);
-            Utility.showErrorMessage(SplashActivity.this, "No record found", Snackbar.LENGTH_LONG);
+            //Utility.showErrorMessage(SplashActivity.this, "No record found", Snackbar.LENGTH_LONG);
+            Utility.setError(parentlayout,childlayout,txt_error,ex.getMessage());
+
         }
     }
 

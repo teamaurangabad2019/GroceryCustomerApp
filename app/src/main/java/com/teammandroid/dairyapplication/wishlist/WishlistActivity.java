@@ -8,13 +8,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.teammandroid.dairyapplication.R;
 import com.teammandroid.dairyapplication.admin.adapters.CartAdapter;
 import com.teammandroid.dairyapplication.admin.adapters.WishlistAdapter;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
+import com.teammandroid.dairyapplication.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -23,6 +27,8 @@ public class WishlistActivity extends AppCompatActivity implements View.OnClickL
     ArrayList<ProductModel> productModelslist;
     DatabaseHelper dbHelper;
     View viewMenuIconBack;
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +44,30 @@ public class WishlistActivity extends AppCompatActivity implements View.OnClickL
 
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(layoutManager);
-        WishlistAdapter adapter = new WishlistAdapter(this,productModelslist);
-        recyclerView.setAdapter(adapter);
+
+        Log.e( "onCreate: ", String.valueOf(productModelslist.size()));
+
+        if(productModelslist.size()==0)
+        {
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
+        }
+        else
+        {
+            WishlistAdapter adapter = new WishlistAdapter(this,productModelslist);
+            recyclerView.setAdapter(adapter);
+        }
+
     }
 
     private void initView() {
         dbHelper = new DatabaseHelper(WishlistActivity.this);
         viewMenuIconBack = findViewById(R.id.viewMenuIconBack);
+        viewMenuIconBack.setOnClickListener(this);
+
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
     }
 
 
@@ -117,6 +140,7 @@ public class WishlistActivity extends AppCompatActivity implements View.OnClickL
                     details, price, ourprice, offer, isavailable, subcategory, image, isactive, created, createdby, modified
                     , modifiedby, RowCount,0,0);
 
+            Log.e( "showProduct: ", String.valueOf(productModel.getProductid()));
             list.add(productModel);
 
         }
@@ -131,5 +155,10 @@ public class WishlistActivity extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
