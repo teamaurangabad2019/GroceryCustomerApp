@@ -1,10 +1,19 @@
 package com.teammandroid.dairyapplication.admin.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,14 +27,28 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.Network.AuthServices;
 import com.teammandroid.dairyapplication.Network.OrderProductServices;
@@ -45,12 +68,17 @@ import com.teammandroid.dairyapplication.utils.Constants;
 import com.teammandroid.dairyapplication.utils.PrefManager;
 import com.teammandroid.dairyapplication.utils.Utility;
 
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_2;
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_4;
 
-public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener {
+public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener, LocationListener {
 
     private static final String TAG = "CheckoutActivity";
     ArrayList<ProductModel> productModelslist;
@@ -95,6 +123,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
      * My Location
      */
     private RadioButton radio_id3;
+
     private RadioGroup groupradio;
     private CardView cv_list;
     /**
@@ -182,14 +211,27 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     String deliveryAmt;
     ArrayList product_array_list;
     Activity  activity;
-    
+
+    int paymentMode =0;
+
+    boolean isGPSEnable = false;
+    boolean isNetworkEnable = false;
+    double latitude, longitude;
+    LocationManager locationManager;
+    Location location;
+    ImageView iv_payment,iv_delivery;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         initView();
-
+        requestPermission();
         activity = CheckoutActivity.this;
+        iv_delivery.setBackgroundResource(R.drawable.ic_right_arrow);
+        iv_payment.setBackgroundResource(R.drawable.ic_right_arrow);
+
 
         deliveryAmt= tv_deliveryAmt.getText().toString();
         tv_subtotalAmt.setText("₹ "+String.valueOf(prefManager.getgrandTotal()));
@@ -205,8 +247,9 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         CheckoutCartAdapter adapter = new CheckoutCartAdapter(this, productModelslist);
         recyclerView.setAdapter(adapter);
 
-        prefManager.setSelect(0);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fn_getlocation();
+        }
         Log.e("TAG","prefUserid "+prefManager.getUSER_ID());
 
         GetUser(prefManager.getUSER_ID());
@@ -218,26 +261,24 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void onRadioButtonClicked(View view) {
+
+        RadioButton   radio_razorpay = (RadioButton) findViewById(R.id.radio_razorpay);
+        RadioButton  radio_cod = (RadioButton) findViewById(R.id.radio_cod);
+        RadioGroup  groupradio1 = (RadioGroup) findViewById(R.id.groupradio1);
+
+        // Is the current Radio Button checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
         switch (view.getId()) {
-            default:
-                break;
-            case R.id.radio_id1:
-                cv_pick_location.setVisibility(View.GONE);
 
-                break;
-
-            case R.id.radio_id2:
-                cv_pick_location.setVisibility(View.GONE);
-
+            case R.id.radio_razorpay:
+                if(checked)
+                    paymentMode =0;
                 break;
 
-            case R.id.radio_id3:
-                Toast.makeText(getApplicationContext(),"fdgdg" ,Toast.LENGTH_LONG).show();
-                //if (prefManager.getSelect()==0) {
-                    cv_pick_location.setVisibility(View.VISIBLE);
-                //}else {
-                //    cv_pick_location.setVisibility(View.GONE);
-               // }
+            case R.id.radio_cod:
+                if(checked)
+                    paymentMode =1;
                 break;
         }
     }
@@ -384,7 +425,11 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     private void initView() {
         tv_finalTotalAmt1 =  findViewById(R.id.tv_finalTotalAmt1);
         back_about = (ImageView) findViewById(R.id.back_about);
+        iv_payment = (ImageView) findViewById(R.id.iv_payment);
+        iv_delivery = (ImageView) findViewById(R.id.iv_delivery);
         back_about.setOnClickListener(this);
+        iv_delivery.setOnClickListener(this);
+        iv_payment.setOnClickListener(this);
         ll_layout2 =  findViewById(R.id.rl_layout2);
         ll_layout2.setOnClickListener(this);
         ll_layout1 =  findViewById(R.id.ll_layout1);
@@ -409,8 +454,9 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         radio_id2.setOnClickListener(this);
         radio_id3 = (RadioButton) findViewById(R.id.radio_id3);
         radio_id3.setOnClickListener(this);
+        radio_id3 = (RadioButton) findViewById(R.id.radio_id3);
+        radio_id3.setOnClickListener(this);
         groupradio = (RadioGroup) findViewById(R.id.groupradio);
-        groupradio.setOnClickListener(this);
         cv_list = (CardView) findViewById(R.id.cv_list);
         tv_pick_address = (TextView) findViewById(R.id.tv_pick_address);
         tv_pick_address.setOnClickListener(this);
@@ -460,6 +506,8 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tv_finalTotal:
                     ll_layout1.setVisibility(View.GONE);
                     ll_layout2.setVisibility(View.VISIBLE);
+               iv_delivery.setBackgroundResource(R.drawable.ic_check);
+               iv_payment.setBackgroundResource(R.drawable.ic_right_arrow);
                 break;
             case R.id.tv_payment:
                 break;
@@ -479,7 +527,11 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btn_pick:
                 break;
             case R.id.tv_proceed:
-                updateDialog();
+                //ll_layout1.setVisibility(View.GONE);
+                //ll_layout2.setVisibility(View.VISIBLE);
+                iv_payment.setBackgroundResource(R.drawable.ic_check);
+                iv_delivery.setBackgroundResource(R.drawable.ic_check);
+                updateDialog(paymentMode);
                 break;
             case R.id.iv_refresh:
                 break;
@@ -491,9 +543,35 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void onRadioButtonClicked1(View view) {
+        switch (view.getId()) {
+            default:
+                break;
+            case R.id.radio_id1:
+                cv_pick_location.setVisibility(View.GONE);
+
+                break;
+
+            case R.id.radio_id2:
+                cv_pick_location.setVisibility(View.GONE);
+
+                break;
+
+            case R.id.radio_id3:
+                Toast.makeText(CheckoutActivity.this,"Please click edit button ",Toast.LENGTH_LONG).show();
+                /*if (prefManager.getSelect()==0) {
+                    cv_pick_location.setVisibility(View.VISIBLE);
+                    prefManager.setSelect(1);
+                }else {
+                    cv_pick_location.setVisibility(View.GONE);
+                    prefManager.setSelect(0);
+                }*/
+                break;
+        }
     }
 
-    private void updateDialog() {
+    private void updateDialog(int paymentMode) {
+
+        Log.d(TAG,"paymentMode  "+paymentMode);
         final Dialog resultbox = new Dialog(CheckoutActivity.this);
         resultbox.setContentView(R.layout.staus_dialog);
         // resultbox.setCanceledOnTouchOutside(false);
@@ -713,4 +791,152 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         //  Log.e( "getQuantity: ", String.valueOf(tquantity));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void fn_getlocation() {
+        Toast.makeText(this, "Cureent location11111 :" +latitude+"\n"+longitude , Toast.LENGTH_LONG).show();
+
+        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isNetworkEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (!isGPSEnable && !isNetworkEnable) {
+
+        } else {
+
+            if (isNetworkEnable) {
+                location = null;
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    Activity#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for Activity#requestPermissions for more details.
+                    return;
+                }
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+                if (locationManager!=null){
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if (location!=null){
+
+                        Log.e("latitudeGgl",location.getLatitude()+"");
+                        Log.e("longitudeGgl",location.getLongitude()+"");
+
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+
+                        getCompleteAddressString(latitude,longitude);
+                        Toast.makeText(this, "Cureent location222 :" +latitude+"\n"+longitude , Toast.LENGTH_LONG).show();
+                        //fn_update(latitude,longitude,prefManager.getUSER_ID());
+                    }
+                }
+
+            }
+
+            if (isGPSEnable){
+                location = null;
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,0,this);
+                if (locationManager!=null){
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location!=null){
+                        // Log.e("latitude_service",location.getLatitude()+"");
+                        // Log.e("longitude_service",location.getLongitude()+"");
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                        //fn_update(latitude,longitude,prefManager.getUSER_ID());
+                    }
+                }
+            }
+
+        }
+    }
+
+
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+
+        String strAdd = "";
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.d("MyCurrentLocAddr", strReturnedAddress.toString());
+            } else {
+                Log.d("MyCurrentLocAddr", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("MyCurrentLocAddr", "Cannot get Address!");
+        }
+        return strAdd;
+    }
+
+
+    private void requestPermission() {
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                           // startService(new Intent(CheckoutActivity.this, MyLocationService.class));
+
+                            //Toast.makeText(getApplicationContext(), "All permissions are granted!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // show alert dialog navigating to Settings
+                            // showSettingsDialog();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+
+
+                }).
+                withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Toast.makeText(getApplicationContext(), "Error occurred! "+error, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }

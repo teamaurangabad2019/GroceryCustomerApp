@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -102,6 +103,9 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
         Log.e("CategoryListAdapter"," "+item.toString());
         holder.tv_title.setText(HoldersArrayList.get(position).getTitle());
         holder.tv_amount.setText(String.valueOf(HoldersArrayList.get(position).getDetails()));
+        holder.tv_ourprice.setText(String.valueOf(HoldersArrayList.get(position).getOurprice()));
+        holder.tv_ActualPrice.setText(String.valueOf(HoldersArrayList.get(position).getPrice()));
+        holder.tv_offer.setText(String.valueOf(HoldersArrayList.get(position).getOffer()));
         //holder.tv_reason.setText("Date: "+ExpenseHoldersArrayList.get(position).getDetails());
         Picasso.with(activity)
                 .load(URL_PRODUCT_IMG + item.getImagename())
@@ -223,6 +227,7 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tv_title, tv_amount, tv_reason,totalview;
+        TextView tv_ourprice, tv_ActualPrice, tv_offer;
         ImageView img_title;
         LinearLayout ll_add;
         ImageView iv_edit,iv_delete,iv_add,iv_remove,iv_addImg;
@@ -233,6 +238,9 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
         public MyViewHolder(View itemView) {
             super(itemView);
 
+            tv_offer = (TextView) itemView.findViewById(R.id.tv_offer);
+            tv_ActualPrice = (TextView) itemView.findViewById(R.id.tv_ActualPrice);
+            tv_ourprice = (TextView) itemView.findViewById(R.id.tv_ourprice);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_amount = (TextView) itemView.findViewById(R.id.tv_amount);
             tv_reason = (TextView) itemView.findViewById(R.id.tv_reason);
@@ -250,6 +258,9 @@ public class ProductViewListAdapter extends RecyclerView.Adapter<ProductViewList
 
             img_title =  itemView.findViewById(R.id.img_title);
             itemView.setOnClickListener(this); // bind the listener
+
+            tv_ActualPrice.setPaintFlags(tv_ActualPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         }
 
         @Override

@@ -13,7 +13,8 @@
         android:id="@+id/toolbarreg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_backprofile"
@@ -128,9 +129,14 @@
                     android:textSize="14sp"
                     android:inputType="textEmailAddress"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
                 <EditText
                     android:id="@+id/et_address"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
@@ -138,10 +144,110 @@
                     android:drawableTint="@color/colorPrimary"
                     android:drawablePadding="10dp"
                     android:hint="@string/location"
+                    android:layout_weight="5"
                     android:textColor="@color/colorBlack"
                     android:textSize="14sp"
                     android:inputType="text"/>
 
+                    <Button
+                        android:id="@+id/btn_pickEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                        android:drawablePadding="@dimen/padding_10"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:text="Pick"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0.2"
+                        android:paddingLeft="10dp"
+                        android:layout_gravity="center_vertical"/>
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_pick_location"
+                    android:elevation="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="4dp"
+                    android:paddingBottom="5dp"
+                    tools:targetApi="lollipop"
+                    app:cardElevation="@dimen/padding_5"
+                    android:layout_below="@id/cv_list"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp"
+                        android:padding="@dimen/padding_10">
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_vertical"
+                                android:text="Current Location"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_pick_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                                android:drawablePadding="10dp"
+                                android:gravity="center_vertical"
+                                android:text="Current Location"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="14sp" />
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                android:layout_marginTop="@dimen/padding_5"
+                                android:background="@color/grey_10">
+
+                                <fragment
+                                    android:id="@+id/map"
+                                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="start"
+                                    />
+
+                            </FrameLayout>
+
+                            <Button
+                                android:id="@+id/btn_pick"
+                                android:layout_width="wrap_content"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center_horizontal"
+                                android:text="Update Location"
+                                android:textAllCaps="false"
+                                android:textSize="14dp"
+                                android:layout_marginTop="10dp"
+                                android:textColor="@color/white"
+                                android:background="@color/grey_40"
+                                android:paddingLeft="@dimen/padding_10"
+                                android:paddingRight="@dimen/padding_10"/>
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+
+                </androidx.cardview.widget.CardView>
 
 
                 <Button

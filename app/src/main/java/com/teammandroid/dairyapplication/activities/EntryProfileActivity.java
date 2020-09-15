@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
 import com.androidnetworking.AndroidNetworking;
@@ -92,6 +93,9 @@ public class EntryProfileActivity extends AppCompatActivity implements View.OnCl
     private Bitmap bitmap;
     private Uri filePath;
 
+    Button btn_pickEdit;
+    CardView cv_pick_location;
+
     private UserModel userModel;
 
     public static final int RequestPermissionCode = 2;
@@ -119,6 +123,9 @@ public class EntryProfileActivity extends AppCompatActivity implements View.OnCl
         iv_male_avatar = (ImageView) findViewById(R.id.iv_male_avatar);
         iv_edit = (ImageView) findViewById(R.id.iv_edit);
         iv_edit.setOnClickListener(this);
+        btn_pickEdit =  findViewById(R.id.btn_pickEdit);
+        cv_pick_location =  findViewById(R.id.cv_pick_location);
+        btn_pickEdit.setOnClickListener(this);
         btn_submit = (Button) findViewById(R.id.btn_submit);
 
         et_fullname = (EditText) findViewById(R.id.et_fullname);
@@ -147,6 +154,17 @@ public class EntryProfileActivity extends AppCompatActivity implements View.OnCl
 
             case R.id.iv_backprofile:
 
+                break;
+
+            case R.id.btn_pickEdit:
+                if (prefManager.getSelect()==0) {
+                    prefManager.setSelect(1);
+                    cv_pick_location.setVisibility(View.VISIBLE);
+
+                }else {
+                    prefManager.setSelect(0);
+                    cv_pick_location.setVisibility(View.GONE);
+                }
                 break;
 
             case R.id.iv_edit:
