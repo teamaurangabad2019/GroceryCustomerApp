@@ -234,6 +234,9 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     BadgeHolderLayout badgeLayout;
     SwipeRefreshLayout swipeLayout;
 
+    RelativeLayout childlayout,parentlayout;
+    TextView txt_error;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -312,6 +315,16 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
             public void onRefresh() {
 
 
+                if(prefManager.getUSER_ID()==0)
+                {
+                    getCountForNotLogin();
+                }
+                else {
+
+                    getCount();
+
+                }
+
                 getCategoryWithoutDialog();
                 productListWithoutDialog(0);
                 new Handler().postDelayed(new Runnable() {
@@ -352,6 +365,8 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
         rl_track_order.setOnClickListener(this);
         rl_home.setOnClickListener(this);
         rl_wishlist.setOnClickListener(this);
+
+
     }
 
     private void bindView() {
@@ -403,6 +418,10 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
         progressDialog=new ProgressDialog(HomepageActivity.this);
         prefManager=new PrefManager(HomepageActivity.this);
+        childlayout=findViewById(R.id.childlayout);
+        parentlayout=findViewById(R.id.parentlayout);
+        txt_error=findViewById(R.id.txt_error);
+
     }
 
     /*private ArrayList<NewRequestDetailsModel> arrayListProduct() {
@@ -618,7 +637,8 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                                 // lyt_progress_employees.setVisibility(View.GONE);
                                 progressDialog.dismiss();
                                 Log.e("errorHome",""+anError);
-                                Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+                                // Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
 
                             }
 
@@ -626,15 +646,21 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                             public void onUnknownError(Exception e) {
                                 // lyt_progress_employees.setVisibility(View.GONE);
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(HomepageActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+                                // Utility.showErrorMessage(HomepageActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
                         });
 
             } else {
-                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                // Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                Utility.setError(parentlayout,childlayout,txt_error,"Could not connect to the internet");
+
             }
         } catch (Exception ex) {
-            Utility.showErrorMessage(HomepageActivity.this, ex.getMessage(), Snackbar.LENGTH_LONG);
+            //  Utility.showErrorMessage(HomepageActivity.this, ex.getMessage(), Snackbar.LENGTH_LONG);
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
 
@@ -784,23 +810,30 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                             public void onError(ANError anError) {
                                 Log.e("CheckReponseanError", ""+anError.getMessage());
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 Log.e("CheckReponseUnknown", "Called");
                                 progressDialog.dismiss();
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
                                 //   Utility.showErrorMessage(getActivity(), e.getMessage(), Snackbar.LENGTH_LONG);
                             }
                         });
             } else {
-                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                // Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                Utility.setError(parentlayout,childlayout,txt_error,"Please check internet connection");
+
             }
         }catch (Exception ex) {
             Log.e("CheckReponseOther", "Called");
             Log.e("GetVideoPackages","InsideGetVideoPackagesExtra"+ex);
-            Utility.showErrorMessage(HomepageActivity.this, "No record found", Snackbar.LENGTH_LONG);
+            // Utility.showErrorMessage(HomepageActivity.this, "No record found", Snackbar.LENGTH_LONG);
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
     private void getCategoryWithoutDialog() {
@@ -820,22 +853,30 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onError(ANError anError) {
                                 Log.e("CheckReponseanError", ""+anError.getMessage());
-                                Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(HomepageActivity.this, "Network:" + anError.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 Log.e("CheckReponseUnknown", "Called");
                                 //   Utility.showErrorMessage(getActivity(), e.getMessage(), Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
                         });
             } else {
-                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                //  Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet", Snackbar.LENGTH_LONG);
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         }catch (Exception ex) {
             Log.e("CheckReponseOther", "Called");
             Log.e("GetVideoPackages","InsideGetVideoPackagesExtra"+ex);
-            Utility.showErrorMessage(HomepageActivity.this, "No record found", Snackbar.LENGTH_LONG);
+            // Utility.showErrorMessage(HomepageActivity.this, "No record found", Snackbar.LENGTH_LONG);
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
 
@@ -886,7 +927,9 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
                                 progressDialog.dismiss();
-                                Utility.showErrorMessage(HomepageActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(HomepageActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
@@ -895,16 +938,22 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                                 Log.e(TAG, "exc " + e.getMessage());
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
 
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet");
+                //Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
             progressDialog.dismiss();
-            Utility.showErrorMessage(HomepageActivity.this, ex.getMessage());
+            // Utility.showErrorMessage(HomepageActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
     private void productListWithoutDialog(int Subcategoryid) {
@@ -921,23 +970,31 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onError(ANError anError) {
                                 Log.e(TAG, "ANError " + anError.getMessage());
-                                Utility.showErrorMessage(HomepageActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                //  Utility.showErrorMessage(HomepageActivity.this, "No Attachment found", Snackbar.LENGTH_LONG);
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                             }
 
                             @Override
                             public void onUnknownError(Exception e) {
                                 Log.e(TAG, "exc " + e.getMessage());
+                                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
                                 //Utility.showErrorMessage(CategoryListActivity.this, e.getMessage(), Snackbar.LENGTH_LONG);
 
                             }
 
                         });
             } else {
-                Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet");
+                // Utility.showErrorMessage(HomepageActivity.this, "Could not connect to the internet");
+                Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.internet));
+
             }
         } catch (Exception ex) {
             //  lyt_progress_reg.setVisibility(View.GONE);
-            Utility.showErrorMessage(HomepageActivity.this, ex.getMessage());
+            // Utility.showErrorMessage(HomepageActivity.this, ex.getMessage());
+            Utility.setError(parentlayout,childlayout,txt_error,getResources().getString(R.string.data_not_available));
+
         }
     }
 

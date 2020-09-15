@@ -34,5 +34,8 @@
     <string name="contact">contact</string>
     <string name="location">location</string>
 
+    <string name="internet">Please check internet connection</string>
+    <string name="data_not_available">data not available</string>
+
 
 </resources>
