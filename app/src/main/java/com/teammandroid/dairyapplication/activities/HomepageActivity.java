@@ -105,8 +105,6 @@ import static com.teammandroid.dairyapplication.offline.DatabaseHelper.QUANTITY_
 public class HomepageActivity extends AppCompatActivity implements View.OnClickListener,
         BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener
 {
-////////////////////////////////////////////////////////////
-    int a=0;
     RecyclerView recyclerView;
     private final static String TAG=HomepageActivity.class.getSimpleName();
     RecyclerView rv_home_video_pkg;
@@ -342,7 +340,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
 
     private void listener() {
 
-        int c=0;
+
         img_openDrawer.setOnClickListener(this);
         rl_profileChnage.setOnClickListener(this);
         rl_paymentHist.setOnClickListener(this);
@@ -370,7 +368,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void bindView() {
-        int nb=0;
+
         img_openDrawer = (ImageView) findViewById(R.id.img_openDrawer);
         img_whatsapp = (ImageView) findViewById(R.id.img_whatsapp);
         img_call = (ImageView) findViewById(R.id.img_call);
@@ -616,7 +614,7 @@ public class HomepageActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getSlider() {
-     int d=0;
+
         try {
             if (Utility.isNetworkAvailable(HomepageActivity.this)) {
                 progressDialog.setTitle("Please Wait...");
