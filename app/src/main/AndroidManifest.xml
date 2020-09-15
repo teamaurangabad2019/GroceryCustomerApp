@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".admin.activities.CheckoutActivity"></activity>
+        <activity android:name=".activities.MapActivity"></activity>
+        <activity android:name=".admin.activities.CheckoutActivity" />
         <activity android:name=".wishlist.WishlistActivity" />
         <activity android:name=".activities.ProductDetailsActivity" />
         <activity android:name=".admin.activities.ProductListActivity" />
@@ -62,9 +63,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDXxxOr5HVgSaT2dDVbilrCrQwHj-yESBg"/>
+            android:value="AIzaSyDXxxOr5HVgSaT2dDVbilrCrQwHj-yESBg" />
     </application>
 
-
-    <!--AIzaSyDXxxOr5HVgSaT2dDVbilrCrQwHj-yESBg-->
 </manifest>

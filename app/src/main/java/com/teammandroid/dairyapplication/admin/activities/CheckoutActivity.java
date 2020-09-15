@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,14 +33,18 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.androidnetworking.interfaces.UploadProgressListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -49,28 +52,22 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.squareup.picasso.Picasso;
 import com.teammandroid.dairyapplication.Network.AuthServices;
 import com.teammandroid.dairyapplication.Network.OrderProductServices;
 import com.teammandroid.dairyapplication.Network.OrderServices;
 import com.teammandroid.dairyapplication.R;
-
 import com.teammandroid.dairyapplication.activities.EditProfileActivity;
 import com.teammandroid.dairyapplication.activities.HomepageActivity;
-import com.teammandroid.dairyapplication.admin.adapters.CartAdapter;
+import com.teammandroid.dairyapplication.activities.MapActivity;
 import com.teammandroid.dairyapplication.admin.adapters.CheckoutCartAdapter;
 import com.teammandroid.dairyapplication.admin.model.ProductModel;
 import com.teammandroid.dairyapplication.interfaces.ApiStatusCallBack;
 import com.teammandroid.dairyapplication.model.Response;
 import com.teammandroid.dairyapplication.model.UserModel;
 import com.teammandroid.dairyapplication.offline.DatabaseHelper;
-import com.teammandroid.dairyapplication.utils.Constants;
 import com.teammandroid.dairyapplication.utils.PrefManager;
 import com.teammandroid.dairyapplication.utils.Utility;
 
-import org.json.JSONObject;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -78,7 +75,7 @@ import java.util.Locale;
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_2;
 import static com.teammandroid.dairyapplication.offline.DatabaseHelper.PMQUANTITY_4;
 
-public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener, LocationListener {
+public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener, LocationListener, OnMapReadyCallback {
 
     private static final String TAG = "CheckoutActivity";
     ArrayList<ProductModel> productModelslist;
@@ -111,20 +108,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
      */
     private TextView tv_mobile;
     private LinearLayout ll_details;
-    /**
-     * Home
-     */
-    private RadioButton radio_id1;
-    /**
-     * Work
-     */
-    private RadioButton radio_id2;
-    /**
-     * My Location
-     */
-    private RadioButton radio_id3;
 
-    private RadioGroup groupradio;
     private CardView cv_list;
     /**
      * Current Location
@@ -201,7 +185,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     private TextView tv_finalTotal;
     private TextView tv_finalTotalAmt1;
     private TextView tv_proceed;
-    private RelativeLayout rl_four,ll_layout2;
+    private RelativeLayout rl_four, ll_layout2;
     private LinearLayout ll_layout1;
     PrefManager prefManager;
     int tquantity;
@@ -209,18 +193,49 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     ProgressDialog progressDialog;
 
     String deliveryAmt;
+    String GrandTotal;
     ArrayList product_array_list;
-    Activity  activity;
+    Activity activity;
 
-    int paymentMode =0;
+    int paymentMode = 0;
 
     boolean isGPSEnable = false;
     boolean isNetworkEnable = false;
     double latitude, longitude;
     LocationManager locationManager;
     Location location;
-    ImageView iv_payment,iv_delivery;
+    ImageView iv_payment, iv_delivery;
+    /**
+     * Today
+     */
+    private RadioButton radio_today;
+    /**
+     * Tomorrow
+     */
+    private RadioButton radio_tomorrow;
+    private RadioGroup radio_group;
+    /**
+     * Morning 9 AM to 12 PM
+     */
+    private RadioButton radio_mrng;
+    /**
+     * Afternoon 1 PM to 2 PM
+     */
+    private RadioButton radio_noon1;
+    /**
+     * Afternoon 2 PM to 6 PM
+     */
+    private RadioButton radio_noon2;
+    /**
+     * Evening 7 PM to 9 PM
+     */
+    private RadioButton radio_evng;
+    private RadioGroup radio_group2;
 
+
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private static final int REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,11 +248,16 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         iv_payment.setBackgroundResource(R.drawable.ic_right_arrow);
 
 
-        deliveryAmt= tv_deliveryAmt.getText().toString();
-        tv_subtotalAmt.setText("₹ "+String.valueOf(prefManager.getgrandTotal()));
-        tv_finalTotalAmt1.setText("₹ "+String.valueOf(prefManager.getgrandTotal()));
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchLocation();
 
-        tv_finalTotalAmt.setText("₹ "+String.valueOf(prefManager.getgrandTotal()+deliveryAmt));
+        deliveryAmt = tv_deliveryAmt.getText().toString();
+        tv_subtotalAmt.setText("₹ " + String.valueOf(prefManager.getgrandTotal()));
+        tv_finalTotalAmt1.setText("₹ " + String.valueOf(prefManager.getgrandTotal()));
+
+
+        GrandTotal = prefManager.getgrandTotal() + deliveryAmt;
+        tv_finalTotalAmt.setText("₹ " + GrandTotal);
         productModelslist = showProduct();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         RecyclerView recyclerView = findViewById(R.id.recycler_view_cart);
@@ -250,11 +270,15 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fn_getlocation();
         }
-        Log.e("TAG","prefUserid "+prefManager.getUSER_ID());
+        Log.e("TAG", "prefUserid " + prefManager.getUSER_ID());
 
         GetUser(prefManager.getUSER_ID());
 
+        product_array_list = dbHelper.getAllCotacts(String.valueOf(prefManager.getUSER_ID()));
 
+        for (int i = 0; i < product_array_list.size(); i++) {
+            Log.e("pchk: ", product_array_list.get(i).toString());
+        }
         // productModelslist = getIntent().getParcelableExtra("productModelslist");
         //Log.d(TAG, "ffff " + productModelslist.getProductid());
 
@@ -262,9 +286,9 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
     public void onRadioButtonClicked(View view) {
 
-        RadioButton   radio_razorpay = (RadioButton) findViewById(R.id.radio_razorpay);
-        RadioButton  radio_cod = (RadioButton) findViewById(R.id.radio_cod);
-        RadioGroup  groupradio1 = (RadioGroup) findViewById(R.id.groupradio1);
+        RadioButton radio_razorpay = (RadioButton) findViewById(R.id.radio_razorpay);
+        RadioButton radio_cod = (RadioButton) findViewById(R.id.radio_cod);
+        RadioGroup groupradio1 = (RadioGroup) findViewById(R.id.groupradio1);
 
         // Is the current Radio Button checked?
         boolean checked = ((RadioButton) view).isChecked();
@@ -272,13 +296,16 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()) {
 
             case R.id.radio_razorpay:
-                if(checked)
-                    paymentMode =0;
+                if (checked)
+                    // Toast.makeText(getApplicationContext(),"raz",Toast.LENGTH_SHORT).show();
+                    paymentMode = 0;
                 break;
 
             case R.id.radio_cod:
-                if(checked)
-                    paymentMode =1;
+                if (checked)
+                    // Toast.makeText(getApplicationContext(),"radio_cod",Toast.LENGTH_SHORT).show();
+
+                    paymentMode = 1;
                 break;
         }
     }
@@ -350,7 +377,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
             ProductModel productModel = new ProductModel(productid, title,
                     details, price, ourprice, offer, isavailable, subcategory, image, isactive, created, createdby, modified
-                    , modifiedby, RowCount,0,0);
+                    , modifiedby, RowCount, 0, 0);
 
             list.add(productModel);
 
@@ -391,17 +418,17 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onSuccess(ArrayList<UserModel> response) {
                                 progressDialog.dismiss();
-                                Log.e("UserModel "," "+response.get(0).getUserid());
+                                Log.e("UserModel ", " " + response.get(0).getUserid());
 
-                                tv_address.setText("Address : "+response.get(0).getAddress());
-                                tv_mobile.setText("Mobile :"+ response.get(0).getMobile());
-                                tv_name.setText("Name :"+response.get(0).getFullname());
+                                tv_address.setText("Address : " + response.get(0).getAddress());
+                                tv_mobile.setText("Mobile :" + response.get(0).getMobile());
+                                tv_name.setText("Name :" + response.get(0).getFullname());
                             }
 
                             @Override
                             public void onError(ANError anError) {
                                 progressDialog.dismiss();
-                                Log.e("anErrorOTP",anError.getMessage());
+                                Log.e("anErrorOTP", anError.getMessage());
                                 Utility.showErrorMessage(CheckoutActivity.this, "Check your network Connection !");
                             }
 
@@ -423,18 +450,18 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initView() {
-        tv_finalTotalAmt1 =  findViewById(R.id.tv_finalTotalAmt1);
+        tv_finalTotalAmt1 = findViewById(R.id.tv_finalTotalAmt1);
         back_about = (ImageView) findViewById(R.id.back_about);
         iv_payment = (ImageView) findViewById(R.id.iv_payment);
         iv_delivery = (ImageView) findViewById(R.id.iv_delivery);
         back_about.setOnClickListener(this);
         iv_delivery.setOnClickListener(this);
         iv_payment.setOnClickListener(this);
-        ll_layout2 =  findViewById(R.id.rl_layout2);
+        ll_layout2 = findViewById(R.id.rl_layout2);
         ll_layout2.setOnClickListener(this);
-        ll_layout1 =  findViewById(R.id.ll_layout1);
+        ll_layout1 = findViewById(R.id.ll_layout1);
         ll_layout1.setOnClickListener(this);
-        tv_proceed =  findViewById(R.id.tv_proceed);
+        tv_proceed = findViewById(R.id.tv_proceed);
         tv_proceed.setOnClickListener(this);
         tv_delivery = (TextView) findViewById(R.id.tv_delivery);
         tv_delivery.setOnClickListener(this);
@@ -448,15 +475,6 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         tv_address = (TextView) findViewById(R.id.tv_address);
         tv_mobile = (TextView) findViewById(R.id.tv_mobile);
         ll_details = (LinearLayout) findViewById(R.id.ll_details);
-        radio_id1 = (RadioButton) findViewById(R.id.radio_id1);
-        radio_id1.setOnClickListener(this);
-        radio_id2 = (RadioButton) findViewById(R.id.radio_id2);
-        radio_id2.setOnClickListener(this);
-        radio_id3 = (RadioButton) findViewById(R.id.radio_id3);
-        radio_id3.setOnClickListener(this);
-        radio_id3 = (RadioButton) findViewById(R.id.radio_id3);
-        radio_id3.setOnClickListener(this);
-        groupradio = (RadioGroup) findViewById(R.id.groupradio);
         cv_list = (CardView) findViewById(R.id.cv_list);
         tv_pick_address = (TextView) findViewById(R.id.tv_pick_address);
         tv_pick_address.setOnClickListener(this);
@@ -494,6 +512,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         progressDialog = new ProgressDialog(CheckoutActivity.this);
         dbHelper = new DatabaseHelper(CheckoutActivity.this);
         prefManager = new PrefManager(CheckoutActivity.this);
+
     }
 
     @Override
@@ -502,29 +521,23 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
             default:
                 break;
             case R.id.back_about:
+                onBackPressed();
                 break;
             case R.id.tv_finalTotal:
-                    ll_layout1.setVisibility(View.GONE);
-                    ll_layout2.setVisibility(View.VISIBLE);
-               iv_delivery.setBackgroundResource(R.drawable.ic_check);
-               iv_payment.setBackgroundResource(R.drawable.ic_right_arrow);
+                ll_layout1.setVisibility(View.GONE);
+                ll_layout2.setVisibility(View.VISIBLE);
+                iv_delivery.setBackgroundResource(R.drawable.ic_check);
+                iv_payment.setBackgroundResource(R.drawable.ic_right_arrow);
                 break;
             case R.id.tv_payment:
                 break;
             case R.id.iv_edit:
-                Utility.launchActivity(CheckoutActivity.this, EditProfileActivity.class,false);
+                Utility.launchActivity(CheckoutActivity.this, EditProfileActivity.class, false);
                 break;
-            case R.id.radio_id1:
-                break;
-            case R.id.radio_id2:
-                break;
-            case R.id.radio_id3:
-                break;
-            case R.id.groupradio:
-                break;
-            case R.id.tv_pick_address:
+             case R.id.tv_pick_address:
                 break;
             case R.id.btn_pick:
+                Utility.launchActivity(CheckoutActivity.this, MapActivity.class, false);
                 break;
             case R.id.tv_proceed:
                 //ll_layout1.setVisibility(View.GONE);
@@ -543,9 +556,13 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void onRadioButtonClicked1(View view) {
+        RadioButton radio_id1 = (RadioButton) findViewById(R.id.radio_id1);
+        RadioButton radio_id2 = (RadioButton) findViewById(R.id.radio_id2);
+        RadioButton radio_id3 = (RadioButton) findViewById(R.id.radio_id3);
+        RadioGroup groupradio = (RadioGroup) findViewById(R.id.groupradio);
+
         switch (view.getId()) {
-            default:
-                break;
+
             case R.id.radio_id1:
                 cv_pick_location.setVisibility(View.GONE);
 
@@ -557,21 +574,64 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.radio_id3:
-                Toast.makeText(CheckoutActivity.this,"Please click edit button ",Toast.LENGTH_LONG).show();
-                /*if (prefManager.getSelect()==0) {
-                    cv_pick_location.setVisibility(View.VISIBLE);
-                    prefManager.setSelect(1);
-                }else {
-                    cv_pick_location.setVisibility(View.GONE);
-                    prefManager.setSelect(0);
-                }*/
+                cv_pick_location.setVisibility(View.VISIBLE);
+
                 break;
+        }
+    }
+
+    public void onDayTime(View view) {
+
+        radio_today = (RadioButton) findViewById(R.id.radio_today);
+        radio_tomorrow = (RadioButton) findViewById(R.id.radio_tomorrow);
+        radio_group = (RadioGroup) findViewById(R.id.radio_group);
+
+        switch (view.getId()) {
+            default:
+                break;
+            case R.id.radio_today:
+
+                break;
+
+            case R.id.radio_tomorrow:
+
+                break;
+
+
+        }
+    }
+
+    public void onDeliveryTimeClicked(View view) {
+        radio_mrng = (RadioButton) findViewById(R.id.radio_mrng);
+        radio_noon1 = (RadioButton) findViewById(R.id.radio_noon1);
+        radio_noon2 = (RadioButton) findViewById(R.id.radio_noon2);
+        radio_evng = (RadioButton) findViewById(R.id.radio_evng);
+        radio_group2 = (RadioGroup) findViewById(R.id.radio_group2);
+        switch (view.getId()) {
+            default:
+                break;
+            case R.id.radio_mrng:
+
+                break;
+
+            case R.id.radio_noon1:
+
+                break;
+
+            case R.id.radio_noon2:
+                //Toast.makeText(CheckoutActivity.this, "Please click edit button ", Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.radio_evng:
+                //Toast.makeText(CheckoutActivity.this, "Please click edit button ", Toast.LENGTH_LONG).show();
+                break;
+
         }
     }
 
     private void updateDialog(int paymentMode) {
 
-        Log.d(TAG,"paymentMode  "+paymentMode);
+
         final Dialog resultbox = new Dialog(CheckoutActivity.this);
         resultbox.setContentView(R.layout.staus_dialog);
         // resultbox.setCanceledOnTouchOutside(false);
@@ -591,12 +651,13 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         LinearLayout btn_all = resultbox.findViewById(R.id.btn_all);
         LinearLayout ll_price = resultbox.findViewById(R.id.ll_price);
 
-        tv_totalAmt.setText(tv_deliveryAmt.getText().toString()+prefManager.getour_price());
-        txt_ourprice.setText(""+prefManager.getour_price());
-        txt_savedprice.setText(""+prefManager.getsaved_price());
+        tv_totalAmt.setText(tv_deliveryAmt.getText().toString() + prefManager.getour_price());
+        txt_ourprice.setText("" + prefManager.getour_price());
+        txt_savedprice.setText("" + prefManager.getsaved_price());
         tv_title.setText("Delivery Address");
         radio_id1.setText("Use Profile Address");
         radio_id2.setText("Change Address");
+        btn_resume.setText("Continue");
 
         radio_id3.setVisibility(View.GONE);
         radio_id1.setVisibility(View.VISIBLE);
@@ -654,9 +715,12 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                         Toast.makeText(CheckoutActivity.this, "Enter address", Toast.LENGTH_SHORT).show();
                         //  Utility.showErrorMessage(CheckoutActivity.this,"Please enter all the details !!");
                     } else {
+                        Log.d(TAG, "paymentMode  " + paymentMode + "userriD " + prefManager.getUSER_ID() + "date " + Utility.getCurrentDate()
+                                + "addr " + et1_address.getText().toString() + "ourprice " + Double.parseDouble(prefManager.getour_price()) + "savePrice "
+                                + Double.parseDouble(prefManager.getsaved_price()));
                         placeOrder(0, prefManager.getUSER_ID(), 0, 0,
                                 Utility.getCurrentDate(),
-                                et1_address.getText().toString(), 0, Double.parseDouble(prefManager.getour_price()),
+                                et1_address.getText().toString(), paymentMode, Double.parseDouble(prefManager.getour_price()),
                                 Double.parseDouble(prefManager.getsaved_price()));
 
                         resultbox.cancel();
@@ -674,13 +738,21 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
+                Log.d(TAG, "paymentMode  " + paymentMode + "userriD " + prefManager.getUSER_ID() + "date " + Utility.getCurrentDate()
+                        + "addr " + et1_address.getText().toString() + "ourprice " + Double.parseDouble(prefManager.getour_price()) + "savePrice "
+                        + Double.parseDouble(prefManager.getsaved_price()));
+
+                placeOrder(0, prefManager.getUSER_ID(), 0, 0,
+                        Utility.getCurrentDate(),
+                        et1_address.getText().toString(), paymentMode, Double.parseDouble(prefManager.getour_price()),
+                        Double.parseDouble(prefManager.getsaved_price()));
+
                 resultbox.cancel();
             }
         });
 
         resultbox.show();
     }
-
 
     private void placeOrder(int Orderid, int Userid, int Status, int Deliveryboyid, String Deliverydate,
                             String Address, int Paymentmode, double Totalprice, double Savedprice) {
@@ -695,11 +767,9 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onSuccess(Response response) {
                                 progressDialog.dismiss();
-                                Log.e(TAG, "response " + response.getMessage());
+                                Log.e(TAG, "response " + response.getMessage() + " " + response.getResult());
 
-
-
-                                Log.e("chk: ", product_array_list.toString());
+                                Log.e("chk: ", product_array_list.toString() + " " + response.getResult());
                                 for (int i = 0; i < product_array_list.size(); i++) {
 
                                     Log.e("productlist: ", product_array_list.get(i).toString());
@@ -737,6 +807,8 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        Toast.makeText(activity, "3333", Toast.LENGTH_SHORT).show();
+
         OrderProductServices.getInstance(CheckoutActivity.this).insertOrderProduct(
                 Orderproductid, Orderid, Productid, Quantity, Totalamount, LogedinUserId,
                 new ApiStatusCallBack<Response>() {
@@ -748,10 +820,11 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                         if (userModels.getHasError() == 1) {
                             progressDialog.dismiss();
                             Toast.makeText(activity, userModels.getMessage(), Toast.LENGTH_SHORT).show();
+
                         } else {
                             progressDialog.dismiss();
                             Utility.showErrorMessage(activity, userModels.getMessage());
-                            Utility.launchActivity(CheckoutActivity.this, HomepageActivity.class,true);
+                            Utility.launchActivity(CheckoutActivity.this, HomepageActivity.class, true);
                         }
                     }
 
@@ -785,6 +858,8 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         //tv.setText(String.valueOf(id));
         // double price =  item * item.getOurprice();
 
+        Toast.makeText(activity, "22222", Toast.LENGTH_SHORT).show();
+
         insertOrderProduct(0, oid,
                 pid, tquantity, 0, 1);
 
@@ -793,7 +868,6 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void fn_getlocation() {
-        Toast.makeText(this, "Cureent location11111 :" +latitude+"\n"+longitude , Toast.LENGTH_LONG).show();
 
         locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -816,30 +890,29 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                     return;
                 }
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
-                if (locationManager!=null){
+                if (locationManager != null) {
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if (location!=null){
+                    if (location != null) {
 
-                        Log.e("latitudeGgl",location.getLatitude()+"");
-                        Log.e("longitudeGgl",location.getLongitude()+"");
+                        Log.e("latitudeGgl", location.getLatitude() + "");
+                        Log.e("longitudeGgl", location.getLongitude() + "");
 
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
 
-                        getCompleteAddressString(latitude,longitude);
-                        Toast.makeText(this, "Cureent location222 :" +latitude+"\n"+longitude , Toast.LENGTH_LONG).show();
+                        getCompleteAddressString(latitude, longitude);
                         //fn_update(latitude,longitude,prefManager.getUSER_ID());
                     }
                 }
 
             }
 
-            if (isGPSEnable){
+            if (isGPSEnable) {
                 location = null;
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,0,this);
-                if (locationManager!=null){
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+                if (locationManager != null) {
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location!=null){
+                    if (location != null) {
                         // Log.e("latitude_service",location.getLatitude()+"");
                         // Log.e("longitude_service",location.getLongitude()+"");
                         latitude = location.getLatitude();
@@ -851,7 +924,6 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
         }
     }
-
 
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
 
@@ -869,6 +941,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                     strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                 }
                 strAdd = strReturnedAddress.toString();
+                tv_pick_address.setText(strAdd);
                 Log.d("MyCurrentLocAddr", strReturnedAddress.toString());
             } else {
                 Log.d("MyCurrentLocAddr", "No Address returned!");
@@ -880,7 +953,6 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         return strAdd;
     }
 
-
     private void requestPermission() {
         Dexter.withActivity(this)
                 .withPermissions(
@@ -891,7 +963,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                           // startService(new Intent(CheckoutActivity.this, MyLocationService.class));
+                            // startService(new Intent(CheckoutActivity.this, MyLocationService.class));
 
                             //Toast.makeText(getApplicationContext(), "All permissions are granted!", Toast.LENGTH_SHORT).show();
                         }
@@ -913,12 +985,30 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                 withErrorListener(new PermissionRequestErrorListener() {
                     @Override
                     public void onError(DexterError error) {
-                        Toast.makeText(getApplicationContext(), "Error occurred! "+error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error occurred! " + error, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .onSameThread()
                 .check();
     }
+
+    private void fetchLocation() {
+
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    currentLocation = location;
+                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                    assert supportMapFragment != null;
+                    supportMapFragment.getMapAsync(CheckoutActivity.this);
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -938,5 +1028,14 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng latLng = new LatLng(latitude, longitude);
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5));
+        googleMap.addMarker(markerOptions);
     }
 }

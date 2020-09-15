@@ -179,6 +179,7 @@ public class EditProfileActivity extends FragmentActivity implements View.OnClic
             }
         });
     }
+
     private void bindViews() {
         iv_backprofile = (ImageView) findViewById(R.id.iv_backprofile);
         iv_male_avatar = (ImageView) findViewById(R.id.iv_male_avatar);
@@ -232,7 +233,6 @@ public class EditProfileActivity extends FragmentActivity implements View.OnClic
 
             case R.id.btn_pick:
                 Log.d(TAG,strAdd);
-                Toast.makeText(this, "Cureent location11111 :" +strAdd, Toast.LENGTH_LONG).show();
 
                 et_address.setText(strAdd);
                 //updateUserProfile(fullname,strAdd,mobileNo,email);
@@ -544,7 +544,6 @@ public class EditProfileActivity extends FragmentActivity implements View.OnClic
                         // Drawing the marker at the coordinates
                         //drawMarker(point);
 
-                        Toast.makeText(this, "Cureent location222 :" +latitude+"\n"+longitude , Toast.LENGTH_LONG).show();
                         //fn_update(latitude,longitude,prefManager.getUSER_ID());
                     }
                 }
@@ -569,10 +568,7 @@ public class EditProfileActivity extends FragmentActivity implements View.OnClic
         }
     }
 
-
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
-
-
 
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {

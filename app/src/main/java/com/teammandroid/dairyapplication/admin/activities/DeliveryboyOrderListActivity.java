@@ -68,11 +68,10 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
 
         rl_status.setVisibility(View.VISIBLE);
         fb_create.setVisibility(View.GONE);
+        img_openDrawer.setVisibility(View.GONE);
 
         tv_toolbar_title.setText("Product List");
 
-
-        img_openDrawer.setVisibility(View.VISIBLE);
 
         deliveryboyStatusModel=getIntent().getParcelableExtra("DeliveryboyStatusModel");
         getOrderList(deliveryboyStatusModel.getOrderid(),deliveryboyStatusModel.getStatus(),deliveryboyStatusModel.getPaymentmode());
@@ -231,13 +230,12 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
         iv_staus2 =  findViewById(R.id.iv_staus2);
         iv_staus3 =  findViewById(R.id.iv_staus3);
 
-
         img_openDrawer =  findViewById(R.id.img_openDrawer);
         img_openDrawer.setOnClickListener(this);
 
 
-        txt_logout =  findViewById(R.id.txt_logout);
-        txt_logout.setOnClickListener(this);
+       // txt_logout =  findViewById(R.id.txt_logout);
+       // txt_logout.setOnClickListener(this);
 
         tv_toolbar_title =  findViewById(R.id.tv_toolbar_title);
         prefManager = new PrefManager(DeliveryboyOrderListActivity.this);
@@ -261,9 +259,9 @@ public class DeliveryboyOrderListActivity extends AppCompatActivity implements V
                 break;
 
 
-            case R.id.txt_logout:
+            /*case R.id.txt_logout:
                 showCustomDialogLogout();
-                break;
+                break;*/
 
         }
     }

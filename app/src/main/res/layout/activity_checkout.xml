@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_5">
 
-        <LinearLayout
+             <LinearLayout
             android:id="@+id/ll_navigation"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -118,13 +118,13 @@
         </LinearLayout>
 
             <!--Layout1-->
-        <LinearLayout
-            android:id="@+id/ll_layout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_below="@id/ll_navigation">
+            <LinearLayout
+                android:id="@+id/ll_layout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:layout_below="@id/ll_navigation">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_list"
@@ -301,12 +301,21 @@
                             android:textColor="@color/colorBlack"
                             android:textSize="14sp" />
 
-                      <LinearLayout
-                          android:layout_width="match_parent"
-                          android:layout_height="120dp"
-                          android:layout_marginTop="@dimen/padding_5"
-                          android:background="@color/grey_10"/>
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="@dimen/padding_5"
+                            android:background="@color/grey_10">
 
+                            <fragment
+                                android:id="@+id/map"
+                                android:name="com.google.android.gms.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="start"
+                                />
+
+                        </FrameLayout>
                         <Button
                             android:id="@+id/btn_pick"
                             android:layout_width="wrap_content"
@@ -645,13 +654,17 @@
                             android:layout_height="wrap_content"
                             android:text="Confirm"
                             android:textSize="16dp"
+                            android:layout_centerVertical="true"
                             android:background="@drawable/button_background"
                             android:drawableRight="@drawable/ic_check_black_24dp"
                             android:drawableTint="@color/colorWhite"
                             android:drawablePadding="@dimen/padding_10"
                             android:layout_alignParentRight="true"
                             android:textColor="@color/colorWhite"
-                            android:paddingLeft="@dimen/padding_20"/>
+                            android:paddingLeft="@dimen/padding_20"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="@dimen/padding_5"/>
 
                     </RelativeLayout>
 
@@ -663,13 +676,209 @@
             <!--End 1-->
 
             <!--Layout2-->
-         <RelativeLayout
+             <RelativeLayout
                 android:id="@+id/rl_layout2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_below="@id/ll_navigation">
+
+                 <androidx.cardview.widget.CardView
+                     android:id="@+id/cv_wallet"
+                     android:elevation="4dp"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     app:cardCornerRadius="4dp"
+                     android:paddingBottom="5dp"
+                     tools:targetApi="lollipop"
+                     android:layout_margin="5dp"
+                     app:cardElevation="@dimen/padding_5">
+
+                     <RelativeLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:padding="@dimen/padding_10">
+
+                         <ImageView
+                             android:id="@+id/iv_img"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:background="@drawable/ic_credit_card"
+                             android:layout_centerVertical="true"
+                             android:backgroundTint="@color/colorPrimary"/>
+
+                         <TextView
+                             android:id="@+id/txt_wallet"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:text="Wallet Balance"
+                             android:layout_marginLeft="@dimen/padding_20"
+                             android:textColor="@color/colorPrimary"
+                             android:layout_toRightOf="@id/iv_img"/>
+
+                         <TextView
+                             android:id="@+id/txt_Balance"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:text="Total Balance : 0.0 "
+                             android:layout_marginLeft="@dimen/padding_20"
+                             android:textColor="@color/colorBlack"
+                             android:layout_toRightOf="@id/iv_img"
+                             android:layout_marginTop="@dimen/padding_10"
+                             android:layout_below="@id/txt_wallet"/>
+
+
+                     </RelativeLayout>
+
+                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_time"
+                    android:elevation="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="4dp"
+                    android:paddingBottom="5dp"
+                    tools:targetApi="lollipop"
+                    android:layout_margin="5dp"
+                    app:cardElevation="@dimen/padding_5"
+                    android:layout_below="@id/cv_wallet">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/rl_time"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:padding="@dimen/padding_10">
+
+                            <TextView
+                                android:id="@+id/tv_txt_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_vertical"
+                                android:text="Select delivery Day"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp" />
+
+                            <RadioGroup
+                                android:id="@+id/radio_group"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="2"
+                                android:layout_below="@id/tv_txt_time"
+                                android:orientation="horizontal"
+                                android:visibility="visible"
+                                android:checkedButton="@+id/radio_cod">
+
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:id="@+id/radio_today"
+                                    android:text="Today"
+                                    android:layout_weight="1"
+                                    android:paddingLeft="@dimen/padding_10"
+                                    android:layout_marginRight="@dimen/padding_20"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:onClick="onDayTime"/>
+
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:id="@+id/radio_tomorrow"
+                                    android:text="Tomorrow"
+                                    android:layout_weight="1"
+                                    android:paddingLeft="@dimen/padding_10"
+                                    android:layout_marginRight="@dimen/padding_20"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:onClick="onDayTime"/>
+
+
+                            </RadioGroup>
+
+                            <TextView
+                                android:id="@+id/tv_delivery_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center_vertical"
+                                android:text="Delivery Time"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp" />
+
+                            <RadioGroup
+                                android:id="@+id/radio_group2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:visibility="visible"
+                                android:checkedButton="@+id/radio_cod">
+
+
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:id="@+id/radio_mrng"
+                                    android:text="Morning 9 AM to 12 PM"
+                                    android:paddingLeft="@dimen/padding_10"
+                                    android:layout_marginRight="@dimen/padding_20"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:onClick="onDeliveryTimeClicked"/>
+
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:id="@+id/radio_noon1"
+                                    android:text="Afternoon 1 PM to 2 PM"
+                                    android:paddingLeft="@dimen/padding_10"
+                                    android:layout_marginRight="@dimen/padding_20"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:onClick="onDeliveryTimeClicked"/>
+
+                                 <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:id="@+id/radio_noon2"
+                                     android:text="Afternoon 2 PM to 6 PM"
+                                     android:paddingLeft="@dimen/padding_10"
+                                     android:layout_marginRight="@dimen/padding_20"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:onClick="onDeliveryTimeClicked"/>
+
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:id="@+id/radio_evng"
+                                    android:text="Evening 7 PM to 9 PM"
+                                    android:paddingLeft="@dimen/padding_10"
+                                    android:layout_marginRight="@dimen/padding_20"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:onClick="onDeliveryTimeClicked"/>
+
+
+                            </RadioGroup>
+
+
+                        </LinearLayout>
+
+
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv_list1"
@@ -681,7 +890,7 @@
                     tools:targetApi="lollipop"
                     android:layout_margin="5dp"
                     app:cardElevation="@dimen/padding_5"
-                    >
+                    android:layout_below="@id/cv_time">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -748,98 +957,109 @@
                                 android:visibility="gone"/>
                         </LinearLayout>
 
-                        <RadioGroup
-                            android:id="@+id/groupradio1"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="3"
-                            android:layout_marginTop="5dp"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="5dp"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:paddingRight="@dimen/padding_10"
-                            android:paddingLeft="@dimen/padding_10"
-                            android:visibility="visible"
-                            android:layout_below="@id/ll_details1"
-                            android:checkedButton="@+id/radio_cod">
-
-                            <RelativeLayout
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="4"
+                                android:layout_below="@id/ll_details1"
+                                android:layout_marginTop="@dimen/padding_10">
 
-                            <ImageView
-                                android:id="@+id/iv_cod"
+                                <LinearLayout
+                                    android:id="@+id/ll_images"
+                                    android:layout_weight="1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/iv_cod"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:src="@drawable/ic_vol_type_tv_light"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_marginLeft="@dimen/padding_10"/>
+
+                                <ImageView
+                                    android:id="@+id/iv_razorpay"
+                                    android:layout_width="60dp"
+                                    android:layout_height="45dp"
+                                    android:src="@drawable/razorpay"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_marginTop="@dimen/padding_10"
+                                    android:layout_marginLeft="@dimen/padding_10"/>
+
+
+                            </LinearLayout>
+
+                                <LinearLayout
+                                android:id="@+id/ll_imagesText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_vol_type_tv_light"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentLeft="true"
-                                android:layout_marginLeft="@dimen/padding_10"/>
+                                android:orientation="vertical"
+                                    android:layout_weight="2">
 
-                            <TextView
-                                android:id="@+id/tv_cod"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:layout_weight="1"
-                                android:text="Cash on Delivery "
-                                android:textColor="@color/colorBlack"
-                                android:textSize="14sp"
-                                android:layout_centerInParent="true"/>
+                             <TextView
+                                 android:id="@+id/tv_cod"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="45dp"
+                                 android:gravity="center_vertical"
+                                 android:layout_weight="1"
+                                 android:text="Cash on Delivery "
+                                 android:textColor="@color/colorBlack"
+                                 android:textSize="14sp"
+                                 android:layout_centerInParent="true"/>
+
+                             <TextView
+                                 android:id="@+id/tv_razorpay"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="45dp"
+                                 android:gravity="center_vertical"
+                                 android:layout_weight="1"
+                                 android:text="RazorPay"
+                                 android:layout_marginTop="@dimen/padding_10"
+                                 android:textColor="@color/colorBlack"
+                                 android:textSize="14sp"
+                                 android:layout_centerInParent="true"/>
+
+
+                         </LinearLayout>
+
+                                <RadioGroup
+                                    android:id="@+id/groupradio1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:visibility="visible"
+                                    android:checkedButton="@+id/radio_cod">
+
 
                                 <RadioButton
                                     android:layout_width="wrap_content"
                                     android:layout_height="45dp"
                                     android:id="@+id/radio_cod"
                                     android:layout_marginRight="@dimen/padding_20"
-                                    android:layout_weight="1"
                                     android:layout_centerVertical="true"
                                     android:layout_alignParentRight="true"
                                     android:onClick="onRadioButtonClicked"/>
-
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:id="@+id/iv_razorpay"
-                                    android:layout_width="60dp"
-                                    android:layout_height="40dp"
-                                    android:src="@drawable/razorpay"
-                                    android:layout_centerVertical="true"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_marginLeft="@dimen/padding_10"/>
-
-                                <TextView
-                                    android:id="@+id/tv_razorpay"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:text="RazorPay"
-                                    android:textColor="@color/colorBlack"
-                                    android:textSize="14sp"
-                                    android:layout_centerInParent="true"/>
 
                                 <RadioButton
                                     android:layout_width="wrap_content"
                                     android:layout_height="45dp"
                                     android:id="@+id/radio_razorpay"
                                     android:layout_marginRight="@dimen/padding_20"
-                                    android:layout_weight="1"
+                                    android:layout_marginTop="@dimen/padding_10"
                                     android:layout_centerVertical="true"
                                     android:layout_alignParentRight="true"
                                     android:onClick="onRadioButtonClicked"/>
 
-                            </RelativeLayout>
 
                         </RadioGroup>
 
+                            </LinearLayout>
                     </RelativeLayout>
 
 
@@ -847,12 +1067,12 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                  <RelativeLayout
+                <RelativeLayout
                       android:id="@+id/rl_four1"
                       android:layout_below="@+id/cv_list1"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:padding="@dimen/padding_10"
+                      android:padding="@dimen/padding_20"
                       android:layout_alignParentBottom="true"
                       android:background="@color/colorWhite">
 
@@ -867,21 +1087,26 @@
                           android:layout_alignParentLeft="true"
                           android:textColor="@color/colorBlack" />
 
-                      <TextView
-                          android:id="@+id/tv_proceed"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:text="Proceed"
-                          android:textSize="20dp"
-                          android:background="@drawable/button_background"
-                          android:drawableRight="@drawable/ic_check_black_24dp"
-                          android:drawableTint="@color/colorWhite"
-                          android:drawablePadding="@dimen/padding_10"
-                          android:layout_alignParentRight="true"
-                          android:textColor="@color/colorWhite"
-                          android:paddingLeft="@dimen/padding_20"/>
+                    <TextView
+                        android:id="@+id/tv_proceed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Proceed"
+                        android:textSize="16dp"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/button_background"
+                        android:drawableRight="@drawable/ic_check_black_24dp"
+                        android:drawableTint="@color/colorWhite"
+                        android:drawablePadding="@dimen/padding_10"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/colorWhite"
+                        android:paddingLeft="@dimen/padding_20"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingRight="@dimen/padding_5"/>
 
                   </RelativeLayout>
+
             </RelativeLayout>
             <!--End 2 -->
 

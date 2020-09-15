@@ -109,6 +109,8 @@ public class PrefManager {
         return pref.getInt(Select, 0);
     }
 
+
+
     public void setAUTH_BACK(int uid) {
         editor.putInt(AUTH_BACK, uid);
         editor.commit();
